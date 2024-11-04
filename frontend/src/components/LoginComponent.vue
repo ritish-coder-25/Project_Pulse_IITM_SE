@@ -13,11 +13,6 @@ import router from '../router'
           <div class="welcome-text">Welcome user! You are not signed in.</div>
         </div>
 
-        <!-- Login Title -->
-        <!-- <div class="text-center mb-3">
-          <button class="login-title">Login</button>
-        </div> -->
-
         <!-- Login Form -->
         <form @submit.prevent="handleSubmit">
           <label class="form-label">Username</label>

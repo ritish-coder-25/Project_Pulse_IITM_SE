@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import { ProtectedRoutesEnums, RoutesEnums } from '../enums/RoutesEnums'
 import { LocalStorageEnums } from '@/enums'
 import { isJwtTokenExpired } from '@/helpers/TokenHelpers'
+import MilestoneScoring from '@/components/MilestoneScoring.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +37,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AuthViews/SignupView.vue'),
     },
+    {
+      path: '/scoring',
+      name: 'MilestoneScoring',
+      component: MilestoneScoring
+    }
   ],
 })
 

@@ -14,9 +14,9 @@ import router from '../router'
         </div>
 
         <!-- Login Title -->
-        <div class="text-center mb-3">
+        <!-- <div class="text-center mb-3">
           <button class="login-title">Login</button>
-        </div>
+        </div> -->
 
         <!-- Login Form -->
         <form @submit.prevent="handleSubmit">

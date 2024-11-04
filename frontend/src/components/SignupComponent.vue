@@ -13,11 +13,6 @@ import router from '../router'
           <div class="welcome-text">Welcome user! You are not signed in.</div>
         </div>
 
-        <!-- Register Title -->
-        <div class="text-center mb-3">
-          <button class="register-title">Register</button>
-        </div>
-
         <!-- Signup Form -->
         <form @submit.prevent="handleSubmit">
           <label class="form-label">Username</label>
@@ -57,7 +52,6 @@ import router from '../router'
 </template>
 
 <script>
-import { useAuthStore } from '../stores/authstore'
 
 export default {
   data() {

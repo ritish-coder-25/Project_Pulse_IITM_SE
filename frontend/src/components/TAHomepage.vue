@@ -1,4 +1,5 @@
 <template>
+  <!-- Pending User Approvals -->
   <div class="container-fluid">
     <div class="my-4">
       <h2 class="mb-4">User Approvals Pending</h2>
@@ -50,7 +51,7 @@
       </table>
     </div>
 
-
+<!-- New activity listing for last 7 days -->
     <div class="my-4">
     <h2>New activities in last 7 days</h2>
     <table class="table">

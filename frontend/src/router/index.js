@@ -54,7 +54,7 @@ const router = createRouter({
       // component: () => import('@/components/Project_Definition.vue')
     },
     {
-      path: '/milestones-definition',
+      path: '/milestone-definition',
       name: 'MilestoneDefinition',
       component: MilestoneDefinition, // Add route for DefineMilestones
     },

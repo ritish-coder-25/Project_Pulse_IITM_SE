@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { TaHomePageApiHelpers } from '@/helpers/ApiHelperFuncs/TaHomePage';
 
 export default {
   name: 'TAHomepage',
@@ -84,68 +84,42 @@ export default {
       uploads: [],
       commits: [],
       milecomps: [],
-      
-      // Local fallback data
-      localPendusers: [
-        { id: 1, name: 'Test User A', email: 'usera@mail.com', role: 'Student' },
-        { id: 2, name: 'Test  User B', email: 'userb@mail.com', role: 'Student' },
-        { id: 3, name: 'Test User C', email: 'userc@mail.com', role: 'Student' },
-      ],
-      localUploads: [
-        { team: 'Test Team A'},
-        { team: 'Test Team B'},
-        { team: 'Test Team C'},
-      ],
-      localCommits: [
-        { team: 'Test Team D'},
-        { team: 'Test Team E'},
-        { team: 'Test Team F'},
-      ],
-      localMilecomps: [
-        { team: 'Test Team G'},
-        { team: 'Test Team H'},
-        { team: 'Test Team I'},
-      ],
     };
   },
   methods: {
     async fetchPendusers() {
       try {
-        const response = await axios.get('http://localhost:3000/pendusers');
-        this.pendusers = response.data.map(user => ({
+        const response = await TaHomePageApiHelpers.fetchPendusers();
+        this.pendusers = response.map(user => ({
         ...user,
         role: user.role || 'Student',  // Set 'Student' if role is not defined
         }));
       } catch (error) {
         console.warn("Using local pending user data due to error:", error);
-        this.pendusers = this.localPendusers;
       }
     },
     async fetchUploads() {
       try {
-        const response = await axios.get('http://localhost:3000/uploads');
-        this.uploads = response.data;
+        const response = await TaHomePageApiHelpers.fetchUploads();
+        this.uploads = response;
       } catch (error) {
         console.warn("Using local uploads data due to error:", error);
-        this.uploads = this.localUploads;
       }
     },
     async fetchCommits() {
       try {
-        const response = await axios.get('http://localhost:3000/commits');
-        this.commits = response.data;
+        const response = await TaHomePageApiHelpers.fetchCommits();
+        this.commits = response;
       } catch (error) {
         console.warn("Using local commit data due to error:", error);
-        this.commits = this.localCommits;
       }
     },
     async fetchMilecomps() {
       try {
-        const response = await axios.get('http://localhost:3000/milecomps');
-        this.milecomps = response.data;
+        const response = await TaHomePageApiHelpers.fetchMilecomps();
+        this.milecomps = response;
       } catch (error) {
         console.warn("Using local milestone completion data due to error:", error);
-        this.milecomps = this.localMilecomps;
       }
     },
     async submitForm() {

@@ -3,8 +3,6 @@ import HomeView from '../views/HomeView.vue'
 import { ProtectedRoutesEnums, RoutesEnums } from '../enums/RoutesEnums'
 import { LocalStorageEnums } from '@/enums'
 import { isJwtTokenExpired } from '@/helpers/TokenHelpers'
-import MilestoneScoring from '@/components/MilestoneScoring.vue'
-import TAHomepage from '@/components/TAHomepage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,15 +37,10 @@ const router = createRouter({
       component: () => import('../views/AuthViews/SignupView.vue'),
     },
     {
-      path: '/scoring',
-      name: 'MilestoneScoring',
-      component: MilestoneScoring
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/Dashboards/DashboardView.vue'),
     },
-    {
-      path: '/tahome',
-      name: 'TAHomepage',
-      component: TAHomepage
-    }
   ],
 })
 

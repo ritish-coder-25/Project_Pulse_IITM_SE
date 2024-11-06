@@ -56,9 +56,9 @@
                 {{ errors[`emails[${index}]`] }}
               </div>
             </div>
-            <div class="invalid-feedback d-block" v-if="errors.emails">
-              {{ errors.emails }}
-            </div>
+          </div>
+          <div class="invalid-feedback d-block" v-if="errors.emails">
+            {{ errors.emails }}
           </div>
 
           <!-- Buttons Container -->

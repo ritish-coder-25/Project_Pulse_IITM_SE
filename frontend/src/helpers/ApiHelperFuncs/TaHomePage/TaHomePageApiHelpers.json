@@ -1,0 +1,37 @@
+{
+  "localPendusers": [
+    {
+      "id": 1,
+      "name": "Test User A",
+      "email": "usera@mail.com",
+      "role": "Student"
+    },
+    {
+      "id": 2,
+      "name": "Test  User B",
+      "email": "userb@mail.com",
+      "role": "Student"
+    },
+    {
+      "id": 3,
+      "name": "Test User C",
+      "email": "userc@mail.com",
+      "role": "Student"
+    }
+  ],
+  "localUploads": [
+    { "team": "Test Team A" },
+    { "team": "Test Team B" },
+    { "team": "Test Team C" }
+  ],
+  "localCommits": [
+    { "team": "Test Team D" },
+    { "team": "Test Team E" },
+    { "team": "Test Team F" }
+  ],
+  "localMilecomps": [
+    { "team": "Test Team G" },
+    { "team": "Test Team H" },
+    { "team": "Test Team I" }
+  ]
+}

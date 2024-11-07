@@ -83,6 +83,7 @@ import { BButton } from 'bootstrap-vue-next'
 <script>
 import router from '../router'
 import { RoutesEnums } from '@/enums'
+import { Axios } from 'axios';
 
 export default {
   data() {
@@ -99,13 +100,30 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      if (this.formData.password !== this.formData.reenterPassword) {
-        alert('Passwords do not match')
-        return
-      }
-      alert('Registration successful!')
-      router.push(RoutesEnums.login)
-    },
+          if (this.formData.password !== this.formData.reenterPassword) {
+            alert('Passwords do not match')
+            return
+          }
+    
+          const url = `https://api.github.com/users/${this.formData.githubUsername}`;
+          try {
+            const response = await fetch(url);
+            console.log('response:', response);
+            if (response.status === 200) {
+              console.log('Github User found');
+            } else {
+              alert('Github User not found');
+              return
+            }
+          } catch (error) {
+            console.error('Error fetching user:', error);
+            alert('An error occurred while checking Github user existence');
+            return
+          }
+    
+          alert('Registration successful!')
+          this.$router.push({ name: 'login' });
+        },
     redirectToLogin() {
       router.push(RoutesEnums.login)
     },

@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
 from datetime import datetime
+from flask_jwt_extended import get_jwt_identity
 
 # Create a Blueprint for the routes
 api_bp = Blueprint('api', __name__)
@@ -157,6 +158,11 @@ def record_commit():
     db.session.commit()
     
     return jsonify({'message': 'Commit recorded successfully'}), 201
+
+
+
+
+
 
 
 

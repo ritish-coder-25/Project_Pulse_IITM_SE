@@ -1,6 +1,7 @@
 <script setup>
 import InputComponent from './InputComponent.vue'
 import router from '../router'
+import { BButton } from 'bootstrap-vue-next'
 </script>
 
 <template>
@@ -8,28 +9,43 @@ import router from '../router'
     <div class="row mt-5">
       <div class="mx-auto col-6 p-4 shadow-sm rounded bg-light form-container">
         <!-- Header Section with Logo and Welcome Message -->
-        <div class="header-section">
+        <div class="header-section mb-3">
           <div class="app-logo">App Logo</div>
-          <div class="welcome-text">Welcome user! You are not signed in.</div>
+          <!-- <div class="welcome-text">Welcome user! You are not signed in.</div> -->
         </div>
 
         <!-- Login Form -->
         <form @submit.prevent="handleSubmit">
           <label class="form-label">Username</label>
-          <input type="text" class="form-control mb-3" v-model="formData.username" />
+          <input
+            type="text"
+            class="form-control mb-3"
+            v-model="formData.username"
+          />
 
           <label class="form-label">Password</label>
-          <input type="password" class="form-control mb-3" v-model="formData.password" />
+          <input
+            type="password"
+            class="form-control mb-3"
+            v-model="formData.password"
+          />
 
-          <div class="d-flex justify-content-around mt-3">
-            <button type="submit" class="submit-button">Submit</button>
-            <button type="button" @click="resetForm" class="submit-button">Reset</button>
+          <div class="d-flex justify-content-between mt-3">
+            <button type="button" @click="resetForm" class="submit-button-grey">
+              Reset
+            </button>
+
+            <BButton type="submit" variant="primary" class="submit-button"
+              >Submit</BButton
+            >
           </div>
         </form>
 
         <!-- Register Link -->
         <div class="text-center mt-3">
-          <a @click.prevent="redirectToRegister" href="#" class="back-link">Register as new user</a>
+          <a @click.prevent="redirectToRegister" class="back-link"
+            >Register as new user</a
+          >
         </div>
       </div>
     </div>
@@ -38,29 +54,30 @@ import router from '../router'
 
 <script>
 import { useAuthStore } from '../stores/authstore'
+import { RoutesEnums } from '@/enums'
 
 export default {
   data() {
     return {
       formData: {
         username: '',
-        password: ''
-      }
+        password: '',
+      },
     }
   },
   methods: {
     async handleSubmit() {
-      alert('Login successful!');
-      router.push('/dashboard');
+      alert('Login successful!')
+      router.push('/dashboard')
     },
     resetForm() {
-      this.formData.username = '';
-      this.formData.password = '';
+      this.formData.username = ''
+      this.formData.password = ''
     },
     redirectToRegister() {
-      router.push('/register');
-    }
-  }
+      router.push(RoutesEnums.signup)
+    },
+  },
 }
 </script>
 
@@ -115,6 +132,11 @@ export default {
 }
 
 .submit-button {
+  width: 45%;
+  padding: 10px;
+}
+
+.submit-button-grey {
   width: 45%;
   padding: 10px;
   font-size: 1em;

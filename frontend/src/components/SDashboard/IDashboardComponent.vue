@@ -1,20 +1,39 @@
 <script setup>
 import { BTabs, BTab } from 'bootstrap-vue-next'
+import {
+  HomeIcon,
+  UserGroupIcon,
+  ClipboardDocumentListIcon,
+} from '@heroicons/vue/24/outline'
 import DefineTeamComponent from '../DefineTeam/DefineTeamComponent.vue'
 import MilestoneScoring from '../MilestoneScoring.vue'
 import TAHomepage from '../TAHomepage.vue'
 </script>
 
 <template>
-  <div class="container">
-    <BTabs class="mt-5">
-      <BTab title="Home" active>
-        <h1>Home</h1>
-        <TAHomepage />
+  <div class="dashboard-container p-4">
+    <BTabs class="custom-tabs" nav-class="border-0 mb-3" card>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <HomeIcon class="tab-icon me-2" />
+            <span>Home</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <TAHomepage />
+        </div>
       </BTab>
-      <BTab title="MileStone Scoring" active>
-        <h1>MileStone Scoring</h1>
-        <MilestoneScoring />
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <UserGroupIcon class="tab-icon me-2" />
+            <span>MileStone Scoring</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <MilestoneScoring />
+        </div>
       </BTab>
     </BTabs>
   </div>

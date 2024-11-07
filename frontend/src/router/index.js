@@ -3,14 +3,10 @@ import HomeView from '../views/HomeView.vue'
 import { ProtectedRoutesEnums, RoutesEnums } from '../enums/RoutesEnums'
 import { LocalStorageEnums } from '@/enums'
 import { isJwtTokenExpired } from '@/helpers/TokenHelpers'
-<<<<<<< HEAD
-=======
 import MilestoneScoring from '@/components/MilestoneScoring.vue'
 import ProjectDefinition from '@/components/Project_Definition.vue'
-
 import MilestoneDefinition from '@/components/Milestone_Definition.vue'
 
->>>>>>> feature/project_milestone_definition
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,14 +41,9 @@ const router = createRouter({
       component: () => import('../views/AuthViews/SignupView.vue'),
     },
     {
-<<<<<<< HEAD
       path: '/dashboard',
       name: 'dashboard',
       component: () => import('../views/Dashboards/DashboardView.vue'),
-=======
-      path: '/scoring',
-      name: 'MilestoneScoring',
-      component: MilestoneScoring
     },
     {
       path: '/project-definition',
@@ -65,7 +56,6 @@ const router = createRouter({
       path: '/milestone-definition',
       name: 'MilestoneDefinition',
       component: MilestoneDefinition, // Add route for DefineMilestones
->>>>>>> feature/project_milestone_definition
     },
   ],
 })

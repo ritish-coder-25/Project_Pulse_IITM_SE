@@ -9,6 +9,9 @@ import DefineTeamComponent from '../DefineTeam/DefineTeamComponent.vue'
       <BTab title="Home" active>
         <h1>Home</h1>
       </BTab>
+      <BTab title="Dashboard" active>
+        <h1>Team's Dashboard</h1>
+      </BTab>
       <BTab title="Define Team" active>
         <h1>DefineTeam</h1>
         <DefineTeamComponent />

@@ -7,6 +7,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import DefineTeamComponent from '../DefineTeam/DefineTeamComponent.vue'
 import MilestoneScoring from '../MilestoneScoring.vue'
+import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
 </script>
 
 <template>
@@ -25,6 +26,7 @@ import MilestoneScoring from '../MilestoneScoring.vue'
       </BTab>
       <BTab title="Dashboard" active>
         <h1>Team's Dashboard</h1>
+        <StudentTeamsDashboard />
       </BTab>
       <BTab title="Define Team" active>
         <h1>DefineTeam</h1>

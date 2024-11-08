@@ -24,13 +24,10 @@ import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
           <h1>Student Home</h1>
         </div>
       </BTab>
-      <BTab title="Dashboard" active>
-        <h1>Team's Dashboard</h1>
-        <StudentTeamsDashboard />
-      </BTab>
       <BTab title="Define Team" active>
         <h1>DefineTeam</h1>
         <DefineTeamComponent />
+      </BTab>
       <BTab>
         <template #title>
           <div class="tab-title">
@@ -41,6 +38,10 @@ import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
         <div class="tab-content-wrapper">
           <DefineTeamComponent />
         </div>
+      </BTab>
+      <BTab title="Team's Dashboard" active>
+        <h1>Dashboard</h1>
+        <StudentTeamsDashboard />
       </BTab>
     </BTabs>
   </div>

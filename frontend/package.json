@@ -29,6 +29,7 @@
     "vue": "^3.5.12",
     "vue-multiselect": "^3.1.0",
     "vue-router": "^4.4.5",
+    "vue3-easy-data-table": "^1.5.47",
     "yup": "^1.4.0"
   },
   "devDependencies": {

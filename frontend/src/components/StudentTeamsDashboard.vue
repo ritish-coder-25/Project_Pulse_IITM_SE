@@ -2,7 +2,7 @@
     <div>
       <!-- Team Dashboard Header -->
       <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-        <h2>Team XXX's Dashboard</h2>
+        <h3>Team name: XXX</h3>
         <p style="margin-left: auto;">Team's Score: 80/100</p>
       </div>
   

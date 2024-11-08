@@ -24,7 +24,7 @@ import MilestoneScoring from '../MilestoneScoring.vue'
         </div>
       </BTab>
       <BTab title="Dashboard" active>
-        <h1>Student's Dashboard</h1>
+        <h1>Team's Dashboard</h1>
       </BTab>
       <BTab title="Define Team" active>
         <h1>DefineTeam</h1>

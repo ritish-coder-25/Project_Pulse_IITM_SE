@@ -8,6 +8,8 @@ import {
 import DefineTeamComponent from '../DefineTeam/DefineTeamComponent.vue'
 import MilestoneScoring from '../MilestoneScoring.vue'
 import TAHomepage from '../TAHomepage.vue'
+import Teams from '../Teams.vue'
+import TeamDetails from '../TeamDetails.vue'
 </script>
 
 <template>
@@ -33,6 +35,28 @@ import TAHomepage from '../TAHomepage.vue'
         </template>
         <div class="tab-content-wrapper">
           <MilestoneScoring />
+        </div>
+      </BTab>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <UserGroupIcon class="tab-icon me-2" />
+            <span>Teams</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <Teams />
+        </div>
+      </BTab>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <UserGroupIcon class="tab-icon me-2" />
+            <span>Team Details</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <TeamDetails />
         </div>
       </BTab>
     </BTabs>

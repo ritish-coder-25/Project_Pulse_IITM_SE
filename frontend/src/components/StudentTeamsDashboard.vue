@@ -67,12 +67,14 @@
           { id: 2, stu_name: "Lebron James", stu_email: "21f1004321@mail.com" },
           { id: 3, stu_name: "Kevin Durant", stu_email: "21f1001212@mail.com" },
           { id: 4, stu_name: "Giannis Antetokounmpo", stu_email: "21f1001213@mail.com" },
+          { id: 5, stu_name: "Jacob Konmankauf", stu_email: "21f1001214@mail.com" }
         ],
         localStuCommits: [
           { user_id: 1, commits: 20 },
           { user_id: 2, commits: 19 },
           { user_id: 3, commits: 22 },
           { user_id: 4, commits: 17 },
+          { user_id: 5, commits: 18 },
         ],
         localMilestones: [
           { details: "Deadline", milestone1: "20 Oct 2024", milestone2: "20 Oct 2024", milestone3: "10 Nov 2024", milestone4: "17 Nov 2024", milestone5: "24 Nov 2024", milestone6: "01 Dec 2024" },

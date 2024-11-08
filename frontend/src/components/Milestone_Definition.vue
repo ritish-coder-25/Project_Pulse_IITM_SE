@@ -19,8 +19,42 @@
 
     <!-- Main Content Section -->
     <main class="content">
+<<<<<<< HEAD
       <!-- Button to Open Modal for Creating a Milestone -->
       <b-button @click="modal = true" class="create-btn">Create Milestone</b-button>
+=======
+      <form class="milestone-form" @submit.prevent="handleSubmit">
+        <div class="form-group">
+          <label for="milestone-name">Milestone Name</label>
+          <input v-model="newMilestone.name" id="milestone-name" type="text" placeholder="Type a new milestone to create or select existing milestone to edit or delete" required />
+        </div>
+
+        <div class="form-group">
+          <label for="milestone-description">Milestone Description (Max 50 char)</label>
+          <textarea v-model="newMilestone.description" id="milestone-description" placeholder="List the tasks which will form part of this milestone" maxlength="50" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="start-date">Milestone Start Date</label>
+          <input v-model="newMilestone.startDate" id="start-date" type="date" required />
+        </div>
+        <div class="form-group">
+          <label for="submission-deadline">Submission Deadline</label>
+          <input v-model="newMilestone.deadline" id="submission-deadline" type="date" required />
+        </div>
+
+        <div class="form-group">
+          <label for="max-marks">Max Marks</label>
+          <input v-model="newMilestone.maxMarks" id="max-marks" type="number" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">Submit</button>
+          <button type="button" class="delete-btn" @click="confirmDelete">Delete</button>
+          <button type="button" class="cancel-btn" @click="resetForm">Cancel</button>
+        </div>
+      </form>
+>>>>>>> origin/main
 
       <!-- Dynamic Table for Created Milestones -->
       <table class="milestone-table" v-if="milestones.length">

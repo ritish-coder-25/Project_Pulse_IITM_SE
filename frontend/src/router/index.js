@@ -5,7 +5,6 @@ import { LocalStorageEnums } from '@/enums'
 import { isJwtTokenExpired } from '@/helpers/TokenHelpers'
 import MilestoneScoring from '@/components/MilestoneScoring.vue'
 import ProjectDefinition from '@/components/Project_Definition.vue'
-
 import MilestoneDefinition from '@/components/Milestone_Definition.vue'
 
 
@@ -42,9 +41,9 @@ const router = createRouter({
       component: () => import('../views/AuthViews/SignupView.vue'),
     },
     {
-      path: '/scoring',
-      name: 'MilestoneScoring',
-      component: MilestoneScoring
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/Dashboards/DashboardView.vue'),
     },
     {
       path: '/project-definition',

@@ -1,121 +1,105 @@
 <script setup>
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
+import { BContainer, BRow, BCol, BCard } from 'bootstrap-vue-next'
+import { AcademicCapIcon, UsersIcon, ClipboardIcon, ChartBarIcon } from '@heroicons/vue/24/outline'
 </script>
 
 <template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
+  <BContainer fluid class="p-0 m-0">
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5">
+      <BContainer>
+        <BRow class="align-items-center">
+          <BCol md="6">
+            <h1 class="display-4">Team Project Management</h1>
+            <p class="lead">
+              Streamline student team assignments, project tracking, and grading for professors
+            </p>
+          </BCol>
+          <BCol md="6">
+            <!-- <img src="@/assets/team-collaboration.svg" alt="Collaboration" class="img-fluid" /> -->
+          </BCol>
+        </BRow>
+      </BContainer>
+    </div>
 
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener"
-      >official documentation</a
-    >
-    provides you with all information you need to get started.
-  </WelcomeItem>
+    <!-- Features Section -->
+    <BContainer class="py-5">
+      <h2 class="text-center mb-5">Key Features</h2>
+      <BRow>
+        <BCol md="3">
+          <BCard class="h-100 text-center p-3">
+            <UsersIcon class="w-12 h-12 mx-auto mb-3 text-primary" />
+            <h4>Team Formation</h4>
+            <p>Easily assign students to balanced teams</p>
+          </BCard>
+        </BCol>
+        <BCol md="3">
+          <BCard class="h-100 text-center p-3">
+            <ClipboardIcon class="w-12 h-12 mx-auto mb-3 text-primary" />
+            <h4>Project Details</h4>
+            <p>Define projects and milestone requirements</p>
+          </BCard>
+        </BCol>
+        <BCol md="3">
+          <BCard class="h-100 text-center p-3">
+            <ChartBarIcon class="w-12 h-12 mx-auto mb-3 text-primary" />
+            <h4>Progress Tracking</h4>
+            <p>Monitor team progress and milestone completion</p>
+          </BCard>
+        </BCol>
+        <BCol md="3">
+          <BCard class="h-100 text-center p-3">
+            <AcademicCapIcon class="w-12 h-12 mx-auto mb-3 text-primary" />
+            <h4>Grading</h4>
+            <p>Evaluate and grade milestone submissions</p>
+          </BCard>
+        </BCol>
+      </BRow>
+    </BContainer>
 
-  <WelcomeItem>
-    <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
-
-    This project is served and bundled with
-    <a
-      href="https://vite.dev/guide/features.html"
-      target="_blank"
-      rel="noopener"
-      >Vite</a
-    >. The recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener"
-      >VSCode</a
-    >
-    +
-    <a
-      href="https://github.com/johnsoncodehk/volar"
-      target="_blank"
-      rel="noopener"
-      >Volar</a
-    >. If you need to test your components and web pages, check out
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a>
-    and
-    <a href="https://on.cypress.io/component" target="_blank" rel="noopener"
-      >Cypress Component Testing</a
-    >.
-
-    <br />
-
-    More instructions are available in <code>README.md</code>.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
-
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener"
-      >Vue Router</a
-    >,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener"
-      >Vue Test Utils</a
-    >, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener"
-      >Vue Dev Tools</a
-    >. If you need more resources, we suggest paying
-    <a
-      href="https://github.com/vuejs/awesome-vue"
-      target="_blank"
-      rel="noopener"
-      >Awesome Vue</a
-    >
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a
-    >, our official Discord server, or
-    <a
-      href="https://stackoverflow.com/questions/tagged/vue.js"
-      target="_blank"
-      rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
-    <a href="https://news.vuejs.org" target="_blank" rel="noopener"
-      >our mailing list</a
-    >
-    and follow the official
-    <a href="https://twitter.com/vuejs" target="_blank" rel="noopener"
-      >@vuejs</a
-    >
-    twitter account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its
-    sustainability. You can help us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener"
-      >becoming a sponsor</a
-    >.
-  </WelcomeItem>
+    <!-- How It Works -->
+    <div class="bg-light py-5">
+      <BContainer>
+        <h2 class="text-center mb-5">How It Works</h2>
+        <BRow class="g-4">
+          <BCol md="4">
+            <div class="d-flex align-items-center">
+              <div class="fs-1 me-3 text-primary">1</div>
+              <div>
+                <h5>Create Teams</h5>
+                <p>Assign students to balanced teams or let them form their own groups</p>
+              </div>
+            </div>
+          </BCol>
+          <BCol md="4">
+            <div class="d-flex align-items-center">
+              <div class="fs-1 me-3 text-primary">2</div>
+              <div>
+                <h5>Set Milestones</h5>
+                <p>Define project requirements and milestone deadlines</p>
+              </div>
+            </div>
+          </BCol>
+          <BCol md="4">
+            <div class="d-flex align-items-center">
+              <div class="fs-1 me-3 text-primary">3</div>
+              <div>
+                <h5>Track & Grade</h5>
+                <p>Monitor progress and evaluate team performance</p>
+              </div>
+            </div>
+          </BCol>
+        </BRow>
+      </BContainer>
+    </div>
+  </BContainer>
 </template>
+
+<style scoped>
+.card {
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+</style>

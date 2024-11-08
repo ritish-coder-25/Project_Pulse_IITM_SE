@@ -24,10 +24,6 @@ import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
           <h1>Student Home</h1>
         </div>
       </BTab>
-      <BTab title="Define Team" active>
-        <h1>DefineTeam</h1>
-        <DefineTeamComponent />
-      </BTab>
       <BTab>
         <template #title>
           <div class="tab-title">

@@ -57,6 +57,11 @@ const router = createRouter({
       name: 'MilestoneDefinition',
       component: MilestoneDefinition, // Add route for DefineMilestones
     },
+    {
+      path: '/team/:id',
+      name: 'TeamDetails',
+      component: () => import('../views/TeamDetailsView.vue'), // Add route for DefineMilestones
+    },
   ],
 })
 

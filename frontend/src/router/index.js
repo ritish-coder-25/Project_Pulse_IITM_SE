@@ -3,6 +3,10 @@ import HomeView from '../views/HomeView.vue'
 import { ProtectedRoutesEnums, RoutesEnums } from '../enums/RoutesEnums'
 import { LocalStorageEnums } from '@/enums'
 import { isJwtTokenExpired } from '@/helpers/TokenHelpers'
+import MilestoneScoring from '@/components/MilestoneScoring.vue'
+import ProjectDefinition from '@/components/Project_Definition.vue'
+import MilestoneDefinition from '@/components/Milestone_Definition.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +44,18 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: () => import('../views/Dashboards/DashboardView.vue'),
+    },
+    {
+      path: '/project-definition',
+      name: 'ProjectDefinition',
+      component: ProjectDefinition  // If eagerly loaded
+      // Or use lazy loading with:
+      // component: () => import('@/components/Project_Definition.vue')
+    },
+    {
+      path: '/milestone-definition',
+      name: 'MilestoneDefinition',
+      component: MilestoneDefinition, // Add route for DefineMilestones
     },
   ],
 })

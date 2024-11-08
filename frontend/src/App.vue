@@ -71,7 +71,7 @@ import HelloWorld from './components/HelloWorld.vue'
       </div>
     </div>
   </header>
-  <body>
+  <body class="container-fluid">
     <RouterView />
   </body>
 </template>

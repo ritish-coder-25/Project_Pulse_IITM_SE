@@ -24,6 +24,7 @@
     "chartjs": "^0.3.24",
     "date-fns": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
+    "lucide-vue-next": "^0.454.0",
     "pinia": "^2.2.4",
     "portal-vue": "^3.0.0",
     "vee-validate": "^4.14.6",

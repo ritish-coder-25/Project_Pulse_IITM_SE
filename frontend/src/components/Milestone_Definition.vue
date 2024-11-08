@@ -9,54 +9,55 @@
       </div>
     </header>
 
-    <!-- Navigation Section -->
-    <nav class="navigation">
-      <router-link to="/home" class="nav-button">Home</router-link>
-      <router-link to="/dashboard" class="nav-button">Dashboard</router-link>
-      <router-link to="/define-milestones" class="nav-button active">Define Milestones</router-link>
-      <router-link to="/project-scoring" class="nav-button">Project Scoring</router-link>
-    </nav>
+    <!-- Updated Navigation Section using BTabs with routing -->
+    <BTabs 
+      class="custom-tabs" 
+      nav-class="border-0 mb-3" 
+      card
+      v-model="activeTab"
+      @update:modelValue="handleTabChange"
+    >
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <Home class="tab-icon me-2" />
+            <span>Home</span>
+          </div>
+        </template>
+      </BTab>
+      
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <LayoutDashboard class="tab-icon me-2" />
+            <span>Dashboard</span>
+          </div>
+        </template>
+      </BTab>
+      
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <Milestone class="tab-icon me-2" />
+            <span>Define Milestones</span>
+          </div>
+        </template>
+      </BTab>
+      
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <ClipboardCheck class="tab-icon me-2" />
+            <span>Project Scoring</span>
+          </div>
+        </template>
+      </BTab>
+    </BTabs>
 
-    <!-- Main Content Section -->
-    <main class="content">
-<<<<<<< HEAD
-      <!-- Button to Open Modal for Creating a Milestone -->
+    <!-- Rest of the template remains exactly the same -->
+    <main class="content" v-if="activeTab === 2">
       <b-button @click="modal = true" class="create-btn">Create Milestone</b-button>
-=======
-      <form class="milestone-form" @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label for="milestone-name">Milestone Name</label>
-          <input v-model="newMilestone.name" id="milestone-name" type="text" placeholder="Type a new milestone to create or select existing milestone to edit or delete" required />
-        </div>
 
-        <div class="form-group">
-          <label for="milestone-description">Milestone Description (Max 50 char)</label>
-          <textarea v-model="newMilestone.description" id="milestone-description" placeholder="List the tasks which will form part of this milestone" maxlength="50" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="start-date">Milestone Start Date</label>
-          <input v-model="newMilestone.startDate" id="start-date" type="date" required />
-        </div>
-        <div class="form-group">
-          <label for="submission-deadline">Submission Deadline</label>
-          <input v-model="newMilestone.deadline" id="submission-deadline" type="date" required />
-        </div>
-
-        <div class="form-group">
-          <label for="max-marks">Max Marks</label>
-          <input v-model="newMilestone.maxMarks" id="max-marks" type="number" required />
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="submit-btn">Submit</button>
-          <button type="button" class="delete-btn" @click="confirmDelete">Delete</button>
-          <button type="button" class="cancel-btn" @click="resetForm">Cancel</button>
-        </div>
-      </form>
->>>>>>> origin/main
-
-      <!-- Dynamic Table for Created Milestones -->
       <table class="milestone-table" v-if="milestones.length">
         <thead>
           <tr>
@@ -84,8 +85,8 @@
       </table>
     </main>
 
-    <!-- Modal for Creating a New Milestone -->
-    <b-modal v-model="modal" title="Create or Edit Milestone">
+    <!-- Updated Modal with hide-footer prop -->
+    <b-modal v-model="modal" title="Create or Edit Milestone" hide-footer>
       <form class="milestone-form" @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="milestone-name">Milestone Name</label>
@@ -122,19 +123,62 @@
 </template>
 
 <script>
-// Importing necessary components from bootstrap-vue-next
 import { ref } from 'vue';
-import { BButton, BModal } from 'bootstrap-vue-next';
+import { useRouter, useRoute } from 'vue-router';
+import { BButton, BModal, BTabs, BTab } from 'bootstrap-vue-next';
+import { 
+  Home, 
+  LayoutDashboard, 
+  ClipboardCheck, 
+  Flag as Milestone 
+} from 'lucide-vue-next';
 
 export default {
   name: 'DefineMilestones',
   components: {
     BButton,
-    BModal
+    BModal,
+    BTabs,
+    BTab,
+    Home,
+    LayoutDashboard,
+    Milestone,
+    ClipboardCheck
+  },
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    
+    // Map routes to tab indices
+    const routeToTabIndex = {
+      '/home': 0,
+      '/dashboard': 1,
+      '/milestone-definition': 2,
+      '/scoring': 3
+    };
+
+    // Map tab indices to routes
+    const tabIndexToRoute = {
+      0: '/home',
+      1: '/dashboard',
+      2: '/milestone-definition',
+      3: '/scoring'
+    };
+
+    // Set initial active tab based on current route
+    const initialTab = routeToTabIndex[route.path] || 2;
+
+    return {
+      router,
+      route,
+      tabIndexToRoute,
+      initialTab
+    };
   },
   data() {
     return {
-      modal: ref(false), // Controls the modal visibility
+      modal: ref(false),
+      activeTab: this.initialTab,
       newMilestone: {
         name: '',
         description: '',
@@ -142,28 +186,31 @@ export default {
         deadline: '',
         maxMarks: '',
       },
-      milestones: [], // Stores created milestones
-      editingIndex: null, // Index of the milestone being edited
+      milestones: [],
+      editingIndex: null,
     };
   },
   methods: {
+    handleTabChange(newIndex) {
+      const targetRoute = this.tabIndexToRoute[newIndex];
+      if (targetRoute && this.route.path !== targetRoute) {
+        this.router.push(targetRoute);
+      }
+    },
     handleSubmit() {
       if (this.editingIndex !== null) {
-        // Update the existing milestone
         this.milestones[this.editingIndex] = { ...this.newMilestone };
-        this.editingIndex = null; // Reset editing state
+        this.editingIndex = null;
       } else {
-        // Add a new milestone
         this.milestones.push({ ...this.newMilestone });
       }
-      this.resetForm();  // Reset form after submission
-      this.modal = false; // Close modal after submitting
+      this.resetForm();
+      this.modal = false;
     },
     editMilestone(index) {
-      // Populate the form with the selected milestone's data for editing
       this.newMilestone = { ...this.milestones[index] };
-      this.editingIndex = index; // Set the editingIndex to the selected milestone's index
-      this.modal = true; // Open the modal
+      this.editingIndex = index;
+      this.modal = true;
     },
     deleteMilestone(index) {
       if (confirm('Are you sure you want to delete this milestone?')) {
@@ -180,11 +227,23 @@ export default {
       };
     },
   },
+  watch: {
+    // Update active tab when route changes externally
+    '$route'(to) {
+      const routeToTabIndex = {
+        '/home': 0,
+        '/dashboard': 1,
+        '/milestone-definition': 2,
+        '/scoring': 3
+      };
+      this.activeTab = routeToTabIndex[to.path] || 2;
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Header styles */
+/* All styles remain exactly the same */
 .header {
   display: flex;
   justify-content: space-between;
@@ -208,31 +267,27 @@ export default {
   text-decoration: none;
 }
 
-/* Navigation styles */
-.navigation {
-  display: flex;
-  gap: 10px;
+.custom-tabs {
   padding: 10px;
 }
 
-.nav-button {
-  padding: 5px 10px;
-  background-color: #4d4d4d;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
+.tab-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 }
 
-.nav-button.active {
-  background-color: #bfa060;
+.tab-icon {
+  width: 20px;
+  height: 20px;
 }
 
-/* Content area styles */
 .content {
   padding: 20px;
 }
 
-/* Button styles */
+/* Rest of the styles remain the same */
 .create-btn {
   background-color: #4d4d4d;
   color: white;
@@ -240,7 +295,6 @@ export default {
   border-radius: 5px;
 }
 
-/* Milestone form styles */
 .milestone-form {
   display: flex;
   flex-direction: column;
@@ -286,7 +340,6 @@ export default {
   background-color: #a5a5a5;
 }
 
-/* Styles for the dynamic table */
 .milestone-table {
   width: 100%;
   border-collapse: collapse;

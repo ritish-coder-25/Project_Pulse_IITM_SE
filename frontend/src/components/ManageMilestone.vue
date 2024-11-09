@@ -1,13 +1,5 @@
 <template>
   <div class="manage-milestone">
-    <div class="tabs">
-      <button @click="navigateTo('home')">Home</button>
-      <button @click="navigateTo('dashboard')">Dashboard</button>
-      <button @click="navigateTo('define-teams')">Define Teams</button>
-      <button @click="navigateTo('milestone-info')">Milestone Info</button>
-      <button @click="navigateTo('milestone-progress')">Milestone Progress</button>
-    </div>
-
     <table class="milestone-table">
       <thead>
         <tr>
@@ -20,15 +12,15 @@
       <tbody>
         <tr v-for="milestone in milestones" :key="milestone.id">
           <td>
-            <a href="#" @click.prevent="goToMilestoneInfo(milestone)">{{ milestone.name }}</a>
+            <!-- Link to navigate to MilestoneInfo.vue without parameters -->
+            <router-link to="/milestone-info">{{ milestone.name }}</router-link>
           </td>
           <td>
-            <button
+            <input
+              type="file"
               :disabled="milestone.status === 'Not open'"
-              @click="openUploadWindow(milestone)"
-            >
-              Select
-            </button>
+              @change="handleFileUpload($event, milestone)"
+            />
           </td>
           <td>
             <input
@@ -80,18 +72,11 @@ export default {
     },
   },
   methods: {
-    navigateTo(routeName) {
-      this.$router.push({ name: routeName });
-    },
-    goToMilestoneInfo(milestone) {
-      // Logic to navigate to Milestone Info tab with relevant description
-      alert(`Navigating to info for ${milestone.name}`);
-      this.$router.push({ name: 'milestone-info', params: { milestoneId: milestone.id } });
-    },
-    openUploadWindow(milestone) {
-      if (milestone.status !== 'Not open') {
-        alert(`Upload window opened for ${milestone.name}`);
-        // Logic to open a file upload window or modal
+    handleFileUpload(event, milestone) {
+      const file = event.target.files[0];
+      if (file) {
+        alert(`File ${file.name} uploaded for ${milestone.name}`);
+        // Logic to handle file upload
       }
     },
     markAsComplete(milestone) {
@@ -119,17 +104,19 @@ export default {
 <style scoped>
 .manage-milestone {
   padding: 16px;
-}
-
-.tabs button {
-  margin: 0 8px;
-  padding: 8px 16px;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .milestone-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .milestone-table th, .milestone-table td {
@@ -138,12 +125,31 @@ export default {
   text-align: center;
 }
 
-.milestone-table .missed {
-  color: red;
+.milestone-table th {
+  background-color: #3498db;
+  color: #ffffff;
+  font-weight: bold;
 }
 
-.milestone-table .due {
-  color: green;
+.milestone-table a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.milestone-table a:hover {
+  color: #2980b9;
+}
+
+.missed {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.due {
+  color: #2ecc71;
+  font-weight: bold;
 }
 
 .note {
@@ -151,14 +157,33 @@ export default {
   margin-top: 16px;
   padding: 12px;
   border-radius: 4px;
+  font-size: 14px;
+  color: #555;
 }
 
 .actions {
-  margin-top: 16px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .actions button {
-  margin-right: 8px;
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
   padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background-color 0.3s;
+}
+
+.actions button:hover {
+  background-color: #2980b9;
+}
+
+.actions button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
 }
 </style>

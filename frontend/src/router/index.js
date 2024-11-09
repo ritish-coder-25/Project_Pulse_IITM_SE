@@ -7,6 +7,8 @@ import MilestoneScoring from '@/components/MilestoneScoring.vue';
 import ProjectDefinition from '@/components/Project_Definition.vue';
 import MilestoneDefinition from '@/components/Milestone_Definition.vue';
 import ManageMilestone from '@/components/ManageMilestone.vue';
+import MilestoneInfo from '@/components/MilestoneInfo.vue';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +57,11 @@ const router = createRouter({
       path: '/manage-milestone',
       name: 'ManageMilestone',
       component: ManageMilestone,
+    },
+    {
+      path: '/milestone-info',
+      name: 'MilestoneInfo',
+      component: MilestoneInfo,
     },
   ],
 });

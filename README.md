@@ -5,6 +5,6 @@
 #### Start instructions
 > cd frontend
 
-> npm i
+> npm ci
 
 > npm run dev

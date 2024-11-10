@@ -2,7 +2,7 @@
 
 1. **Create a virtual environment:**
     ```sh
-    python -m venv env
+    python -m venv env  or python3 -m venv env 
 2. **Activate the virtual environment:** 
 
         - **Linux:**

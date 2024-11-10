@@ -27,6 +27,33 @@ export const RoutesEnums = {
         relUrl: 'milestones',
       },
     },
+    instructor: {
+      root: {
+        name: 'instructor-dashboard-root',
+        url: '/dashboard/instructor',
+        relUrl: 'instructor',
+      },
+      home: {
+        name: 'instructor-dashboard-home',
+        url: '/dashboard/instructor/home',
+        relUrl: 'home',
+      },
+      milestones: {
+        name: 'instructor-dashboard-milestones',
+        url: '/dashboard/instructor/milestones',
+        relUrl: 'milestones',
+      },
+      teams: {
+        name: 'instructor-dashboard-teams',
+        url: '/dashboard/instructor/teams',
+        relUrl: 'teams',
+      },
+      teamDetails: {
+        name: 'instructor-dashboard-team-details',
+        url: '/dashboard/instructor/team-details',
+        relUrl: 'team-details',
+      },
+    }
   },
 }
 

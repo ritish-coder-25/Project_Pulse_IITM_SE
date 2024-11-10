@@ -1,6 +1,4 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { BTabs, BTab } from 'bootstrap-vue-next'
 import {
   HomeIcon,
@@ -11,9 +9,7 @@ import DefineTeamComponent from '../DefineTeam/DefineTeamComponent.vue'
 import MilestoneScoring from '../MilestoneScoring.vue'
 import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
 import { RoutesEnums } from '@/enums'
-
-const router = useRouter()
-const route = useRoute()
+import { useTabRouting } from '@/composables/useTabRouting'
 
 const TabNames = {
   Home: RoutesEnums.dashboard.student.home.name,
@@ -21,30 +17,8 @@ const TabNames = {
   //Milestones: RoutesEnums.dashboard.student.milestones.name,
 }
 
-const routeToTabIndex = Object.values(TabNames).reduce(
-  (acc, tabName, index) => {
-    acc[tabName] = index
-    return acc
-  },
-  {},
-)
-console.log(routeToTabIndex)
+const { activeTab, onTabChange } = useTabRouting(TabNames)
 
-const activeTab = ref(routeToTabIndex[route.name] || 0)
-
-// Handle tab changes
-const onTabChange = tabIndex => {
-  const routes = [...Object.values(TabNames)]
-  router.push({ name: routes[tabIndex] })
-}
-
-// Keep tabs in sync with route changes
-watch(
-  () => route.name,
-  newRoute => {
-    activeTab.value = routeToTabIndex[newRoute] || 0
-  },
-)
 </script>
 
 <template>

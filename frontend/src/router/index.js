@@ -73,36 +73,36 @@ const router = createRouter({
             },
           ],
         },
-        // {
-        //   path: 'instructor',
-        //   //component: IDashboardComponent,
-        //   children: [
-        //     {
-        //       path: '',
-        //       redirect: '/dashboard/instructor/home',
-        //     },
-        //     {
-        //       path: 'home',
-        //       name: 'instructor-dashboard-home',
-        //       //component: TAHomepage,
-        //     },
-        //     {
-        //       path: 'milestones',
-        //       name: 'instructor-dashboard-milestones',
-        //       //component: MilestoneScoring,
-        //     },
-        //     {
-        //       path: 'teams',
-        //       name: 'instructor-dashboard-teams',
-        //       //component: Teams,
-        //     },
-        //     {
-        //       path: 'team-details',
-        //       name: 'instructor-dashboard-team-details',
-        //       //component: TeamDetails,
-        //     },
-        //   ],
-        // },
+        {
+          path: RoutesEnums.dashboard.instructor.root.relUrl,
+          //component: IDashboardComponent,
+          children: [
+            {
+              path: '',
+              redirect: '/dashboard/instructor/home',
+            },
+            {
+              path: RoutesEnums.dashboard.instructor.home.relUrl,
+              name: RoutesEnums.dashboard.instructor.home.name,
+              //component: TAHomepage,
+            },
+            {
+              path: RoutesEnums.dashboard.instructor.milestones.relUrl,
+              name: RoutesEnums.dashboard.instructor.milestones.name,
+              //component: MilestoneScoring,
+            },
+            {
+              path: RoutesEnums.dashboard.instructor.teams.relUrl,
+              name: RoutesEnums.dashboard.instructor.teams.name,
+              //component: Teams,
+            },
+            {
+              path: RoutesEnums.dashboard.instructor.teamDetails.relUrl,
+              name: RoutesEnums.dashboard.instructor.teamDetails.name,
+              //component: TeamDetails,
+            },
+          ],
+        },
         {
           path: '',
           redirect: to => {

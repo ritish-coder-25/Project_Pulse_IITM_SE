@@ -5,3 +5,5 @@ Flask-Bcrypt
 Flask-Migrate
 python-dotenv
 psycopg2-binary
+langchain
+langchain-groq

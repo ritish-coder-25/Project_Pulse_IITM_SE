@@ -8,11 +8,28 @@ import {
 import DefineTeamComponent from '../DefineTeam/DefineTeamComponent.vue'
 import MilestoneScoring from '../MilestoneScoring.vue'
 import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
+import { RoutesEnums } from '@/enums'
+import { useTabRouting } from '@/composables/useTabRouting'
+
+const TabNames = {
+  Home: RoutesEnums.dashboard.student.home.name,
+  DefineTeam: RoutesEnums.dashboard.student.team.name,
+  //Milestones: RoutesEnums.dashboard.student.milestones.name,
+}
+
+const { activeTab, onTabChange } = useTabRouting(TabNames)
+
 </script>
 
 <template>
   <div class="dashboard-container p-4">
-    <BTabs class="custom-tabs" nav-class="border-0 mb-3" card>
+    <BTabs
+      class="custom-tabs"
+      nav-class="border-0 mb-3"
+      card
+      v-model="activeTab"
+      @update:modelValue="onTabChange"
+    >
       <BTab>
         <template #title>
           <div class="tab-title">
@@ -22,6 +39,7 @@ import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
         </template>
         <div class="tab-content-wrapper">
           <h1>Student Home</h1>
+          <StudentTeamsDashboard />
         </div>
       </BTab>
       <BTab>
@@ -35,10 +53,10 @@ import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
           <DefineTeamComponent />
         </div>
       </BTab>
-      <BTab title="Team's Dashboard" active>
+      <!-- <BTab title="Team's Dashboard" active>
         <h1>Dashboard</h1>
         <StudentTeamsDashboard />
-      </BTab>
+      </BTab> -->
     </BTabs>
   </div>
 </template>

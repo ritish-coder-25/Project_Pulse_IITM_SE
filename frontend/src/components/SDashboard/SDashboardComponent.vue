@@ -10,8 +10,8 @@ import MilestoneScoring from '../MilestoneScoring.vue'
 import StudentTeamsDashboard from '../StudentTeamsDashboard.vue'
 import { RoutesEnums } from '@/enums'
 import { useTabRouting } from '@/composables/useTabRouting'
-import ManageMilestone from '../ManageMilestone.vue';
-import MilestoneInfo from '../MilestoneInfo.vue';
+import ManageMilestone from '../ManageMilestone.vue'
+import MilestoneInfo from '../MilestoneInfo.vue'
 
 const TabNames = {
   Home: RoutesEnums.dashboard.student.home.name,
@@ -22,8 +22,6 @@ const TabNames = {
 }
 
 const { activeTab, onTabChange } = useTabRouting(TabNames)
-
-
 </script>
 
 <template>
@@ -58,13 +56,27 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           <DefineTeamComponent />
         </div>
       </BTab>
-      <BTab title="Manage Milestone" active>
-        <h1>Manage Milestone</h1>
-        <ManageMilestone/>
+      <BTab title="Manage Milestone">
+        <template #title>
+          <div class="tab-title">
+            <UserGroupIcon class="tab-icon me-2" />
+            <span>Manage Milestone</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <ManageMilestone />
+        </div>
       </BTab>
-      <BTab title="MilestoneInfo" active>
-        <h1>Milestone Info</h1>
-        <MilestoneInfo/>
+      <BTab title="MilestoneInfo">
+        <template #title>
+          <div class="tab-title">
+            <UserGroupIcon class="tab-icon me-2" />
+            <span>Milestone Info</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <MilestoneInfo />
+        </div>
       </BTab>
     </BTabs>
   </div>

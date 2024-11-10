@@ -5,11 +5,14 @@ import SDashboardComponent from './SDashboardComponent.vue'
 import IDashboardComponent from './IDashboardComponent.vue'
 import { useAuthStore } from '@/stores/authstore'
 import { UserRoleEnums } from '@/enums'
+import { useRoute } from 'vue-router'
 
 const authStore = useAuthStore()
-
+const route = useRoute();
+console.log(route.path)
 const currentDashboard = computed(() => {
-  return authStore.userRole === UserRoleEnums.student
+  //return authStore.userRole === UserRoleEnums.student
+  return route.path.includes('/dashboard/student')
     ? SDashboardComponent
     : IDashboardComponent
 })

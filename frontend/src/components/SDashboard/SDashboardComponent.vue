@@ -17,6 +17,8 @@ const TabNames = {
   Home: RoutesEnums.dashboard.student.home.name,
   DefineTeam: RoutesEnums.dashboard.student.team.name,
   //Milestones: RoutesEnums.dashboard.student.milestones.name,
+  MilestoneInfo: RoutesEnums.dashboard.student.milestoneinfo.name,
+  ManageMilestone: RoutesEnums.dashboard.student.managemilestone.name,
 }
 
 const { activeTab, onTabChange } = useTabRouting(TabNames)

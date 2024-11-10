@@ -9,14 +9,6 @@ import MilestoneDefinition from '@/components/Milestone_Definition.vue'
 import StudentTeamsDashboard from '@/components/StudentTeamsDashboard.vue'
 import DefineTeamComponent from '@/components/DefineTeam/DefineTeamComponent.vue'
 import { useAuthStore } from '@/stores/authstore' // Add this import
-import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
-import { ProtectedRoutesEnums, RoutesEnums } from '../enums/RoutesEnums';
-import { LocalStorageEnums } from '@/enums';
-import { isJwtTokenExpired } from '@/helpers/TokenHelpers';
-import MilestoneScoring from '@/components/MilestoneScoring.vue';
-import ProjectDefinition from '@/components/Project_Definition.vue';
-import MilestoneDefinition from '@/components/Milestone_Definition.vue';
 import ManageMilestone from '@/components/ManageMilestone.vue';
 import MilestoneInfo from '@/components/MilestoneInfo.vue';
 
@@ -73,6 +65,16 @@ const router = createRouter({
               path: RoutesEnums.dashboard.student.milestones.relUrl,
               name: RoutesEnums.dashboard.student.milestones.name,
               //component: MilestoneScoring,
+            },
+            {
+              path: RoutesEnums.dashboard.student.milestoneinfo.relUrl,
+              name: RoutesEnums.dashboard.student.milestoneinfo.name,
+              component: MilestoneInfo,
+            },
+            {
+              path: RoutesEnums.dashboard.student.managemilestone.relUrl,
+              name: RoutesEnums.dashboard.student.managemilestone.name,
+              component: ManageMilestone,
             },
           ],
         },

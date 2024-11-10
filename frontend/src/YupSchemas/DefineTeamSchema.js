@@ -14,6 +14,6 @@ export const DefineTeamSchema = yup.object({
           value => value?.trim() !== '',
         ),
     )
-    .min(5, 'At 5 emails are required')
+    .min(5, 'Atleast 5 emails are required')
     .max(9, 'Maximum 9 emails allowed'),
 })

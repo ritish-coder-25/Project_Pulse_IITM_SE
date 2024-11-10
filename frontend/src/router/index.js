@@ -9,6 +9,10 @@ import MilestoneDefinition from '@/components/Milestone_Definition.vue'
 import StudentTeamsDashboard from '@/components/StudentTeamsDashboard.vue'
 import DefineTeamComponent from '@/components/DefineTeam/DefineTeamComponent.vue'
 import { useAuthStore } from '@/stores/authstore' // Add this import
+import ManageMilestone from '@/components/ManageMilestone.vue';
+import MilestoneInfo from '@/components/MilestoneInfo.vue';
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,25 +25,16 @@ const router = createRouter({
     {
       path: RoutesEnums.about,
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
     {
       path: RoutesEnums.login,
       name: 'login',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AuthViews/LoginView.vue'),
     },
     {
       path: RoutesEnums.signup,
       name: 'signup',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AuthViews/SignupView.vue'),
     },
     {
@@ -70,6 +65,16 @@ const router = createRouter({
               path: RoutesEnums.dashboard.student.milestones.relUrl,
               name: RoutesEnums.dashboard.student.milestones.name,
               //component: MilestoneScoring,
+            },
+            {
+              path: RoutesEnums.dashboard.student.milestoneinfo.relUrl,
+              name: RoutesEnums.dashboard.student.milestoneinfo.name,
+              component: MilestoneInfo,
+            },
+            {
+              path: RoutesEnums.dashboard.student.managemilestone.relUrl,
+              name: RoutesEnums.dashboard.student.managemilestone.name,
+              component: ManageMilestone,
             },
           ],
         },
@@ -132,41 +137,41 @@ const router = createRouter({
       name: 'TeamDetails',
       component: () => import('../views/TeamDetailsView.vue'), // Add route for DefineMilestones
     },
+    {
+      path: '/manage-milestone',
+      name: 'ManageMilestone',
+      component: ManageMilestone,
+    },
+    {
+      path: '/milestone-info',
+      name: 'MilestoneInfo',
+      component: MilestoneInfo,
+    },
   ],
-})
+});
 
 router.beforeEach((to, from, next) => {
-  const accessToken = localStorage.getItem(LocalStorageEnums.accessToken, null)
-  const refreshToken = localStorage.getItem(
-    LocalStorageEnums.refreshToken,
-    null,
-  )
-  const accessTokenExpired = isJwtTokenExpired(accessToken)
-  const refreshTokenExpired = isJwtTokenExpired(refreshToken)
+  const accessToken = localStorage.getItem(LocalStorageEnums.accessToken);
+  const refreshToken = localStorage.getItem(LocalStorageEnums.refreshToken);
+  const accessTokenExpired = isJwtTokenExpired(accessToken);
+  const refreshTokenExpired = isJwtTokenExpired(refreshToken);
 
   try {
-    if (
-      ProtectedRoutesEnums.findIndex(val => {
-        if (to.fullPath === val) {
-          return true
-        }
-      }) != -1
-    ) {
+    if (ProtectedRoutesEnums.some(val => to.fullPath === val)) {
       if (!accessToken || refreshTokenExpired) {
-        return next(RoutesEnums.login)
+        return next(RoutesEnums.login);
       }
     }
     if (to.fullPath === RoutesEnums.login) {
       if (accessToken && !refreshTokenExpired) {
-        return next(RoutesEnums.start)
+        return next(RoutesEnums.start);
       }
     }
   } catch (err) {
-    console.debug('router error', err)
+    console.debug('router error', err);
   }
 
-  // next();
-  return next()
-})
+  return next();
+});
 
-export default router
+export default router;

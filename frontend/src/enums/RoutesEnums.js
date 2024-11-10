@@ -26,6 +26,16 @@ export const RoutesEnums = {
         url: '/dashboard/student/milestones',
         relUrl: 'milestones',
       },
+      milestoneinfo: {
+        name: 'student-dashboard-milestoneinfo',
+        url: '/dashboard/student/milestoneinfo',
+        relUrl: 'milestoneinfo',
+      },
+      managemilestone: {
+        name: 'student-dashboard-managemilestone',
+        url: '/dashboard/student/managemilestone',
+        relUrl: 'managemilestone',
+      },
     },
     instructor: {
       root: {

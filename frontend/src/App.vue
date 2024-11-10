@@ -13,6 +13,13 @@ import HelloWorld from './components/HelloWorld.vue'
           href="/"
           class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
         >
+          <img
+            src="@/assets/icon.png"
+            alt="Project Pulse Icon"
+            width="100"
+            height="100"
+            class="me-2"
+          />
           <svg
             class="bi me-2"
             width="40"
@@ -30,6 +37,16 @@ import HelloWorld from './components/HelloWorld.vue'
           <li>
             <RouterLink class="nav-link px-2 text-white" to="/"
               >Home</RouterLink
+            >
+          </li>
+          <li>
+            <RouterLink class="nav-link px-2 text-white" to="/dashboard"
+              >Student Dashboard</RouterLink
+            >
+          </li>
+          <li>
+            <RouterLink class="nav-link px-2 text-white" to="/dashboard/instructor"
+              >Instructor Dashboard</RouterLink
             >
           </li>
           <!-- <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>

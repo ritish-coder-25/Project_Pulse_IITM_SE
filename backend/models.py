@@ -51,8 +51,9 @@ class Team(db.Model):
         
 class Member(db.Model):
     __tablename__ = 'member'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False, primary_key=True)
-    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), primary_key=True)
+
 
 class Project(db.Model):
     __tablename__ = "project"

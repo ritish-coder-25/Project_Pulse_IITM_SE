@@ -156,7 +156,7 @@ def allocate_users():
 
 @api_ta.route("/api/users_approval", methods=["POST"])
 @jwt_required()
-def approve_users():
+def users_approval():
 
     data = request.get_json()
 

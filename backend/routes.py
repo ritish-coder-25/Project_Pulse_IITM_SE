@@ -64,13 +64,6 @@ def record_commit():
     
     return jsonify({'message': 'Commit recorded successfully'}), 201
 
-
-
-
-
-
-
-
 @api_bp.route('/api/users', methods=['GET'])
 @jwt_required()
 def get_users():
@@ -106,3 +99,40 @@ def get_users():
 
     
     return jsonify([user.to_dict() for user in users]), 200
+
+#(Joyce) Student Home component API 
+@api_bp.route('/api/stu_home/<int:stu_id>', methods=['GET'])
+@jwt_required()
+def get_stuhome(stu_id):
+    user = User.query.get(stu_id)
+    if user:
+        team = Team.query.get(user.team_id)
+        if team:
+            # Construct team data with members' names, emails, and their commits
+            team_data = {
+                'team_name': team.team_name,
+                'members': []
+            }
+
+            # Loop through each member in the team
+            for member in team.members:
+                member_data = {
+                    'name': f"{member.first_name} {member.last_name}",
+                    'email': member.email,
+                    'commit_count': 0,
+                }
+
+                # Get commits for each member
+                member_commits = Commit.query.filter_by(user_id=member.user_id).all()
+                member_data['commit_count'] = len(member_commits)  # Count of commits
+
+                team_data['members'].append(member_data)
+
+            return jsonify(team_data), 200
+        else:
+            return jsonify({"error": "No Team Found"}), 404
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+
+

@@ -108,13 +108,16 @@ def get_stuhome(stu_id):
     if user:
         team = Team.query.get(user.team_id)
         if team:
-            # Construct team data with members' names, emails, and their commits
+            # team data with members' names, emails, and their commits
             team_data = {
                 'team_name': team.team_name,
+                'team_score': 0,
                 'members': []
             }
+            scores = MilestoneStatus.query.filter_by(team_id=team.team_id).all() 
+            for score in scores: 
+                team_data['team_score'] += score.eval_score
 
-            # Loop through each member in the team
             for member in team.members:
                 member_data = {
                     'name': f"{member.first_name} {member.last_name}",
@@ -122,7 +125,6 @@ def get_stuhome(stu_id):
                     'commit_count': 0,
                 }
 
-                # Get commits for each member
                 member_commits = Commit.query.filter_by(user_id=member.user_id).all()
                 member_data['commit_count'] = len(member_commits)  # Count of commits
 

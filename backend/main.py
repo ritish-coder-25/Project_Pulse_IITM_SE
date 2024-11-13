@@ -88,16 +88,16 @@ if __name__ == '__main__':
 
     # Create default admin user if not exists
     with app.app_context():
-        if not User.query.filter_by(student_email='admin@projectpulse.com').first():
+        if not User.query.filter_by(email='admin@projectpulse.com').first():
             admin_user = User(
                 first_name='Admin',
                 last_name='ProjectPulse',
                 password=bcrypt.generate_password_hash('projectpulse123').decode('utf-8'),
-                student_email='admin@projectpulse.com',
+                email='admin@projectpulse.com',
                 github_username='pranjalkar99',
                 discord_username='test123',
                 user_type='Admin',
-                status='Active',
+                approval_status='Active',
             )
             db.session.add(admin_user)
             db.session.commit()

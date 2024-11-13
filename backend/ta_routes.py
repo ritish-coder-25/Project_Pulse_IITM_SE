@@ -1,6 +1,15 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
-from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
+from models import (
+    db,
+    User,
+    Team,
+    Project,
+    Milestone,
+    MilestoneStatus,
+    Commit,
+    Submission,
+)
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import get_jwt_identity
 
@@ -67,9 +76,9 @@ def get_uploads():
     try:
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
         recent_submissions = (
-            db.session.query(submission)
-            .join(Team, submission.team_id == Team.id)
-            .filter(submission.submission_timestamp >= seven_days_ago)
+            db.session.query(Submission)
+            .join(Team, Submission.team_id == Team.id)
+            .filter(Submission.submission_timestamp >= seven_days_ago)
             .all()
         )
         result = [{"team": submission.team.name} for submission in recent_submissions]

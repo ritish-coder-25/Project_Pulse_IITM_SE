@@ -15,7 +15,9 @@ class User(db.Model):
     user_type = db.Column(db.Enum('Student', 'TA', 'Admin', 'Instructor', 'Developer', 'Registered', name='user_types'))
     approval_status = db.Column(db.Enum('Active', 'Inactive', 'Decline', name='marker_types'), nullable=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=True)
-    commits = db.relationship('Commit', backref='user', lazy=True)
+    # Relationship to Team (each user belongs to one team)
+    team = db.relationship('Team', backref='members', lazy=True)
+
     def to_dict(self):
         return {
             'user_id': self.user_id,
@@ -29,6 +31,7 @@ class User(db.Model):
             'team_id': self.team_id,
         }
 
+
 class Team(db.Model):
     __tablename__ = "team"
     team_id = db.Column(db.Integer, primary_key=True)
@@ -37,7 +40,9 @@ class Team(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'))
     team_lead_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     milestone_statuses = db.relationship('MilestoneStatus', backref='team', lazy=True)
+    # Relationship to User (each team has many users)
     members = db.relationship('User', backref='team', lazy=True)
+
     def to_dict(self):
         return {
             'team_id': self.team_id,
@@ -49,12 +54,6 @@ class Team(db.Model):
             'members': [member.to_dict() for member in self.members]
         }
         
-class Member(db.Model):
-    __tablename__ = 'member'
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
-    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), primary_key=True)
-
-
 class Project(db.Model):
     __tablename__ = "project"
     project_id = db.Column(db.Integer, primary_key=True)

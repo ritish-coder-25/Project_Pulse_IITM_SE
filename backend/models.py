@@ -1,5 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
@@ -16,7 +16,7 @@ class User(db.Model):
     approval_status = db.Column(db.Enum('Active', 'Inactive', 'Decline', name='marker_types'), nullable=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=True)
     # Relationship to Team (each user belongs to one team)
-    team = db.relationship('Team', backref='members', lazy=True)
+    team = db.relationship('Team', back_populates='members', foreign_keys=[team_id])
 
     def to_dict(self):
         return {
@@ -39,9 +39,10 @@ class Team(db.Model):
     github_repo_url = db.Column(db.String(200))
     project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'))
     team_lead_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    milestone_statuses = db.relationship('MilestoneStatus', backref='team', lazy=True)
     # Relationship to User (each team has many users)
-    members = db.relationship('User', backref='team', lazy=True)
+    members = db.relationship('User', back_populates='team', foreign_keys='User.team_id', lazy=True)
+    # Relationship to MilestoneStatus
+    milestone_statuses = db.relationship('MilestoneStatus', backref='team', lazy=True)
 
     def to_dict(self):
         return {
@@ -53,6 +54,14 @@ class Team(db.Model):
             'milestone_statuses': [status.to_dict() for status in self.milestone_statuses],
             'members': [member.to_dict() for member in self.members]
         }
+
+
+class Member(db.Model):
+    __tablename__ = 'member'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), primary_key=True)
+# This Member class might not be needed 
+
         
 class Project(db.Model):
     __tablename__ = "project"

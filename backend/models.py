@@ -44,15 +44,15 @@ class Team(db.Model):
             'github_repo_url': self.github_repo_url,
             'project_id': self.project_id,
             'team_lead_id': self.team_lead_id,
-            'milestone_statuses': self.milestone_statuses,
-            'members': self.members
+            'milestone_statuses': [status.to_dict() for status in self.milestone_statuses],
+            'members': [member.to_dict() for member in self.members]
         }
 
 class Member(db.Model):
     __tablename__ = 'member'
-    member_id=db.Column(db.Integer, primary_key=True )
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), primary_key=True)
+
 
 class Project(db.Model):
     __tablename__ = "project"

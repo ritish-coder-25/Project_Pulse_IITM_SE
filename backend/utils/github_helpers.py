@@ -226,9 +226,9 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
 
 # Run the check and create an issue if not already a collaborator
 if __name__ == "__main__":
-    if not check_collaborator_status(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE', username='pranjalkar99'):
-        create_invite_request_issue(repo_owner='pranjalkar99', repo_name='california-agents')
-        print("You are not a collaborator on this repository.")
+    #if not check_collaborator_status(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE', username='joycejemimas'):
+        #create_invite_request_issue(repo_owner='joycejemimas', repo_name='california-agents')
+       # print("You are not a collaborator on this repository.")
     #create_invite_request_issue(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
 
     # get_commits_with_changes(since="2023-01-01T00:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= 'ritish-coder-25', repo_name='Project_Pulse_IITM_SE')

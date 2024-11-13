@@ -4,109 +4,145 @@ from datetime import datetime
 db = SQLAlchemy()
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = "user"
+    user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    student_email = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
     github_username = db.Column(db.String(50), unique=True)
     discord_username = db.Column(db.String(50))
-    user_type = db.Column(db.Enum('Student', 'TA', 'Admin', 'Instructor', 'Developer','Registered', name='user_types'))
-    status = db.Column(db.Enum('Active', 'Inactive', 'Decline', name='marker_types'), nullable=True)
-    allocation_status = db.Column(db.Boolean, default=False)  # True if allocated to a team
-    team_id = db.Column(db.Integer, db.ForeignKey('team.id'), nullable=True)
-    commits = db.relationship('Commit', backref='user', lazy=True)
-
+    user_type = db.Column(db.Enum('Student', 'TA', 'Admin', 'Instructor', 'Developer', 'Registered', name='user_types'))
+    approval_status = db.Column(db.Enum('Active', 'Inactive', 'Decline', name='marker_types'), nullable=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=True)
     def to_dict(self):
         return {
-        'id': self.id,
-        'first_name': self.first_name,
-        'last_name': self.last_name,
-        'student_email': self.student_email,
-        'github_username': self.github_username,
-        'discord_username': self.discord_username,
-        'user_type': self.user_type,
-        'status': self.status,
-        'allocation_status': self.allocation_status,
-        'team_id': self.team_id
+            'user_id': self.user_id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'github_username': self.github_username,
+            'discord_username': self.discord_username,
+            'user_type': self.user_type,
+            'approval_status': self.approval_status,
+            'team_id': self.team_id,
         }
 
 class Team(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    __tablename__ = "team"
+    team_id = db.Column(db.Integer, primary_key=True)
+    team_name = db.Column(db.String(100), nullable=False)
     github_repo_url = db.Column(db.String(200))
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
-    
-    team_lead_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'))
+    team_lead_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     milestone_statuses = db.relationship('MilestoneStatus', backref='team', lazy=True)
-    members = db.relationship('User', 
-                               backref='team', 
-                               lazy=True, 
-                               foreign_keys=[User.team_id])
+    members = db.relationship('User', backref='team', lazy=True)
+    def to_dict(self):
+        return {
+            'team_id': self.team_id,
+            'team_name': self.team_name,
+            'github_repo_url': self.github_repo_url,
+            'project_id': self.project_id,
+            'team_lead_id': self.team_lead_id,
+            'milestone_statuses': self.milestone_statuses,
+            'members': self.members
+        }
+
+class Member(db.Model):
+    __tablename__ = 'member'
+    member_id=db.Column(db.Integer, primary_key=True )
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
 
 class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    __tablename__ = "project"
+    project_id = db.Column(db.Integer, primary_key=True)
+    project_topic = db.Column(db.String(100), nullable=False)
     statement = db.Column(db.Text, nullable=False)
     document_url = db.Column(db.String(200))
-    teams = db.relationship('Team', backref='project', lazy=True)
+    def to_dict(self):
+        return {
+            'project_id': self.project_id,
+            'project_topic': self.project_topic,
+            'statement': self.statement,
+            'document_url': self.document_url
+        }
 
 class Milestone(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
+    __tablename__ = "milestone"
+    milestone_id = db.Column(db.Integer, primary_key=True)
+    milestone_name = db.Column(db.String(100), nullable=False)
+    milestone_description = db.Column(db.Text)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     max_marks = db.Column(db.Float, nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'), nullable=False)
     milestone_statuses = db.relationship('MilestoneStatus', backref='milestone', lazy=True)
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'github_username': self.github_username,
+            'discord_username': self.discord_username,
+            'user_type': self.user_type,
+            'approval_status': self.approval_status,
+            'team_id': self.team_id,
+        }
 
 class MilestoneStatus(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    team_id = db.Column(db.Integer, db.ForeignKey('team.id'), nullable=False)
-    milestone_id = db.Column(db.Integer, db.ForeignKey('milestone.id'), nullable=False)
-    status = db.Column(db.Enum('Evaluated', 'Completed', 'Missed', 'Pending', name='status_types'))
+    __tablename__ = "milestonestatus"
+    milestonestatus_id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
+    milestone_id = db.Column(db.Integer, db.ForeignKey('milestone.milestone_id'), nullable=False)
+    milestone_status = db.Column(db.Enum('Evaluated', 'Completed', 'Missed', 'Pending', name='status_types'))
     eval_date = db.Column(db.DateTime)
     completed_date = db.Column(db.DateTime)
     eval_score = db.Column(db.Float)
     eval_feedback = db.Column(db.Text)
-
-class Commit(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    commit_hash = db.Column(db.String(40), nullable=False)
-    commit_message = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    commit_score = db.Column(db.Float, default=0.0)
-    commit_url = db.Column(db.String(255))
-    analysis = db.relationship('CommitAnalysis', back_populates='commit', uselist=False, passive_deletes=True)
-
+    submission_id = db.Column(db.Integer, db.ForeignKey('submission.submission_id'))
     def to_dict(self):
         return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'commit_hash': self.commit_hash,
-            'commit_message': self.commit_message,
-            'timestamp': self.timestamp,
-            'analysis': self.analysis.to_dict() if self.analysis else None,  # Include analysis data if it exists
+            'milestonestatus_id': self.milestonestatus_id,
+            'team_id': self.team_id,
+            'milestone_id': self.milestone_id,
+            'milestone_status': self.milestone_status,
+            'eval_date': self.eval_date,
+            'completed_date': self.completed_date,
+            'eval_score': self.eval_score,
+            'eval_feedback': self.eval_feedback,
+            'submission_id': self.submission_id,
         }
 
-class CommitAnalysis(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    commit_id = db.Column(db.Integer, db.ForeignKey('commit.id'), nullable=False)
-    commit_clarity = db.Column(db.Float)  # Score between 0-10
-    complexity_score = db.Column(db.Float)  # Numerical score for complexity
-    code_quality_score = db.Column(db.Float)  # Score between 0-100
-    risk_assessment = db.Column(db.String(20))  # e.g., 'low', 'medium', 'high'
-    improvement_suggestions = db.Column(db.Text)  # Text field for suggestions
-    analysis_timestamp = db.Column(db.DateTime, default=datetime.utcnow)  # Analysis timestamp
-    additional_observations = db.Column(db.Text)  # Text field for observations
-
-    commit = db.relationship('Commit', back_populates='analysis')
+class Commit(db.Model):
+    __tablename__ = "commit"
+    commit_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
+    commit_hash = db.Column(db.String(40), nullable=False)
+    commit_message = db.Column(db.Text)
+    commit_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    commit_score = db.Column(db.Float, default=0.0)
+    commit_url = db.Column(db.String(255))
+    commit_clarity = db.Column(db.Float, default=0.0)
+    complexity_score = db.Column(db.Float)
+    code_quality_score = db.Column(db.Float)
+    risk_assessment = db.Column(db.String(20))
+    improvement_suggestions = db.Column(db.Text)
+    analysis_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    additional_observations = db.Column(db.Text)
 
     def to_dict(self):
         return {
-            'id': self.id,
             'commit_id': self.commit_id,
+            'user_id': self.user_id,
+            'team_id': self.team_id,
+            'commit_hash': self.commit_hash,
+            'commit_message': self.commit_message,
+            'commit_timestamp': self.commit_timestamp,
+            'commit_score': self.commit_score,
+            'commit_url': self.commit_url,
             'commit_clarity': self.commit_clarity,
             'complexity_score': self.complexity_score,
             'code_quality_score': self.code_quality_score,
@@ -116,3 +152,28 @@ class CommitAnalysis(db.Model):
             'additional_observations': self.additional_observations,
         }
 
+class Submission(db.Model):
+    __tablename__ = "submission"
+    submission_id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
+    milestone_id = db.Column(db.Integer, db.ForeignKey('milestone.milestone_id'), nullable=False)
+    submission_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    def to_dict(self):
+        return {
+            'submission_id': self.submission_id,
+            'team_id': self.team_id,
+            'milestone_id': self.milestone_id,
+            'submission_timestamp': self.submission_timestamp
+        }
+
+class File(db.Model):
+    __tablename__ = "file"
+    file_id = db.Column(db.Integer, primary_key=True)
+    file_name = db.Column(db.String(100), nullable=False)
+    submission_id = db.Column(db.Integer, db.ForeignKey('submission.submission_id'), nullable=False)
+    def to_dict(self):
+        return {
+            'file_id': self.file_id,
+            'file_name': self.file_name,
+            'submission_id': self.submission_id
+        }

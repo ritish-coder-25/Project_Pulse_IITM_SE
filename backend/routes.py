@@ -106,3 +106,20 @@ def get_users():
 
     
     return jsonify([user.to_dict() for user in users]), 200
+
+@api_bp.routes('/api/stu_home', methods=['GET'])
+@jwt_required()
+def get_stuhome():
+    query_params = request.args  # Get all query parameters from the URL
+
+    # If 'id' is present, fetch the exact user by id
+    user_id = query_params.get('id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            user_teamId = user.team_id
+            user_team = Team.query.get(user_teamId)
+            return jsonify(user.to_dict()), 200
+        else:
+            return jsonify({"error": "User not found"}), 404
+    

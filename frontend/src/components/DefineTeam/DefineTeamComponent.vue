@@ -9,9 +9,27 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
         <Form
           :validation-schema="DefineTeamSchema"
           @submit="onSubmit"
-          v-slot="{ values }"
+          v-slot="{
+            values,
+            setFieldValue,
+            resetForm,
+            errors,
+            resetField,
+            setValues,
+          }"
           :validate-on-mount="false"
         >
+          <div
+            v-if="
+              storeFormRefs({
+                resetForm,
+                setFieldValue,
+                resetField,
+                setValues,
+                values,
+              })
+            "
+          ></div>
           <div class="mb-3">
             <label class="form-label" for="team-input">Team Name</label>
             <Field name="team" v-slot="{ field, meta }">
@@ -31,6 +49,25 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
             </Field>
           </div>
 
+          <div class="mb-3">
+            <label class="form-label" for="team-input">Github Repo Url</label>
+            <Field name="github_repo_url" v-slot="{ field, meta }">
+              <input
+                v-bind="field"
+                id="github-repo-input"
+                class="form-control"
+                :readonly="isTeamReadOnly"
+                placeholder="Enter repo url"
+                :class="{
+                  'is-invalid': meta.touched && meta.errors.length > 0,
+                }"
+              />
+              <div class="invalid-feedback">
+                <ErrorMessage name="github_repo_url" v-if="meta.touched" />
+              </div>
+            </Field>
+          </div>
+
           <!-- Dynamic Email Dropdowns -->
           <div
             v-for="(field, index) in emailFields"
@@ -40,36 +77,78 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
             <label class="form-label">Email {{ index + 1 }}</label>
             <div class="input-group">
               <Field :name="`emails.${index}`" v-slot="{ field, meta }">
-                <select
-                  v-bind="field"
-                  class="form-select"
-                  :class="{
-                    'is-invalid': meta.touched && meta.errors.length > 0,
-                  }"
-                >
-                  <option value="">Choose...</option>
-                  <option
-                    v-for="(emailOption, idx) in emailOptions"
-                    :key="idx"
-                    :value="emailOption"
+                <div class="position-relative w-100">
+                  <div>
+                    <div class="d-flex">
+                      <input
+                        type="text"
+                        v-bind="field"
+                        class="form-control"
+                        :class="{
+                          'is-invalid': meta.touched && meta.errors.length > 0,
+                        }"
+                        @input="
+                          e => {
+                            debounceSearch(e, index)
+                          }
+                        "
+                        placeholder="Search email..."
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-danger ms-2"
+                        @click="removeEmail(index, setFieldValue)"
+                        v-if="emailFields.length > 1"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                    <div
+                      :class="{
+                        'is-invalid': meta.touched && meta.errors.length > 0,
+                      }"
+                    ></div>
+                    <div class="invalid-feedback">
+                      {{ errors[`emails[${index}]`] }}
+                      <ErrorMessage
+                        :name="`emails[${index}]`"
+                        v-if="
+                          meta.touched && searchResults[index]?.length === 0
+                        "
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Results Dropdown -->
+                  <div
+                    v-if="searchResults[index]?.length"
+                    class="position-absolute w-100 bg-white border rounded-bottom shadow-sm"
+                    style="z-index: 1000"
                   >
-                    {{ emailOption }}
-                  </option>
-                </select>
-                <!-- {{ meta }} -->
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  @click="removeEmail(index)"
-                  v-if="emailFields.length > 1"
-                >
-                  Remove
-                </button>
-                <div class="invalid-feedback">
-                  <ErrorMessage
-                    :name="`emails[${index}]`"
-                    v-if="meta.touched"
-                  />
+                    <div
+                      v-for="result in searchResults[index]"
+                      :key="result.student_email"
+                      class="p-2 cursor-pointer hover:bg-gray-100"
+                      @click="
+                        () => {
+                          //field.value = result.student_email
+                          selectEmail(
+                            result.student_email,
+                            result.id,
+                            index,
+                            setFieldValue,
+                          )
+                        }
+                      "
+                    >
+                      <div class="d-flex flex-column">
+                        <span class="fw-bold">{{ result.student_email }}</span>
+                        <small class="text-muted">
+                          {{ result.first_name }} {{ result.last_name }}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Field>
             </div>
@@ -82,10 +161,10 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
           <div class="text-end">
             <button
               type="button"
-              class="btn btn-secondary mb-4 d-block ms-auto"
+              class="btn btn-primary mb-4 d-block ms-auto"
               @click="addEmail"
             >
-              <i class="bi bi-plus-circle me-2"></i>
+              <i class="bi bi-plus-circle"></i>
             </button>
 
             <button type="submit" class="btn btn-primary d-block ms-auto">
@@ -103,6 +182,9 @@ import { DefineTeamApiHelper } from '@/helpers/ApiHelperFuncs/DefineTeam'
 import { useForm, useFieldArray } from 'vee-validate'
 import { DefineTeamSchema } from '@/YupSchemas'
 import FormConatiner from '../MainComponents/FormConatiner.vue'
+import { mainAxios } from '@/helpers'
+import { LocalStorageEnums } from '@/enums'
+import { DefineTeamService } from '../../../services'
 
 export default {
   name: 'DefineTeamComponent',
@@ -111,6 +193,9 @@ export default {
       emailOptions: [],
       isTeamReadOnly: false,
       emailFields: [],
+      updateEmailField: null,
+      searchResults: {},
+      searchTimeout: null,
       formData: null,
       push: null,
       remove: null,
@@ -118,25 +203,41 @@ export default {
       handleSubmit: null,
       errors: null,
       values: null,
+      //setFieldValue: null,
+      setValues: null,
+      resetFormRef: null,
+      setFieldValueRef: null,
+      resetFieldRef: null,
+      setValuesRef: null,
+      currentTeam: null,
+      valuesRef: null,
     }
   },
   created() {
     // Initialize form
-    const { handleSubmit, reset, setErrors, errors, values, setValues } =
-      useForm({
-        validationSchema: DefineTeamSchema,
-        initialValues: {
-          team: '',
-          emails: [''],
-        },
-        validateOnMount: false,
-        initialTouched: false,
-        initialErrors: {},
-      })
-
+    const {
+      handleSubmit,
+      reset,
+      setErrors,
+      errors,
+      values,
+      setValues,
+      setFieldValue,
+      resetField,
+    } = useForm({
+      validationSchema: DefineTeamSchema,
+      initialValues: {
+        team: '',
+        emails: [''],
+        github_repo_url: '',
+      },
+      validateOnMount: false,
+      initialTouched: false,
+      initialErrors: {},
+    })
+    //setValues({team: 'testing', emails: ['hiii']})
     // Initialize field array
-    const { fields, push, remove } = useFieldArray('emails')
-
+    const { fields, push, remove, update } = useFieldArray('emails')
     // Assign to data properties
     this.emailFields = fields
     this.push = push
@@ -145,6 +246,9 @@ export default {
     this.handleSubmit = handleSubmit
     this.errors = errors
     this.values = values
+    this.updateEmailField = update
+    //this.setFieldValue = setFieldValue
+    this.setValues = setValues
   },
   methods: {
     resetForm() {
@@ -154,43 +258,72 @@ export default {
     addEmail() {
       this.push('')
     },
-    removeEmail(index) {
-      this.remove(index)
+    async removeEmail(index, setFieldValue) {
+      await DefineTeamService.removeEmail({
+        index,
+        setFieldValue,
+        valuesRef: this.valuesRef,
+        currentTeam: this.currentTeam,
+        emailFields: this.emailFields,
+        remove: this.remove,
+      })
     },
-    onSubmit(formValues) {
-      console.log('Form Submitted:', formValues)
+    async onSubmit(formValues) {
+      if (this.currentTeam) {
+        formValues.team_id = this.currentTeam.teamId
+        const formResult = await DefineTeamApiHelper.updateTeam(formValues)
+        if (formResult.isSuccess) {
+          alert('Team updated successfully!')
+          //localStorage.setItem(LocalStorageEnums.teamId, formResult.teamId)
+        } else {
+          alert('Team update failed')
+        }
+      } else {
+        const formResult = await DefineTeamApiHelper.createTeam(formValues)
+        if (formResult.isSuccess) {
+          alert('Team created successfully!')
+          localStorage.setItem(LocalStorageEnums.teamId, formResult.teamId)
+        } else {
+          alert('Team creation failed')
+        }
+      }
+
       // Add submission logic here
     },
-    async fetchTeam() {
-      try {
-        const teamData = await DefineTeamApiHelper.fetchTeam()
-        if (teamData && teamData.name) {
-          //setValues({ ...values, team: teamData.name })
-          this?.reset({
-            team: teamData.name,
-            // Preserve existing emails or set if needed
-            emails: values.emails.length > 0 ? values.emails : [''],
-          })
-          isTeamReadOnly.value = true
-        }
-      } catch (error) {
-        console.error('Error fetching team:', error)
-      }
+    storeFormRefs({ resetForm, setFieldValue, resetField, setValues, values }) {
+      this.resetFormRef = resetForm
+      this.setFieldValueRef = setFieldValue
+      this.resetFieldRef = resetField
+      this.setValuesRef = setValues
+      this.valuesRef = values
     },
-    async fetchEmails() {
-      try {
-        const emails = await DefineTeamApiHelper.fetchEmails()
-        this.emailOptions = emails
-        //this.emailOptions.value = emails
-      } catch (error) {
-        console.error('Error fetching emails:', error)
-      }
+    async fetchTeam() {
+      await DefineTeamService.fetchTeam({
+        addEmail: this.addEmail,
+        selectEmail: this.selectEmail,
+        setValuesRef: this.setValuesRef,
+        isTeamReadOnly: this.isTeamReadOnly,
+        currentTeam: this.currentTeam,
+        setFieldValueRef: this.setFieldValueRef,
+      })
+    },
+    async debounceSearch(event, index) {
+      await DefineTeamService.debounceSearch({
+        event,
+        index,
+        searchTimeout: this.searchTimeout,
+        searchResults: this.searchResults,
+      })
+    },
+    async selectEmail(email, userId, index, setFieldValue) {
+      this.updateEmailField(index, email)
+      setFieldValue(`emails.${index}`, email)
+      setFieldValue(`user_ids.${index}`, userId)
+      this.searchResults[index] = []
     },
   },
   mounted() {
-    Promise.all([this.fetchTeam(), this.fetchEmails()])
-    // this.fetchTeam()
-    // this.fetchEmails()
+    Promise.all([this.fetchTeam()])
   },
 }
 </script>
@@ -198,5 +331,11 @@ export default {
 <style scoped>
 .is-invalid {
   border-color: #dc3545;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.hover\:bg-gray-100:hover {
+  background-color: #f3f4f6;
 }
 </style>

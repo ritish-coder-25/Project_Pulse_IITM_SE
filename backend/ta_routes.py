@@ -18,7 +18,7 @@ api_ta = Blueprint("api_ta", __name__)
 
 # (Parag) TAHomePage - Fetching pending Users for approval
 @api_ta.route("/api/pendusers", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_pending_users():
     try:
         pending_users = User.query.filter_by(status="Inactive").all()
@@ -40,7 +40,7 @@ def get_pending_users():
 
 # (Parag) TAHomePage - Returning approve/reject for users
 @api_ta.route("/api/approve_users", methods=["POST"])
-# @jwt_required()
+@jwt_required()
 def approve_usersTA():
     data = request.get_json()
     current_user_id = get_jwt_identity()
@@ -71,7 +71,7 @@ def approve_usersTA():
 
 # (Parag) TAHomePage - Fetching uploads for last 7 days
 @api_ta.route("/api/uploads", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_uploads():
     try:
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
@@ -91,7 +91,7 @@ def get_uploads():
 
 # (Parag) TAHomePage - Fetching commits for last 7 days
 @api_ta.route("/api/commits", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_commits():
     try:
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
@@ -110,7 +110,7 @@ def get_commits():
 
 # (Parag) TAHomePage - Fetching milestone completions for last 7 days
 @api_ta.route("/api/milecomps", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_milecomps():
     try:
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)

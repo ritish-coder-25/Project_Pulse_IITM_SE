@@ -22,6 +22,7 @@
     "bootstrap-vue": "^2.23.1",
     "bootstrap-vue-next": "^0.25.13",
     "chartjs": "^0.3.24",
+    "ci": "^2.3.0",
     "date-fns": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-vue-next": "^0.454.0",

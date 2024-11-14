@@ -197,7 +197,7 @@ def users_approval():
 
 # Project routes
 @api_ta.route("/api/projects", methods=["POST"])
-#@jwt_required()
+@jwt_required()
 def create_project():
     if request.is_json:
         data = request.get_json()

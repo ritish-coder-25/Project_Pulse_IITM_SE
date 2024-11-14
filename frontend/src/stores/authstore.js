@@ -14,9 +14,12 @@ export const useAuthStore = defineStore('authStore', () => {
           username: null,
           email: null,
           role: UserRoleEnums.student,
+          user_type: UserRoleEnums.student,
         },
   )
-  const userRole = computed(() => user.value?.role)
+  const userRole = computed(() =>
+    user.value?.role ? user.value?.role : user.value?.user_type,
+  )
   function updateAccessToken(newAccessToken) {
     accessToken.value = newAccessToken
   }

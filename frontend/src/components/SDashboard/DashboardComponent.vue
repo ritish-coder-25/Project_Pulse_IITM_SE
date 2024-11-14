@@ -11,8 +11,8 @@ const authStore = useAuthStore()
 const route = useRoute();
 console.log(route.path)
 const currentDashboard = computed(() => {
-  //return authStore.userRole === UserRoleEnums.student
-  return route.path.includes('/dashboard/student')
+  return authStore.userRole === UserRoleEnums.student
+  //return route.path.includes('/dashboard/student')
     ? SDashboardComponent
     : IDashboardComponent
 })

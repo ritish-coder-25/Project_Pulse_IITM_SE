@@ -12,8 +12,8 @@
           "github_username": "pranjalkar99",
           "id": 1,
           "last_name": "kar",
-          "status": null,
-          "student_email": "pranjal_test1@gmail.com",
+          "approval_status": null,
+          "email": "pranjal_test1@gmail.com",
           "team_id": 1,
           "user_type": "Registered"
         },
@@ -24,8 +24,8 @@
           "github_username": "noisybotdude",
           "id": 2,
           "last_name": "kar",
-          "status": null,
-          "student_email": "pranjal@gmail.com",
+          "approval_status": null,
+          "email": "pranjal@gmail.com",
           "team_id": 1,
           "user_type": "Registered"
         },
@@ -36,8 +36,8 @@
           "github_username": "isidhu",
           "id": 3,
           "last_name": "sidhu",
-          "status": "Active",
-          "student_email": "isidhu@test.com",
+          "approval_status": "Active",
+          "email": "isidhu@test.com",
           "team_id": 1,
           "user_type": "Registered"
         },
@@ -48,8 +48,8 @@
           "github_username": "ishdeepsidhu",
           "id": 4,
           "last_name": "Sidhu",
-          "status": "Active",
-          "student_email": "ishdeepsidhu@gmail.com",
+          "approval_status": "Active",
+          "email": "ishdeepsidhu@gmail.com",
           "team_id": 1,
           "user_type": "Registered"
         },
@@ -60,8 +60,8 @@
           "github_username": "ishdeepsidhus",
           "id": 5,
           "last_name": "test",
-          "status": "Active",
-          "student_email": "test@test.com",
+          "approval_status": "Active",
+          "email": "test@test.com",
           "team_id": 1,
           "user_type": "Registered"
         },
@@ -72,8 +72,8 @@
           "github_username": "ishdeepsidhus1",
           "id": 6,
           "last_name": "test1",
-          "status": "Active",
-          "student_email": "test1@test.com",
+          "approval_status": "Active",
+          "email": "test1@test.com",
           "team_id": 1,
           "user_type": "Registered"
         }

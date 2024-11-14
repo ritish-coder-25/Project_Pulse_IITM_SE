@@ -31,7 +31,7 @@ export class AuthApiHelper {
       last_name: data.lastName,
       username: data.username,
       password: data.password,
-      student_email: data.email,
+      email: data.email,
       github_username: data.githubUsername,
       discord_username: data.discordUsername,
     }
@@ -41,7 +41,7 @@ export class AuthApiHelper {
   static async login(data) {
     try {
       const loginData = {
-        student_email: data.student_email,
+        email: data.email,
         password: data.password,
       }
       const stringifiedData = JSON.stringify(loginData)

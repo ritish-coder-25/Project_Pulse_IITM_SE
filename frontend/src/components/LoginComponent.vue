@@ -20,7 +20,7 @@ import { BButton } from 'bootstrap-vue-next'
           <input
             type="text"
             class="form-control mb-3"
-            v-model="formData.student_email"
+            v-model="formData.email"
           />
 
           <label class="form-label">Password</label>
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       formData: {
-        student_email: '',
+        email: '',
         password: '',
       },
     }
@@ -88,7 +88,7 @@ export default {
       }
     },
     resetForm() {
-      this.formData.student_email = ''
+      this.formData.email = ''
       this.formData.password = ''
     },
     redirectToRegister() {

@@ -9,28 +9,49 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
 from config import Config
-from routes import api_bp
+from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
 from flask_cors import CORS
+#from flask_restx import Api
+import marshmallow as ma
+from flask_smorest import Api, Blueprint, abort
 
 app = Flask(__name__)
+#CORS(app)
+app.config["API_TITLE"] = "My API"
+app.config["API_VERSION"] = "v1"
+app.config["OPENAPI_VERSION"] = "3.0.2"
+api = Api(app)
 CORS(app)
 app.config.from_object(Config)
 
+#CORS(api)
 # Enable CORS for all routes
-CORS(app)
+
+# api = Api(
+#     app,
+#     version="1.0",
+#     title="API Documentation",
+#     description="A description of your API",
+# )
+
 
 db.init_app(app)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
+
+api.register_blueprint(api_bp_ta)
+api.register_blueprint(api_bp_users)
+
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
-app.register_blueprint(api_bp_ta)
+
+#api.add_namespace(api_bp_ta)
 
 
 @app.route("/api/auth/register", methods=["POST"])
@@ -41,7 +62,7 @@ def register():
         "first_name",
         "last_name",
         "password",
-        "student_email",
+        "email",
         "github_username",
         "discord_username",
     ]
@@ -49,7 +70,7 @@ def register():
         if field not in data:
             return jsonify({"message": f"Missing {field}"}), 400
 
-    if User.query.filter_by(student_email=data["student_email"]).first():
+    if User.query.filter_by(email=data["email"]).first():
         return jsonify({"message": "Email already registered"}), 400
 
     if User.query.filter_by(github_username=data["github_username"]).first():
@@ -70,41 +91,39 @@ def register():
         first_name=data["first_name"],
         last_name=data["last_name"],
         password=hashed_password,
-        student_email=data["student_email"],
+        email=data["email"],
         github_username=data["github_username"],
         discord_username=data["discord_username"],
         user_type="Registered",
-        status="Inactive",
+        approval_status="Inactive",
     )
 
     db.session.add(new_user)
     db.session.commit()
-    
-    return jsonify({ 'isSuccess': True,'message': 'User registered successfully'}), 201
+
+    return jsonify({"isSuccess": True, "message": "User registered successfully"}), 201
 
 
 @app.route("/api/auth/login", methods=["POST"])
 def login():
     data = request.get_json()
-    user = User.query.filter_by(student_email=data['student_email']).first()
+    user = User.query.filter_by(email=data["email"]).first()
 
-    if user and bcrypt.check_password_hash(user.password, data['password']):
+    if user and bcrypt.check_password_hash(user.password, data["password"]):
         expires = timedelta(days=90)
-        access_token = create_access_token(identity=user.id, expires_delta=expires)
-        jsonified = jsonify({'access_token': access_token, 'user': user.to_dict()})
+        access_token = create_access_token(identity=user.user_id, expires_delta=expires)
+        jsonified = jsonify({"access_token": access_token, "user": user.to_dict()})
         return jsonified, 200
-        
-    return jsonify({'message': 'Invalid credentials'}), 401
+
+    return jsonify({"message": "Invalid credentials"}), 401
 
 
-@app.route('/api/test', methods=['GET'])
-def test_route():   
-    return jsonify({'message': 'It is working'}), 200
+@app.route("/api/test", methods=["GET"])
+def test_route():
+    return jsonify({"message": "It is working"}), 200
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     with app.app_context():
         try:
@@ -127,9 +146,15 @@ if __name__ == '__main__':
                 github_username="pranjalkar99",
                 discord_username="test123",
                 user_type="Admin",
-                status="Active",
+                approval_status="Active",
+            )
+            main_project = Project(
+                project_topic="PROJECT DETAILS  SEP’24",
+                statement="Tracking Student Progress in Software Projects",
+                document_url="https://docs.google.com/document/d/1n7AxCUoBJuDVxIVGGz_jh72hGY4ICQ2tg0tAvJHHMqU/edit?tab=t.0#heading=h.uqcmipq6429b",
             )
             db.session.add(admin_user)
+            db.session.add(main_project)
             db.session.commit()
             logging.info("Default admin user created.")
         else:

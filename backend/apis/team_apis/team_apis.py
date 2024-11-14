@@ -6,6 +6,9 @@ from flask_jwt_extended import get_jwt_identity
 from api_parsers import team_parsers
 from flask_restx import Resource
 from flask_smorest import Blueprint
+from api_outputs.api_outputs_common import TeamSchema, CommonErrorSchema, CommonErrorErrorSchemaFatal
+from api_outputs.teams_api.teams_api_output import TeamsCreateOutput, TeamsDeleteOutput
+from helpers.ErrorCommonHelpers import createError, createFatalError
 
 # Create a Blueprint for the routes
 #api_bp_ta = Blueprint('api_bp_teams', __name__)
@@ -18,52 +21,65 @@ api_bp_ta = Blueprint("Teams-Api", "Teams", description="Operations on teams")
 @api_bp_ta.route('/api/teams')
 class TeamListResource(Resource):
     @api_bp_ta.arguments(team_parsers.CreateTeamSchema)
+    @api_bp_ta.response(201, TeamsCreateOutput)
+    @api_bp_ta.response(404, CommonErrorSchema)
     @jwt_required()
     def post(self, data):
-        current_user_id = get_jwt_identity()
-        # Create new team
-        new_team = Team(
-            team_name=data['team'],
-            github_repo_url=data['github_repo_url'],
-            team_lead_id=current_user_id,
-            project_id=1  # Hardcoded for now
-        )
+        try: 
+            current_user_id = get_jwt_identity()
+            # Create new team
+            new_team = Team(
+                team_name=data['team'],
+                github_repo_url=data['github_repo_url'],
+                team_lead_id=current_user_id,
+                project_id=1  # Hardcoded for now
+            )
 
-        current_user = User.query.get_or_404(current_user_id)
-        current_user.team_id = new_team.team_id
+            current_user = User.query.get_or_404(current_user_id)
+            current_user.team_id = new_team.team_id
 
-        db.session.add(new_team)
-        db.session.commit()
+            db.session.add(new_team)
+            db.session.commit()
 
-        # Add members to the team if provided
-        if 'emails' in data:
-            for member_id in data['emails']:
-                user = User.query.filter_by(email=member_id).first_or_404()
-                #user = User.query.get_or_404(member_id)
-                user.team_id = new_team.team_id
-                db.session.commit()
+            # Add members to the team if provided
+            if 'emails' in data:
+                for member_id in data['emails']:
+                    user = User.query.filter_by(email=member_id).first_or_404()
+                    #user = User.query.get_or_404(member_id)
+                    user.team_id = new_team.team_id
+                    db.session.commit()
 
-        return jsonify({'message': 'Team created and members added successfully', 'team_id': new_team.team_id}), 201
+            return jsonify({'message': 'Team created and members added successfully', 'team_id': new_team.team_id}), 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"errorCode": "error",'message': 'An error occurred', 'error': str(e)}), 500
 
 
     @jwt_required()
+    @api_bp_ta.response(201, TeamSchema)
     def get(self):
-        query_params = request.args  # Get all query parameters from the URL
-        current_user_id = get_jwt_identity()
-        team_id = query_params.get('team_id')
+        try:
+            query_params = request.args  # Get all query parameters from the URL
+            current_user_id = get_jwt_identity()
+            team_id = query_params.get('team_id')
 
-        current_user = User.query.get_or_404(current_user_id)
-        if(not current_user.team):
-            return jsonify({"message": "User is not in team"}), 404
-        
-        #print(current_user.team.to_dict())
+            current_user = User.query.get_or_404(current_user_id)
+            if(not current_user.team):
+                return createError("team_get_curr_no_team", "User is not in team", 404)
 
-        return jsonify({'team': current_user.team.to_dict()}), 200
+            #print(current_user.team.to_dict())
+
+            return jsonify({'team': current_user.team.to_dict()}), 200
+        except Exception as e:
+            db.session.rollback()
+            return createFatalError("error", "An error occurred", str(e))
+            #return jsonify({"errorCode": "error",'message': 'An error occurred', 'error': str(e)}), 500
 
 
 @api_bp_ta.route('/api/teams/<int:team_id>')
 class TeamResource(Resource):
     @api_bp_ta.arguments(team_parsers.PutTeamSchema)
+    @api_bp_ta.response(201, TeamSchema)
     @jwt_required()
     def put(self, data, team_id):
         try:
@@ -91,6 +107,7 @@ class TeamResource(Resource):
 
 @api_bp_ta.route('/api/teams/<int:team_id>/users/<int:user_id>')
 class TeamResource(Resource):
+    @api_bp_ta.response(201, TeamsDeleteOutput)
     @jwt_required()
     def delete(self, team_id, user_id):
         try:

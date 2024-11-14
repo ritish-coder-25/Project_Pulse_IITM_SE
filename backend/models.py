@@ -64,7 +64,7 @@ class Member(db.Model):
     team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), primary_key=True)
 # This Member class might not be needed 
 
-        
+
 class Project(db.Model):
     __tablename__ = "project"
     project_id = db.Column(db.Integer, primary_key=True)

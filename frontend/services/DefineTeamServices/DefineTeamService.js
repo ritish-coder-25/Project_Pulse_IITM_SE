@@ -10,26 +10,15 @@ export class DefineTeamService {
     emailFields,
     remove,
   }) {
-    const updateduserIds = Object.values(valuesRef.user_ids).filter(
-      (id, i) => i !== index,
-    )
-    console.log('updated user ids', updateduserIds)
-    //return;
     if (currentTeam && currentTeam.members[index]) {
-      // const currEmailFields = [...this.emailFields]
-      // console.log('email fields', this.currentTeam.members, index)
-      const userId = currentTeam.members.find(
-        member => member.student_email === emailFields[index].value,
-      ).id
-      console.log('Deleting user:', userId)
       const delUser = await DefineTeamApiHelper.deleteTeamMember(
         currentTeam.teamId,
-        userId,
+        currentTeam.members[index].user_id,
       )
       if (delUser.isSuccess) {
         remove(index)
         setFieldValue(`emails.${index}`, null)
-        setFieldValue(`user_ids`, updateduserIds)
+        //setFieldValue(`user_ids`, updateduserIds)
       } else {
         const errorMessage = delUser.error
           ? delUser.error.message
@@ -39,7 +28,7 @@ export class DefineTeamService {
     } else {
       remove(index)
       setFieldValue(`emails.${index}`, null)
-      setFieldValue(`user_ids`, updateduserIds)
+      //setFieldValue(`user_ids`, updateduserIds)
     }
   }
 
@@ -57,7 +46,7 @@ export class DefineTeamService {
         //setValues({ ...values, team: teamData.name })
         teamData?.members.forEach((email, index) => {
           addEmail()
-          selectEmail(email.student_email, email.id, index, setFieldValueRef)
+          selectEmail(email.email, email.id, index, setFieldValueRef)
         })
         setValuesRef({
           team: teamData.team,
@@ -65,8 +54,8 @@ export class DefineTeamService {
           // Preserve existing emails or set if needed
           emails: teamData.emails.length > 0 ? teamData.emails : [''],
         })
-        isTeamReadOnly = true
-        currentTeam = teamData
+        isTeamReadOnly(true)
+        currentTeam(teamData)
       }
     } catch (error) {
       console.error('Error fetching team:', error)
@@ -89,7 +78,7 @@ export class DefineTeamService {
       try {
         // Replace with your actual API endpoint
         const response = await mainAxios.get(
-          `/users?student_email=${searchTerm}`,
+          `/users?email=${searchTerm}`,
         )
         const data = response.data
         searchResults[index] = JSON.parse(data)

@@ -21,12 +21,12 @@ api_ta = Blueprint("api_ta", __name__)
 @jwt_required()
 def get_pending_users():
     try:
-        pending_users = User.query.filter_by(status="Inactive").all()
+        pending_users = User.query.filter_by(approval_status="Inactive").all()
         result = [
             {
-                "id": user.id,
+                "id": user.user_id,
                 "name": f"{user.first_name} {user.last_name}",
-                "email": user.student_email,
+                "email": user.email,
             }
             for user in pending_users
         ]
@@ -59,11 +59,11 @@ def approve_usersTA():
             continue  # Skip if user not found
         # Update user status based on approval or rejection
         if approved:
-            user.status = "Active"
+            user.approval_status = "Active"
         elif rejected:
-            user.status = "Decline"
+            user.approval_status = "Decline"
         # Update the user's role
-        user.role = role
+        user.user_type = role
         db.session.commit()
 
     return jsonify({"message": "User approvals processed successfully"}), 200
@@ -77,11 +77,13 @@ def get_uploads():
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
         recent_submissions = (
             db.session.query(Submission)
-            .join(Team, Submission.team_id == Team.id)
+            .join(Team, Submission.team_id == Team.team_id)
             .filter(Submission.submission_timestamp >= seven_days_ago)
             .all()
         )
-        result = [{"team": submission.team.name} for submission in recent_submissions]
+        result = [
+            {"team": submission.team.team_name} for submission in recent_submissions
+        ]
         if not result:
             return jsonify({"message": "No uploads in the last 7 days"}), 200
         return jsonify(result), 200
@@ -95,14 +97,16 @@ def get_uploads():
 def get_commits():
     try:
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-        recent_commits = Commit.query.filter(Commit.timestamp >= seven_days_ago).all()
+        recent_commits = Commit.query.filter(
+            Commit.commit_timestamp >= seven_days_ago
+        ).all()
         result = [
-            {"team": commit.user.team.name}
+            {"team": commit.team.team_name}
             for commit in recent_commits
             if commit.user and commit.user.team
         ]
         if not result:
-            return jsonify({"message": "No commits in the last 7 days"}), 200
+            return jsonify([{"team": "No commits in the last 7 days"}]), 200
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"message": "Error fetching commits", "error": str(e)}), 500
@@ -116,10 +120,10 @@ def get_milecomps():
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
         recent_milestone_completions = MilestoneStatus.query.filter(
             MilestoneStatus.completed_date >= seven_days_ago,
-            MilestoneStatus.status == "Completed",
+            MilestoneStatus.milestone_status == "Completed",
         ).all()
         result = [
-            {"team": milestone.team.name}
+            {"team": milestone.team.team_name}
             for milestone in recent_milestone_completions
             if milestone.team
         ]

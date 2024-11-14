@@ -1,54 +1,27 @@
 <template>
-  <div class="milestone-info" v-if="milestone">
+  <div class="milestone-info">
     <h2>DEADLINES:</h2>
-    <ul v-if="milestone.deadlines.length > 0">
-      <li v-for="(deadline, index) in milestone.deadlines" :key="index">
-        {{ deadline.name }}: <strong>{{ deadline.date }}</strong>
-      </li>
+    <ul>
+      <li>Milestone 1 and Milestone 2: Deadline by the end of Week 4: <strong>20th October</strong></li>
+      <li>Milestone 3: Deadline by the end of Week 6: <strong>10th November</strong></li>
+      <li>Milestone 4: Deadline by the end of Week 8: <strong>17th November</strong></li>
+      <li>Milestone 5: Deadline by the end of Week 10: <strong>27th November</strong></li>
+      <li>Milestone 6: Deadline by the end of Week 11: <strong>8th December</strong></li>
     </ul>
-    <p v-else>No deadlines available for this milestone.</p>
 
     <h2>Project Statement:</h2>
-    <p class="project-title">{{ milestone.projectTitle }}</p>
-    <p class="project-description">{{ milestone.projectDescription }}</p>
-  </div>
-
-  <div v-else class="no-milestone">
-    <p>No milestone data available.</p>
+    <p class="project-title">Tracking Student Progress in Software Projects</p>
+    <p class="project-description">
+      In course projects such as the ones you have already done in Application Development I and II,
+      it can be challenging for instructors to effectively track the progress of student projects,
+      particularly in larger classes where multiple teams are working on different tasks...
+    </p>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: "MilestoneInfo",
-  data() {
-    return {
-      milestone: null, // Will hold the fetched milestone data
-    };
-  },
-  computed: {
-    milestoneId() {
-      return this.$route.params.id; // Assuming you pass the milestone ID in the route
-    },
-  },
-  created() {
-    this.fetchMilestoneInfo();
-  },
-  methods: {
-    async fetchMilestoneInfo() {
-      try {
-        const response = await axios.get(`/api/milestones/${this.milestoneId}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        this.milestone = response.data;
-      } catch (error) {
-        console.error("Error fetching milestone data:", error);
-        this.milestone = null;
-      }
-    },
-  },
 };
 </script>
 
@@ -114,24 +87,5 @@ ul li strong {
   border-left: 4px solid #3498db;
   border-radius: 4px;
   box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.no-milestone {
-  font-family: "Arial", sans-serif;
-  color: #333;
-  background-color: #f9f9fb;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 24px;
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.no-milestone p {
-  font-size: 18px;
-  color: #e74c3c;
-  font-weight: bold;
 }
 </style>

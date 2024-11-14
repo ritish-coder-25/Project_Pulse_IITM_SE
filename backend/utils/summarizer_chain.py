@@ -1,4 +1,5 @@
 from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts import SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import LLMChain
@@ -9,12 +10,25 @@ from datetime import datetime
 load_dotenv()
 
 os.environ["GROQ_API_KEY"] = os.environ.get("GROQ_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
 
 
-llm = ChatGroq(
-    model="mixtral-8x7b-32768",
-    temperature=0.5,
-    max_retries=3,
+# llm = ChatGroq(
+#     model="mixtral-8x7b-32768",
+#     temperature=0.5,
+#     max_retries=3,
+#     # other params...
+# )
+
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+    # api_key="...",  # if you prefer to pass api key in directly instaed of using env vars
+    # base_url="...",
+    # organization="...",
     # other params...
 )
 

@@ -14,11 +14,24 @@ import { BButton } from 'bootstrap-vue-next'
 
         <!-- Signup Form -->
         <form @submit.prevent="handleSubmit">
-          <label class="form-label">Username</label>
+          <!-- <label class="form-label">Username</label>
           <input
             type="text"
             class="form-control mb-3"
             v-model="formData.username"
+          /> -->
+          <label class="form-label">First name</label>
+          <input
+            type="text"
+            class="form-control mb-3"
+            v-model="formData.firstName"
+          />
+
+          <label class="form-label">Last name</label>
+          <input
+            type="text"
+            class="form-control mb-3"
+            v-model="formData.lastName"
           />
 
           <label class="form-label">Password</label>
@@ -61,7 +74,8 @@ import { BButton } from 'bootstrap-vue-next'
               />
             </div>
           </div>
-
+          {{ apiErrors }}
+          {{ apiErrorMessage }}
           <!-- Submit Button -->
           <!-- <button type="submit" class="submit-button">Submit</button> -->
           <BButton type="submit" variant="primary" class="w-100"
@@ -83,47 +97,61 @@ import { BButton } from 'bootstrap-vue-next'
 <script>
 import router from '../router'
 import { RoutesEnums } from '@/enums'
-import { Axios } from 'axios';
+import { AuthApiHelper } from '@/helpers/ApiHelperFuncs/Auth'
 
 export default {
   data() {
     return {
       formData: {
         username: '',
+        firstName: '',
+        lastName: '',
         password: '',
         reenterPassword: '',
         email: '',
         githubUsername: '',
         discordUsername: '',
       },
+      apiErrors: {},
+      apiErrorMessage: '',
     }
   },
   methods: {
     async handleSubmit() {
-          if (this.formData.password !== this.formData.reenterPassword) {
-            alert('Passwords do not match')
-            return
-          }
-    
-          const url = `https://api.github.com/users/${this.formData.githubUsername}`;
-          try {
-            const response = await fetch(url);
-            console.log('response:', response);
-            if (response.status === 200) {
-              console.log('Github User found');
-            } else {
-              alert('Github User not found');
-              return
-            }
-          } catch (error) {
-            console.error('Error fetching user:', error);
-            alert('An error occurred while checking Github user existence');
-            return
-          }
-    
-          alert('Registration successful!')
-          this.$router.push({ name: 'login' });
-        },
+      if (this.formData.password !== this.formData.reenterPassword) {
+        alert('Passwords do not match')
+        return
+      }
+
+      const url = `https://api.github.com/users/${this.formData.githubUsername}`
+      try {
+        const response = await fetch(url)
+        console.log('response:', response)
+        if (response.status === 200) {
+          console.log('Github User found')
+        } else {
+          alert('Github User not found')
+          return
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error)
+        alert('An error occurred while checking Github user existence')
+        return
+      }
+
+      const data = await AuthApiHelper.signup(this.formData)
+      if (data.isSuccess) {
+        alert('Registration successful!')
+        this.$router.push({ name: 'login' })
+      } else {
+        alert('Registration failed')
+        if (data.isResponseError) {
+          this.apiErrors = data.responseData
+        } else {
+          this.apiErrorMessage = data.message
+        }
+      }
+    },
     redirectToLogin() {
       router.push(RoutesEnums.login)
     },

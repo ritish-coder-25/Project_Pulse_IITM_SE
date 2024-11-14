@@ -127,13 +127,13 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
                   >
                     <div
                       v-for="result in searchResults[index]"
-                      :key="result.student_email"
+                      :key="result.email"
                       class="p-2 cursor-pointer hover:bg-gray-100"
                       @click="
                         () => {
-                          //field.value = result.student_email
+                          //field.value = result.email
                           selectEmail(
-                            result.student_email,
+                            result.email,
                             result.id,
                             index,
                             setFieldValue,
@@ -142,7 +142,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
                       "
                     >
                       <div class="d-flex flex-column">
-                        <span class="fw-bold">{{ result.student_email }}</span>
+                        <span class="fw-bold">{{ result.email }}</span>
                         <small class="text-muted">
                           {{ result.first_name }} {{ result.last_name }}
                         </small>
@@ -259,6 +259,7 @@ export default {
       this.push('')
     },
     async removeEmail(index, setFieldValue) {
+      console.log("this.currentTeam", this.currentTeam);
       await DefineTeamService.removeEmail({
         index,
         setFieldValue,
@@ -268,7 +269,7 @@ export default {
         remove: this.remove,
       })
     },
-    async onSubmit(formValues) {
+    async onSubmit(formValues) { 
       if (this.currentTeam) {
         formValues.team_id = this.currentTeam.teamId
         const formResult = await DefineTeamApiHelper.updateTeam(formValues)
@@ -297,13 +298,19 @@ export default {
       this.setValuesRef = setValues
       this.valuesRef = values
     },
+    async setCurrentTeam(team){
+      this.currentTeam = team
+    },
+    async setIsTeamReadOnly(isTeamReadOnly){
+      this.isTeamReadOnly = isTeamReadOnly
+    },
     async fetchTeam() {
       await DefineTeamService.fetchTeam({
         addEmail: this.addEmail,
         selectEmail: this.selectEmail,
         setValuesRef: this.setValuesRef,
-        isTeamReadOnly: this.isTeamReadOnly,
-        currentTeam: this.currentTeam,
+        isTeamReadOnly: this.setIsTeamReadOnly,
+        currentTeam: this.setCurrentTeam,
         setFieldValueRef: this.setFieldValueRef,
       })
     },

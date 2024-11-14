@@ -31,3 +31,14 @@ Logun to github-> Settings -> Developer Settings -> Personal Access Token -> Fin
 7. ** Replace the .env.example with a .env file inside Backend/ and put your keys. 
 GROQ_API_KEY=''
 GITHUB_TOKEN=''
+
+
+8. Generate openapi yaml
+> flask openapi write --format=yaml openapi.json  
+if you get an error saying could not find flask project please run 
+> $env:FLASK_APP = "main.py" for windows or set FLASK_APP=main.py for ubuntu and try again
+
+After generating yaml you can run it in 
+> https://editor-next.swagger.io/
+or
+> https://redocly.github.io/redoc/#tag/Tickets/operation/getTicketCode

@@ -34,7 +34,7 @@ export class DefineTeamApiHelper {
   }
 
   static getEmailsFromMembers(members) {
-    return Object.values(members).map(member => member.student_email)
+    return Object.values(members).map(member => member.email)
   }
 
   static async getTeam() {
@@ -68,15 +68,15 @@ export class DefineTeamApiHelper {
     }
   }
 
-  static async updateTeam(data){
+  static async updateTeam(data) {
     try {
       const apiData = {
         team_id: data.team_id,
-        user_ids: data.user_ids,
+        emails: data.emails,
       }
       const stringifiedData = JSON.stringify(apiData)
       //console.log('stringifiedData: ', stringifiedData)
-      const sr = await mainAxios.put('/teams', stringifiedData)
+      const sr = await mainAxios.put(`/teams/${data.team_id}`, stringifiedData)
       //console.log("sr: ", sr)
       const jsonSr = JSON.parse(sr.data)
       console.log('jsonsr', jsonSr)
@@ -100,7 +100,12 @@ export class DefineTeamApiHelper {
 
   static async createTeam(data) {
     try {
-      const stringifiedData = JSON.stringify(data)
+      const apiData = {
+        team: data.team,
+        github_repo_url: data.github_repo_url,
+        emails: data.emails,
+      }
+      const stringifiedData = JSON.stringify(apiData)
       //console.log('stringifiedData: ', stringifiedData)
       const sr = await mainAxios.post('/teams', stringifiedData)
       //console.log("sr: ", sr)
@@ -126,7 +131,7 @@ export class DefineTeamApiHelper {
 
   static async deleteTeamMember(teamId, userId, userEmail) {
     try {
-      const sr = await mainAxios.delete('/teams/users', {
+      const sr = await mainAxios.delete(`/teams/${teamId}/users/${userId}`, {
         params: { team_id: teamId, user_id: userId },
       })
       //console.log("sr: ", sr)

@@ -266,6 +266,94 @@ def create_milestone():
         201,
     )
 
+# ( Ankush ) Get Milestones
+@api_ta.route("/api/milestones", methods=["GET"])
+@jwt_required()
+def get_milestones():
+
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+    if current_user.user_type not in allowed_roles:
+        return (
+            jsonify({"message": "You do not have permission to read milestones"}),
+            403,
+        )
+    
+    milestones = Milestone.query.all()
+
+    return (jsonify([milestone.to_dict() for milestone in milestones]))
+
+# ( Ankush ) Get Milestone
+@api_ta.route("/api/milestones/<int:milestone_id>", methods=["GET"])
+@jwt_required()
+def get_milestone(milestone_id):
+
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+    if current_user.user_type not in allowed_roles:
+        return (
+            jsonify({"message": "You do not have permission to read milestones"}),
+            403,
+        )
+    
+    milestone = Milestone.query.get_or_404(milestone_id)
+
+    return (jsonify(milestone.to_dict()))
+
+# ( Ankush ) Get Milestone Statuses
+@api_ta.route("/api/milestone-status", methods=["GET"])
+@jwt_required()
+def get_milestone_statuses():
+
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+    if current_user.user_type not in allowed_roles:
+        return (
+            jsonify({"message": "You do not have permission to read milestone statuses"}),
+            403,
+        )
+    
+    if current_user.user_type == "Student":
+        milestone_statuses = MilestoneStatus.query.filter(MilestoneStatus.team_id==current_user.team_id).all()
+    else:
+        milestone_statuses = MilestoneStatus.query.all()
+
+    return (jsonify([ status.to_dict() for status in milestone_statuses]))
+
+
+# ( Ankush ) Get Milestone Status
+@api_ta.route("/api/milestone-status/<int:milestonestatus_id>", methods=["GET"])
+@jwt_required()
+def get_milestone_status(milestonestatus_id):
+
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+    if current_user.user_type not in allowed_roles:
+        return (
+            jsonify({"message": "You do not have permission to read milestone statuses"}),
+            403,
+        )
+    
+    if current_user.user_type == "Student":
+        data = MilestoneStatus.query.filter(MilestoneStatus.team_id==current_user.team_id, 
+                                            MilestoneStatus.milestonestatus_id==milestonestatus_id).first()
+        if not data:
+            return (
+                jsonify({"message": "Milestone Status does not exist!"})
+            )
+    else:
+        milestonestatus = MilestoneStatus.query.get_or_404(milestonestatus_id)
+
+    return (jsonify(milestonestatus.to_dict()))
+
 
 # MilestoneStatus routes
 @api_ta.route("/api/milestone-status", methods=["POST"])
@@ -303,3 +391,100 @@ def create_milestone_status():
     db.session.commit()
 
     return jsonify({"message": "Milestone status created successfully"}), 201
+
+
+# ( Ankush ) Get TA Dashboard Teams Data
+@api_ta.route("/api/ta-teams", methods=["GET"])
+@jwt_required()
+def get_teams_data_ta():
+
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+    if current_user.user_type not in allowed_roles:
+        return (
+            jsonify({"message": "You do not have permission fetch teams data."}),
+            403,
+        )
+    
+    teams = Team.query.all()
+
+    commits = Commit.query.all()
+
+    milestones = Milestone.query.all()
+
+    milestone_data = { milestone.milestone_id: milestone for milestone in milestones }
+
+    milestone_statuses = MilestoneStatus.query.all()
+
+    dashboard_teams = {}
+
+    for team in teams:
+        dashboard_teams[team.team_id] = {
+                    "team_id": team.team_id,
+                    "team_name": team.team_name,
+                    "commits": 0,
+                    "score": 0,
+                    "total_score": 0,
+                    "milestones_completed": 0,
+                    "milestones_missed": 0
+                }
+
+    for status in milestone_statuses:
+
+        if status.milestone_status == "Evaluated":
+            dashboard_teams[status.team_id]['score'] += status.eval_score
+            dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
+            dashboard_teams[status.team_id]['milestones_completed'] += 1
+        elif status.milestone_status == "Missed":
+            dashboard_teams[status.team_id]['score'] += 0
+            dashboard_teams[status.team_id]['milestones_missed'] += 1
+
+    for commit in commits:
+        dashboard_teams[commit.team_id]['commits'] += 0
+
+    return jsonify({"teams": [dashboard_teams[team] for team in dashboard_teams], "milestones": [milestone.to_dict() for milestone in milestones]})
+
+
+
+# ( Ankush ) Get TA Dashboard Team Data
+@api_ta.route("/api/ta-team/<int:team_id>", methods=["GET"])
+@jwt_required()
+def get_team_data_ta(team_id):
+
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+    if current_user.user_type not in allowed_roles:
+        return (
+            jsonify({"message": "You do not have permission fetch teams data."}),
+            403,
+        )
+    
+    team = Team.query.get_or_404(team_id)
+
+    commits = Commit.query.filter(Commit.team_id==team_id).all()
+
+    members = User.query.filter(User.team_id==team.team_id).all()
+
+    members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "commits": 0} for member in members }
+
+    for commit in commits:
+        if commit.user_id in members_data:
+            members_data[commit.user_id]['commits'] += 1
+
+    milestones = Milestone.query.all()
+
+    milestone_data = { milestone.milestone_id: {"milestone": milestone.to_dict(), "milestonestatus": ""} for milestone in milestones }
+
+    milestone_statuses = MilestoneStatus.query.filter(MilestoneStatus.team_id==team_id).all()
+
+
+    for status in milestone_statuses:
+
+        milestone_data[status.milestone_id]['milestonestatus'] = status.to_dict()
+
+
+    return jsonify({"members": [members_data[member] for member in members_data], "team": team.to_dict(), "milestones": milestone_data})

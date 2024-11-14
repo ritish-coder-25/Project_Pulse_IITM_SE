@@ -207,7 +207,7 @@ def create_project():
 
     if not data:
         return jsonify({'message': "No input data provided"}), 400
-    '''
+    
     current_user_id = get_jwt_identity()
     current_user = User.query.get_or_404(current_user_id)
 
@@ -217,7 +217,7 @@ def create_project():
             jsonify({"message": "You do not have permission to create a project"}),
             403,
         )
-    '''
+    
 
     new_project = Project(
         project_topic=data["name"],
@@ -274,7 +274,6 @@ def create_milestone():
         201,
     )
 
-<<<<<<< HEAD
 #Update Milestones (Ritish)
 @api_ta.route("/api/milestones/<int:milestone_id>", methods=["PUT"])
 @jwt_required()
@@ -317,7 +316,7 @@ def delete_milestone(milestone_id):
     db.session.delete(milestone)
     db.session.commit()
     return jsonify({"message": "Message deleted successfully"}), 200
-=======
+
 # ( Ankush ) Get Milestones
 @api_ta.route("/api/milestones", methods=["GET"])
 @jwt_required()
@@ -406,7 +405,6 @@ def get_milestone_status(milestonestatus_id):
 
     return (jsonify(milestonestatus.to_dict()))
 
->>>>>>> origin/main
 
 # MilestoneStatus routes
 @api_ta.route("/api/milestone-status", methods=["POST"])

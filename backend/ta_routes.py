@@ -1,6 +1,15 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
-from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
+from models import (
+    db,
+    User,
+    Team,
+    Project,
+    Milestone,
+    MilestoneStatus,
+    Commit,
+    Submission,
+)
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import get_jwt_identity
 
@@ -32,7 +41,7 @@ def get_pending_users():
 # (Parag) TAHomePage - Returning approve/reject for users
 @api_ta.route("/api/approve_users", methods=["POST"])
 @jwt_required()
-def approve_users():
+def approve_usersTA():
     data = request.get_json()
     current_user_id = get_jwt_identity()
     current_user = User.query.get_or_404(current_user_id)
@@ -67,9 +76,9 @@ def get_uploads():
     try:
         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
         recent_submissions = (
-            db.session.query(submission)
-            .join(Team, submission.team_id == Team.id)
-            .filter(submission.submission_timestamp >= seven_days_ago)
+            db.session.query(Submission)
+            .join(Team, Submission.team_id == Team.id)
+            .filter(Submission.submission_timestamp >= seven_days_ago)
             .all()
         )
         result = [{"team": submission.team.name} for submission in recent_submissions]
@@ -156,7 +165,7 @@ def allocate_users():
 '''
 @api_ta.route("/api/users_approval", methods=["POST"])
 @jwt_required()
-def approve_users():
+def users_approval():
 
     data = request.get_json()
 

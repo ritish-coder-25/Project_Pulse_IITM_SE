@@ -11,7 +11,7 @@
             ```
         - **Windows:**
             ```sh
-            .\env\Scripts\activate
+            .\env\Scripts\Activate.ps1
             ```
 
 3. **Install the required dependencies:**

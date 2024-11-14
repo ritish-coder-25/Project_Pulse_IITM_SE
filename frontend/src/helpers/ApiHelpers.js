@@ -12,6 +12,9 @@ const axios = new Axios({
     }
     return false
   },
+  headers: {
+    'Content-Type': 'application/json',
+  }
 })
 
 axios.interceptors.request.use(

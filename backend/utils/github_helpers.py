@@ -1,11 +1,14 @@
 # FILE: github_utils.py
-import requests,os
+import requests
+import requests
+import os
 from dotenv import load_dotenv
 import json
 from datetime import datetime
 load_dotenv()
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+
 
 def github_user_exists(username):
     url = f"https://api.github.com/users/{username}"
@@ -21,7 +24,6 @@ def check_collaborator_status(repo_owner, repo_name, username):
     Checks if the authenticated user is a collaborator on the given repository.
     """
 
-    
     HEADERS = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json"
@@ -41,12 +43,12 @@ def check_collaborator_status(repo_owner, repo_name, username):
         print(f"Error checking collaborator status: {response.json()}")
         return None
 
+
 def create_invite_request_issue(repo_owner, repo_name):
     """
     Creates an issue on the repository to request collaborator access.
     """
 
-    
     HEADERS = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json"
@@ -70,7 +72,6 @@ def create_invite_request_issue(repo_owner, repo_name):
         return None
 
 
-
 def get_commits_with_changes(since, until, repo_owner, repo_name):
     """
     Fetches commits within a specific date range and prints details of file changes.
@@ -88,7 +89,8 @@ def get_commits_with_changes(since, until, repo_owner, repo_name):
     # Step 1: Fetch all commits within the date range
     commits_url = f"{BASE_URL}/commits"
     params = {"since": since, "until": until}
-    commits_response = requests.get(commits_url, headers=HEADERS, params=params)
+    commits_response = requests.get(
+        commits_url, headers=HEADERS, params=params)
 
     if commits_response.status_code == 200:
         commits = commits_response.json()
@@ -119,15 +121,15 @@ def get_commits_with_changes(since, until, repo_owner, repo_name):
                     changes = file['changes']
 
                     print(f"  - {filename} [{status}]")
-                    print(f"    Additions: {additions}, Deletions: {deletions}, Total Changes: {changes}")
+                    print(
+                        f"    Additions: {additions}, Deletions: {deletions}, Total Changes: {changes}")
             else:
-                print(f"Error fetching commit details for {commit_sha}: {detail_response.json()}")
+                print(
+                    f"Error fetching commit details for {commit_sha}: {detail_response.json()}")
     else:
         print(f"Error fetching commits: {commits_response.json()}")
         return None
-    
 
-import requests
 
 def get_commits_with_changes_files(since, until, repo_owner, repo_name):
     """
@@ -152,7 +154,8 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
     # Step 1: Fetch all commits within the date range
     commits_url = f"{BASE_URL}/commits"
     params = {"since": since, "until": until}
-    commits_response = requests.get(commits_url, headers=HEADERS, params=params)
+    commits_response = requests.get(
+        commits_url, headers=HEADERS, params=params)
 
     if commits_response.status_code == 200:
         commits = commits_response.json()
@@ -184,7 +187,8 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
                     additions = file['additions']
                     deletions = file['deletions']
                     changes = file['changes']
-                    patch = file.get('patch', '')  # Get the actual code changes (diff) as a string
+                    # Get the actual code changes (diff) as a string
+                    patch = file.get('patch', '')
 
                     # Generate a string summarizing the file changes
                     changes_str = (
@@ -216,7 +220,8 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
                 user_changes[author]["commit_details"].append(commit_info)
 
             else:
-                print(f"Error fetching commit details for {commit_sha}: {detail_response.json()}")
+                print(
+                    f"Error fetching commit details for {commit_sha}: {detail_response.json()}")
 
     else:
         print(f"Error fetching commits: {commits_response.json()}")
@@ -224,19 +229,21 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
 
     return user_changes
 
+
 # Run the check and create an issue if not already a collaborator
 if __name__ == "__main__":
-    #if not check_collaborator_status(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE', username='ishdeepsidhu'):
-        #create_invite_request_issue(repo_owner='pranjalkar99', repo_name='california-agents')
-        #print("You are not a collaborator on this repository.")
-    #create_invite_request_issue(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
+    #if not check_collaborator_status(repo_owner='ritish-coder-25', #repo_name='Project_Pulse_IITM_SE', username='timon20b1076'):
+    #    create_invite_request_issue(
+    #        repo_owner='pranjalkar99', repo_name='california-agents')
+    #    print("You are not a collaborator on this repository.")
+    # create_invite_request_issue(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
 
     # get_commits_with_changes(since="2023-01-01T00:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= 'ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
-    output = get_commits_with_changes_files(since="2024-11-08T22:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= 'ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
+    output = get_commits_with_changes_files(
+        since="2024-11-08T22:00:00Z", until="2024-11-10T22:00:00Z", repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
 
     team_id = "Project_Pulse_IITM_SE"
 
     with open(f"reports/{team_id}_{datetime.now().strftime('%Y-%m-%d_%H')}_output.json", "w") as file:
         file.write(json.dumps(output, indent=4))
     print(output)
-

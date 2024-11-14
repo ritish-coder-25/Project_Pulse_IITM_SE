@@ -13,12 +13,12 @@
         <tr v-for="milestone in milestones" :key="milestone.id">
           <td>
             <!-- Link to navigate to MilestoneInfo.vue without parameters -->
-            <router-link to="/milestone-info">{{ milestone.name }}</router-link>
+            <router-link :to="`/milestone-info/${milestone.id}`">{{ milestone.name }}</router-link>
           </td>
           <td>
             <input
               type="file"
-              :disabled="milestone.status === 'Not open'"
+              :disabled="milestone.status === 'Not open' || milestone.completed"
               @change="handleFileUpload($event, milestone)"
             />
           </td>
@@ -53,17 +53,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ManageMilestone',
   data() {
     return {
-      milestones: [
-        { id: 1, name: 'Milestone 1', status: 'Completed on xxxxx', completed: true },
-        { id: 2, name: 'Milestone 2', status: 'Deadline missed', completed: false },
-        { id: 3, name: 'Milestone 3', status: 'Due Date: 10 Nov', completed: false },
-        { id: 4, name: 'Milestone 4', status: 'Not open', completed: false },
-        { id: 5, name: 'Milestone 5', status: 'Not open', completed: false },
-      ],
+      milestones: [],
     };
   },
   computed: {
@@ -71,7 +67,20 @@ export default {
       return this.milestones.every(milestone => !milestone.completed);
     },
   },
+  created() {
+    this.fetchMilestones();
+  },
   methods: {
+    async fetchMilestones() {
+      try {
+        const response = await axios.get('/api/milestones', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        this.milestones = response.data;
+      } catch (error) {
+        console.error("Error fetching milestones:", error);
+      }
+    },
     handleFileUpload(event, milestone) {
       const file = event.target.files[0];
       if (file) {

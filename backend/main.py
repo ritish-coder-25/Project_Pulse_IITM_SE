@@ -16,11 +16,14 @@ from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
 from flask_cors import CORS
+from student_dashboard import student_dashboard
 
 app = Flask(__name__)
 CORS(app)
 app.config.from_object(Config)
 
+# Make sure this folder exists in your project
+app.config['UPLOAD_FOLDER'] = 'uploads/'
 # Enable CORS for all routes
 CORS(app)
 
@@ -31,7 +34,7 @@ bcrypt = Bcrypt(app)
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 app.register_blueprint(api_bp_ta)
-
+app.register_blueprint(student_dashboard)
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():

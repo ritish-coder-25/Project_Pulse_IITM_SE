@@ -25,12 +25,13 @@ class StuDashboard(Resource):
             team_data = {
                 'team_name': current_user.team.team_name,
                 'team_score': 0,
-                'members': []
+                'members': [], 
+                'milestones': []
             }
 
             # Retrieve and add the team's score from milestones
-            scores = MilestoneStatus.query.filter_by(team_id=current_user.team.team_id).all()
-            team_data['team_score'] = sum(score.eval_score for score in scores)
+            statuses = MilestoneStatus.query.filter_by(team_id=current_user.team.team_id).all()
+            team_data['team_score'] = sum(status.eval_score for status in statuses)
 
             # Retrieve member data for the team, including commit counts
             for member in current_user.team.members:
@@ -40,6 +41,17 @@ class StuDashboard(Resource):
                     'commit_count': Commit.query.filter_by(user_id=member.user_id).count()
                 }
                 team_data['members'].append(member_data)
+                
+            # Fetch milestone details
+            for status in statuses:
+                milestone = Milestone.query.get(status.milestone_id)
+                if milestone:
+                    milestone_data = {
+                        'milestone_name': milestone.milestone_name,
+                        'milestone_status': status.milestone_status,
+                        'end_date': milestone.end_date
+                    }
+                    team_data['milestones'].append(milestone_data)
 
             return jsonify(team_data), 200
 

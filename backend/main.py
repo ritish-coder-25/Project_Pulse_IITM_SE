@@ -12,6 +12,7 @@ from config import Config
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
+from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging

@@ -16,130 +16,130 @@ from flask_jwt_extended import get_jwt_identity
 api_ta = Blueprint("api_ta", __name__)
 
 
-# (Parag) TAHomePage - Fetching pending Users for approval
-@api_ta.route("/api/pendusers", methods=["GET"])
-@jwt_required()
-def get_pending_users():
-    try:
-        pending_users = User.query.filter_by(approval_status="Inactive").all()
-        result = [
-            {
-                "id": user.user_id,
-                "name": f"{user.first_name} {user.last_name}",
-                "email": user.email,
-            }
-            for user in pending_users
-        ]
-        return jsonify(result), 200
-    except Exception as e:
-        return (
-            jsonify({"message": "Error fetching pending users", "error": str(e)}),
-            500,
-        )
+# # (Parag) TAHomePage - Fetching pending Users for approval
+# @api_ta.route("/api/pendusers", methods=["GET"])
+# @jwt_required()
+# def get_pending_users():
+#     try:
+#         pending_users = User.query.filter_by(approval_status="Inactive").all()
+#         result = [
+#             {
+#                 "id": user.user_id,
+#                 "name": f"{user.first_name} {user.last_name}",
+#                 "email": user.email,
+#             }
+#             for user in pending_users
+#         ]
+#         return jsonify(result), 200
+#     except Exception as e:
+#         return (
+#             jsonify({"message": "Error fetching pending users", "error": str(e)}),
+#             500,
+#         )
 
 
-# (Parag) TAHomePage - Returning approve/reject for users
-@api_ta.route("/api/approve_users", methods=["POST"])
-@jwt_required()
-def approve_usersTA():
-    data = request.get_json()
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get_or_404(current_user_id)
-    allowed_roles = ["TA", "Admin", "Instructor", "Developer"]
-    if current_user.user_type not in allowed_roles:
-        return jsonify({"message": "You do not have permission to approve users"}), 403
-    users = data.get("users", [])
-    for user_data in users:
-        user_id = user_data.get("id")
-        approved = user_data.get("approved")
-        rejected = user_data.get("rejected")
-        role = user_data.get("role", "Student")  # Default role as 'Student'
-        user = User.query.get(user_id)
-        if not user:
-            continue  # Skip if user not found
-        # Update user status based on approval or rejection
-        if approved:
-            user.approval_status = "Active"
-        elif rejected:
-            user.approval_status = "Decline"
-        # Update the user's role
-        user.user_type = role
-        db.session.commit()
+# # (Parag) TAHomePage - Returning approve/reject for users
+# @api_ta.route("/api/approve_users", methods=["POST"])
+# @jwt_required()
+# def approve_usersTA():
+#     data = request.get_json()
+#     current_user_id = get_jwt_identity()
+#     current_user = User.query.get_or_404(current_user_id)
+#     allowed_roles = ["TA", "Admin", "Instructor", "Developer"]
+#     if current_user.user_type not in allowed_roles:
+#         return jsonify({"message": "You do not have permission to approve users"}), 403
+#     users = data.get("users", [])
+#     for user_data in users:
+#         user_id = user_data.get("id")
+#         approved = user_data.get("approved")
+#         rejected = user_data.get("rejected")
+#         role = user_data.get("role", "Student")  # Default role as 'Student'
+#         user = User.query.get(user_id)
+#         if not user:
+#             continue  # Skip if user not found
+#         # Update user status based on approval or rejection
+#         if approved:
+#             user.approval_status = "Active"
+#         elif rejected:
+#             user.approval_status = "Decline"
+#         # Update the user's role
+#         user.user_type = role
+#         db.session.commit()
 
-    return jsonify({"message": "User approvals processed successfully"}), 200
-
-
-# (Parag) TAHomePage - Fetching uploads for last 7 days
-@api_ta.route("/api/uploads", methods=["GET"])
-@jwt_required()
-def get_uploads():
-    try:
-        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-        recent_submissions = (
-            db.session.query(Submission)
-            .join(Team, Submission.team_id == Team.team_id)
-            .filter(Submission.submission_timestamp >= seven_days_ago)
-            .all()
-        )
-        result = [
-            {"team": submission.team.team_name} for submission in recent_submissions
-        ]
-        if not result:
-            return jsonify({"message": "No uploads in the last 7 days"}), 200
-        return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"message": "Error fetching uploads", "error": str(e)}), 500
+#     return jsonify({"message": "User approvals processed successfully"}), 200
 
 
-# (Parag) TAHomePage - Fetching commits for last 7 days
-@api_ta.route("/api/commits", methods=["GET"])
-@jwt_required()
-def get_commits():
-    try:
-        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-        recent_commits = Commit.query.filter(
-            Commit.commit_timestamp >= seven_days_ago
-        ).all()
-        result = [
-            {"team": commit.team.team_name}
-            for commit in recent_commits
-            if commit.user and commit.user.team
-        ]
-        if not result:
-            return jsonify([{"team": "No commits in the last 7 days"}]), 200
-        return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"message": "Error fetching commits", "error": str(e)}), 500
+# # (Parag) TAHomePage - Fetching uploads for last 7 days
+# @api_ta.route("/api/uploads", methods=["GET"])
+# @jwt_required()
+# def get_uploads():
+#     try:
+#         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+#         recent_submissions = (
+#             db.session.query(Submission)
+#             .join(Team, Submission.team_id == Team.team_id)
+#             .filter(Submission.submission_timestamp >= seven_days_ago)
+#             .all()
+#         )
+#         result = [
+#             {"team": submission.team.team_name} for submission in recent_submissions
+#         ]
+#         if not result:
+#             return jsonify({"message": "No uploads in the last 7 days"}), 200
+#         return jsonify(result), 200
+#     except Exception as e:
+#         return jsonify({"message": "Error fetching uploads", "error": str(e)}), 500
 
 
-# (Parag) TAHomePage - Fetching milestone completions for last 7 days
-@api_ta.route("/api/milecomps", methods=["GET"])
-@jwt_required()
-def get_milecomps():
-    try:
-        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-        recent_milestone_completions = MilestoneStatus.query.filter(
-            MilestoneStatus.completed_date >= seven_days_ago,
-            MilestoneStatus.milestone_status == "Completed",
-        ).all()
-        result = [
-            {"team": milestone.team.team_name}
-            for milestone in recent_milestone_completions
-            if milestone.team
-        ]
-        if not result:
-            return (
-                jsonify({"message": "No milestone completions in the last 7 days"}),
-                200,
-            )
-        return jsonify(result), 200
-    except Exception as e:
-        return (
-            jsonify(
-                {"message": "Error fetching milestone completions", "error": str(e)}
-            ),
-            500,
-        )
+# # (Parag) TAHomePage - Fetching commits for last 7 days
+# @api_ta.route("/api/commits", methods=["GET"])
+# @jwt_required()
+# def get_commits():
+#     try:
+#         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+#         recent_commits = Commit.query.filter(
+#             Commit.commit_timestamp >= seven_days_ago
+#         ).all()
+#         result = [
+#             {"team": commit.team.team_name}
+#             for commit in recent_commits
+#             if commit.user and commit.user.team
+#         ]
+#         if not result:
+#             return jsonify([{"team": "No commits in the last 7 days"}]), 200
+#         return jsonify(result), 200
+#     except Exception as e:
+#         return jsonify({"message": "Error fetching commits", "error": str(e)}), 500
+
+
+# # (Parag) TAHomePage - Fetching milestone completions for last 7 days
+# @api_ta.route("/api/milecomps", methods=["GET"])
+# @jwt_required()
+# def get_milecomps():
+#     try:
+#         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+#         recent_milestone_completions = MilestoneStatus.query.filter(
+#             MilestoneStatus.completed_date >= seven_days_ago,
+#             MilestoneStatus.milestone_status == "Completed",
+#         ).all()
+#         result = [
+#             {"team": milestone.team.team_name}
+#             for milestone in recent_milestone_completions
+#             if milestone.team
+#         ]
+#         if not result:
+#             return (
+#                 jsonify({"message": "No milestone completions in the last 7 days"}),
+#                 200,
+#             )
+#         return jsonify(result), 200
+#     except Exception as e:
+#         return (
+#             jsonify(
+#                 {"message": "Error fetching milestone completions", "error": str(e)}
+#             ),
+#             500,
+#         )
 
 
 ##########################
@@ -331,10 +331,11 @@ def get_milestones():
             jsonify({"message": "You do not have permission to read milestones"}),
             403,
         )
-    
+
     milestones = Milestone.query.all()
 
-    return (jsonify([milestone.to_dict() for milestone in milestones]))
+    return jsonify([milestone.to_dict() for milestone in milestones])
+
 
 # ( Ankush ) Get Milestone
 @api_ta.route("/api/milestones/<int:milestone_id>", methods=["GET"])
@@ -350,10 +351,11 @@ def get_milestone(milestone_id):
             jsonify({"message": "You do not have permission to read milestones"}),
             403,
         )
-    
+
     milestone = Milestone.query.get_or_404(milestone_id)
 
-    return (jsonify(milestone.to_dict()))
+    return jsonify(milestone.to_dict())
+
 
 # ( Ankush ) Get Milestone Statuses
 @api_ta.route("/api/milestone-status", methods=["GET"])
@@ -366,16 +368,20 @@ def get_milestone_statuses():
     allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
     if current_user.user_type not in allowed_roles:
         return (
-            jsonify({"message": "You do not have permission to read milestone statuses"}),
+            jsonify(
+                {"message": "You do not have permission to read milestone statuses"}
+            ),
             403,
         )
-    
+
     if current_user.user_type == "Student":
-        milestone_statuses = MilestoneStatus.query.filter(MilestoneStatus.team_id==current_user.team_id).all()
+        milestone_statuses = MilestoneStatus.query.filter(
+            MilestoneStatus.team_id == current_user.team_id
+        ).all()
     else:
         milestone_statuses = MilestoneStatus.query.all()
 
-    return (jsonify([ status.to_dict() for status in milestone_statuses]))
+    return jsonify([status.to_dict() for status in milestone_statuses])
 
 
 # ( Ankush ) Get Milestone Status
@@ -389,21 +395,23 @@ def get_milestone_status(milestonestatus_id):
     allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
     if current_user.user_type not in allowed_roles:
         return (
-            jsonify({"message": "You do not have permission to read milestone statuses"}),
+            jsonify(
+                {"message": "You do not have permission to read milestone statuses"}
+            ),
             403,
         )
-    
+
     if current_user.user_type == "Student":
-        data = MilestoneStatus.query.filter(MilestoneStatus.team_id==current_user.team_id, 
-                                            MilestoneStatus.milestonestatus_id==milestonestatus_id).first()
+        data = MilestoneStatus.query.filter(
+            MilestoneStatus.team_id == current_user.team_id,
+            MilestoneStatus.milestonestatus_id == milestonestatus_id,
+        ).first()
         if not data:
-            return (
-                jsonify({"message": "Milestone Status does not exist!"})
-            )
+            return jsonify({"message": "Milestone Status does not exist!"})
     else:
         milestonestatus = MilestoneStatus.query.get_or_404(milestonestatus_id)
 
-    return (jsonify(milestonestatus.to_dict()))
+    return jsonify(milestonestatus.to_dict())
 
 
 # MilestoneStatus routes
@@ -458,14 +466,14 @@ def get_teams_data_ta():
             jsonify({"message": "You do not have permission fetch teams data."}),
             403,
         )
-    
+
     teams = Team.query.all()
 
     commits = Commit.query.all()
 
     milestones = Milestone.query.all()
 
-    milestone_data = { milestone.milestone_id: milestone for milestone in milestones }
+    milestone_data = {milestone.milestone_id: milestone for milestone in milestones}
 
     milestone_statuses = MilestoneStatus.query.all()
 
@@ -473,30 +481,36 @@ def get_teams_data_ta():
 
     for team in teams:
         dashboard_teams[team.team_id] = {
-                    "team_id": team.team_id,
-                    "team_name": team.team_name,
-                    "commits": 0,
-                    "score": 0,
-                    "total_score": 0,
-                    "milestones_completed": 0,
-                    "milestones_missed": 0
-                }
+            "team_id": team.team_id,
+            "team_name": team.team_name,
+            "commits": 0,
+            "score": 0,
+            "total_score": 0,
+            "milestones_completed": 0,
+            "milestones_missed": 0,
+        }
 
     for status in milestone_statuses:
 
         if status.milestone_status == "Evaluated":
-            dashboard_teams[status.team_id]['score'] += status.eval_score
-            dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
-            dashboard_teams[status.team_id]['milestones_completed'] += 1
+            dashboard_teams[status.team_id]["score"] += status.eval_score
+            dashboard_teams[status.team_id]["total_score"] += milestone_data[
+                status.milestone_id
+            ].max_marks
+            dashboard_teams[status.team_id]["milestones_completed"] += 1
         elif status.milestone_status == "Missed":
-            dashboard_teams[status.team_id]['score'] += 0
-            dashboard_teams[status.team_id]['milestones_missed'] += 1
+            dashboard_teams[status.team_id]["score"] += 0
+            dashboard_teams[status.team_id]["milestones_missed"] += 1
 
     for commit in commits:
-        dashboard_teams[commit.team_id]['commits'] += 0
+        dashboard_teams[commit.team_id]["commits"] += 0
 
-    return jsonify({"teams": [dashboard_teams[team] for team in dashboard_teams], "milestones": [milestone.to_dict() for milestone in milestones]})
-
+    return jsonify(
+        {
+            "teams": [dashboard_teams[team] for team in dashboard_teams],
+            "milestones": [milestone.to_dict() for milestone in milestones],
+        }
+    )
 
 
 # ( Ankush ) Get TA Dashboard Team Data
@@ -513,29 +527,47 @@ def get_team_data_ta(team_id):
             jsonify({"message": "You do not have permission fetch teams data."}),
             403,
         )
-    
+
     team = Team.query.get_or_404(team_id)
 
-    commits = Commit.query.filter(Commit.team_id==team_id).all()
+    commits = Commit.query.filter(Commit.team_id == team_id).all()
 
-    members = User.query.filter(User.team_id==team.team_id).all()
+    members = User.query.filter(User.team_id == team.team_id).all()
 
-    members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "commits": 0} for member in members }
+    members_data = {
+        member.user_id: {
+            "name": f"{member.first_name} {member.last_name}",
+            "commits": 0,
+        }
+        for member in members
+    }
 
     for commit in commits:
         if commit.user_id in members_data:
-            members_data[commit.user_id]['commits'] += 1
+            members_data[commit.user_id]["commits"] += 1
 
     milestones = Milestone.query.all()
 
-    milestone_data = { milestone.milestone_id: {"milestone": milestone.to_dict(), "milestonestatus": ""} for milestone in milestones }
+    milestone_data = {
+        milestone.milestone_id: {
+            "milestone": milestone.to_dict(),
+            "milestonestatus": "",
+        }
+        for milestone in milestones
+    }
 
-    milestone_statuses = MilestoneStatus.query.filter(MilestoneStatus.team_id==team_id).all()
-
+    milestone_statuses = MilestoneStatus.query.filter(
+        MilestoneStatus.team_id == team_id
+    ).all()
 
     for status in milestone_statuses:
 
-        milestone_data[status.milestone_id]['milestonestatus'] = status.to_dict()
+        milestone_data[status.milestone_id]["milestonestatus"] = status.to_dict()
 
-
-    return jsonify({"members": [members_data[member] for member in members_data], "team": team.to_dict(), "milestones": milestone_data})
+    return jsonify(
+        {
+            "members": [members_data[member] for member in members_data],
+            "team": team.to_dict(),
+            "milestones": milestone_data,
+        }
+    )

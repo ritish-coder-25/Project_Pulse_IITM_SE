@@ -45,7 +45,9 @@ import HelloWorld from './components/HelloWorld.vue'
             >
           </li>
           <li>
-            <RouterLink class="nav-link px-2 text-white" to="/dashboard/instructor"
+            <RouterLink
+              class="nav-link px-2 text-white"
+              to="/dashboard/instructor"
               >Instructor Dashboard</RouterLink
             >
           </li>
@@ -69,13 +71,20 @@ import HelloWorld from './components/HelloWorld.vue'
         </form> -->
 
         <div class="text-end">
-          <RouterLink class="btn btn-outline-light me-2" to="/login"
+          <RouterLink
+            v-if="!isLoggedIn"
+            class="btn btn-outline-light me-2"
+            to="/login"
             >Login</RouterLink
           >
-          <RouterLink class="btn btn-outline-light me-2" to="/signup"
+          <RouterLink
+            v-if="!isLoggedIn"
+            class="btn btn-outline-light me-2"
+            to="/signup"
             >Signup</RouterLink
           >
           <button
+            v-if="isLoggedIn"
             type="button"
             class="btn btn-outline-light me-2"
             @click="signout"
@@ -104,6 +113,12 @@ import { useAuthStore } from './stores/authstore'
 export default {
   data() {
     return {}
+  },
+  computed: {
+    isLoggedIn() {
+      const authStore = useAuthStore()
+      return !!authStore.accessToken
+    },
   },
   watch: {},
   methods: {

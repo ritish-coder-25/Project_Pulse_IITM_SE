@@ -1,3 +1,87 @@
 {
-  "emails": ["user1@example.com", "user2@example.com", "user3@example.com"]
+  "emails": ["user1@example.com", "user2@example.com", "user3@example.com"],
+  "team": {
+    "team": {
+      "github_repo_url": "https://google.com",
+      "id": 1,
+      "members": [
+        {
+          "allocation_status": false,
+          "discord_username": "johndoe#1234",
+          "first_name": "pranjal",
+          "github_username": "pranjalkar99",
+          "id": 1,
+          "last_name": "kar",
+          "approval_status": null,
+          "email": "pranjal_test1@gmail.com",
+          "team_id": 1,
+          "user_type": "Registered"
+        },
+        {
+          "allocation_status": false,
+          "discord_username": "test123",
+          "first_name": "pranjal",
+          "github_username": "noisybotdude",
+          "id": 2,
+          "last_name": "kar",
+          "approval_status": null,
+          "email": "pranjal@gmail.com",
+          "team_id": 1,
+          "user_type": "Registered"
+        },
+        {
+          "allocation_status": false,
+          "discord_username": "isidhu",
+          "first_name": "ishdeep",
+          "github_username": "isidhu",
+          "id": 3,
+          "last_name": "sidhu",
+          "approval_status": "Active",
+          "email": "isidhu@test.com",
+          "team_id": 1,
+          "user_type": "Registered"
+        },
+        {
+          "allocation_status": false,
+          "discord_username": "ishdeepsidhu",
+          "first_name": "Ishdeep",
+          "github_username": "ishdeepsidhu",
+          "id": 4,
+          "last_name": "Sidhu",
+          "approval_status": "Active",
+          "email": "ishdeepsidhu@gmail.com",
+          "team_id": 1,
+          "user_type": "Registered"
+        },
+        {
+          "allocation_status": null,
+          "discord_username": "ishdeepsidhu",
+          "first_name": "test",
+          "github_username": "ishdeepsidhus",
+          "id": 5,
+          "last_name": "test",
+          "approval_status": "Active",
+          "email": "test@test.com",
+          "team_id": 1,
+          "user_type": "Registered"
+        },
+        {
+          "allocation_status": null,
+          "discord_username": "ishdeepsidhu",
+          "first_name": "test1",
+          "github_username": "ishdeepsidhus1",
+          "id": 6,
+          "last_name": "test1",
+          "approval_status": "Active",
+          "email": "test1@test.com",
+          "team_id": 1,
+          "user_type": "Registered"
+        }
+      ],
+      "milestone_statuses": [],
+      "name": "Holyshit",
+      "project_id": 1,
+      "team_lead_id": 4
+    }
+  }
 }

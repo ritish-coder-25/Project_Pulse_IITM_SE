@@ -59,15 +59,15 @@
       <form @submit.prevent="handleSubmit">
         <!-- Project Name -->
         <label for="project-name">Project Name</label>
-        <input id="project-name" type="text" v-model="projectName" required />
+        <input id="project-name" type="text" v-model="name" required />
 
         <!-- Project Statement -->
         <label for="project-statement">Project Statement</label>
-        <textarea id="project-statement" v-model="projectStatement" placeholder="(List the tasks which will form part of this milestone)" required></textarea>
+        <textarea id="project-statement" v-model="statement" placeholder="(List the tasks which will form part of this milestone)" required></textarea>
 
         <!-- Project Document URL -->
         <label for="project-url">Project Document URL</label>
-        <input id="project-url" type="text" v-model="projectUrl" required />
+        <input id="project-url" type="text" v-model="document_url" required />
 
         <!-- Buttons -->
         <div class="form-buttons">
@@ -89,6 +89,7 @@ import {
   ClipboardCheck,
   Milestone
 } from 'lucide-vue-next';
+import { createProject } from '@/helpers/ApiHelperFuncs/ProjectDefinition';
 
 export default {
   name: 'DefineProject',
@@ -138,21 +139,51 @@ export default {
   },
   data() {
     return {
-      projectName: '',
-      projectStatement: '',
-      projectUrl: '',
+      name: '',
+      statement: '',
+      document_url: '',
     };
   },
   methods: {
-    handleSubmit() {
-      // Submit form logic here
-      console.log('Form Submitted', this.projectName, this.projectStatement, this.projectUrl);
+    async handleSubmit() {
+      let projectData = {
+        name: this.name,
+        statement: this.statement,
+        document_url: this.document_url
+      };
+
+      console.log('Project Data:', JSON.stringify(projectData));
+
+      try {
+        const response = await createProject(projectData);
+        console.log('Project created successfully:', response);
+        // Reset the form
+        this.name = '';
+        this.statement = '';
+        this.document_url = '';
+        alert('Project created successfully');
+      } catch (error) {
+        console.error('Failed to create project:', error);
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          console.error('Error data:', error.response.data);
+          console.error('Error status:', error.response.status);
+          console.error('Error headers:', error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('Error request:', error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Error message:', error.message);
+        }
+        alert('Failed to create project. Please try again');
+      }
     },
     handleCancel() {
       // Cancel form logic here, reset form or navigate away
-      this.projectName = '';
-      this.projectStatement = '';
-      this.projectUrl = '';
+      this.name = '';
+      this.statement = '';
+      this.document_url = '';
     },
   }
 };

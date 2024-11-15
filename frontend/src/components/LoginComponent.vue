@@ -16,11 +16,11 @@ import { BButton } from 'bootstrap-vue-next'
 
         <!-- Login Form -->
         <form @submit.prevent="handleSubmit">
-          <label class="form-label">Username</label>
+          <label class="form-label">Email</label>
           <input
             type="text"
             class="form-control mb-3"
-            v-model="formData.username"
+            v-model="formData.email"
           />
 
           <label class="form-label">Password</label>
@@ -54,24 +54,41 @@ import { BButton } from 'bootstrap-vue-next'
 
 <script>
 import { useAuthStore } from '../stores/authstore'
-import { RoutesEnums } from '@/enums'
+import { LocalStorageEnums, RoutesEnums } from '@/enums'
+import { AuthApiHelper } from '@/helpers/ApiHelperFuncs/Auth'
 
 export default {
   data() {
     return {
       formData: {
-        username: '',
+        email: '',
         password: '',
       },
     }
   },
   methods: {
     async handleSubmit() {
-      alert('Login successful!')
-      router.push('/dashboard')
+      const authStore = useAuthStore()
+      const auth = await AuthApiHelper.login(this.formData)
+      console.log(auth)
+      if (auth.isSuccess) {
+        localStorage.setItem(LocalStorageEnums.accessToken, auth.accessToken)
+        localStorage.setItem(LocalStorageEnums.user, JSON.stringify(auth.user))
+        //authStore.
+        authStore.updateAccessToken(auth.accessToken)
+        authStore.updateuser(auth.user)
+        alert('Login successful!')
+        router.push('/dashboard/student/home')
+      } else {
+        alert(
+          `Login failed! -  ${
+            auth.error ? auth.error.message : auth.errorMessage
+          }`,
+        )
+      }
     },
     resetForm() {
-      this.formData.username = ''
+      this.formData.email = ''
       this.formData.password = ''
     },
     redirectToRegister() {

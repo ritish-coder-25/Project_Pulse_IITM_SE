@@ -47,6 +47,8 @@ class Team(db.Model):
     def to_dict(self):
         return {
             'team_id': self.team_id,
+            'id': self.team_id,
+            'name': self.team_name,
             'team_name': self.team_name,
             'github_repo_url': self.github_repo_url,
             'project_id': self.project_id,

@@ -166,7 +166,7 @@ def allocate_users():
 
     return jsonify({"message": "Users allocated to team successfully"}), 200
 
-
+'''
 @api_ta.route("/api/users_approval", methods=["POST"])
 @jwt_required()
 def users_approval():
@@ -193,14 +193,21 @@ def users_approval():
     db.session.commit()
 
     return jsonify({"message": "Users approve status and role Updated"}), 200
-
+'''
 
 # Project routes
 @api_ta.route("/api/projects", methods=["POST"])
 @jwt_required()
 def create_project():
-    data = request.get_json()
+    if request.is_json:
+        data = request.get_json()
+        print('Received data:', data)
+    else:
+        data = request.form
 
+    if not data:
+        return jsonify({'message': "No input data provided"}), 400
+    
     current_user_id = get_jwt_identity()
     current_user = User.query.get_or_404(current_user_id)
 
@@ -210,9 +217,10 @@ def create_project():
             jsonify({"message": "You do not have permission to create a project"}),
             403,
         )
+    
 
     new_project = Project(
-        name=data["name"],
+        project_topic=data["name"],
         statement=data["statement"],
         document_url=data["document_url"],
     )
@@ -222,9 +230,9 @@ def create_project():
 
     return (
         jsonify(
-            {"message": "Project created successfully", "project_id": new_project.id}
+            {"message": "Project created successfully", "project_id": new_project.project_id}
         ),
-        201,
+        201
     )
 
 
@@ -265,6 +273,49 @@ def create_milestone():
         ),
         201,
     )
+
+#Update Milestones (Ritish)
+@api_ta.route("/api/milestones/<int:milestone_id>", methods=["PUT"])
+@jwt_required()
+def update_milestone(milestone_id):
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ['Admin', 'TA', 'Instructor', 'Developer']
+    if current_user.user_type not in allowed_roles:
+        return jsonify({"message": "You do not have permission to update milestone"}), 403
+    
+    milestone = Milestone.query.get_or_404(milestone_id)
+    if 'name' in data:
+        milestone.milestone_name = data['name']
+    if 'description' in data:
+        milestone.milestone_description = data['description']
+    if 'start_date' in data:
+        milestone.start_date = datetime.strptime(data['start_date'], '%Y-%m-%d')
+    if 'end_date' in data:
+        milestone.end_date = datetime.strptime(data['end_date'], '%Y-%m-%d')
+    if 'max_marks' in data:
+        milestone.max_marks = data['max_marks']
+    
+    db.session.commit()
+    return jsonify({"message": "Milestone updated successfully"}), 200
+
+#Delete milestone (Ritish)
+@api_ta.route("/api/milestones/<int:milestone_id>", methods=['DELETE'])
+@jwt_required()
+def delete_milestone(milestone_id):
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+
+    allowed_roles = ['Admin', 'TA', 'Instructor', 'Developer']
+    if current_user.user_type not in allowed_roles:
+        return jsonify({"message": "You do not have permission to delete milestones"}), 403
+    
+    milestone = Milestone.query.get_or_404(milestone_id)
+    db.session.delete(milestone)
+    db.session.commit()
+    return jsonify({"message": "Message deleted successfully"}), 200
 
 # ( Ankush ) Get Milestones
 @api_ta.route("/api/milestones", methods=["GET"])

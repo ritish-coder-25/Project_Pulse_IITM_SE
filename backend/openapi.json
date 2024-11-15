@@ -13,6 +13,16 @@ components:
             $ref: '#/components/schemas/Error'
       description: Unprocessable Entity
   schemas:
+    CommonError:
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
+      required:
+      - errorCode
+      - message
+      type: object
     CreateTeam:
       properties:
         emails:
@@ -77,6 +87,39 @@ components:
       - emails
       - team_id
       type: object
+    Team:
+      properties:
+        github_repo_url:
+          format: url
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        project_id:
+          type: integer
+        team_lead_id:
+          type: integer
+        team_name:
+          type: string
+      required:
+      - github_repo_url
+      - project_id
+      - team_lead_id
+      - team_name
+      type: object
+    TeamsCreateOutput:
+      properties:
+        message:
+          type: string
+        team_id:
+          readOnly: true
+          type: integer
+      type: object
+    TeamsDeleteOutput:
+      properties:
+        message:
+          type: string
+      type: object
 info:
   title: My API
   version: v1
@@ -85,6 +128,12 @@ paths:
   /api/teams:
     get:
       responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: Created
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
       tags:
@@ -97,6 +146,18 @@ paths:
               $ref: '#/components/schemas/CreateTeam'
         required: true
       responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsCreateOutput'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
         '422':
           $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
         default:
@@ -119,6 +180,12 @@ paths:
               $ref: '#/components/schemas/PutTeam'
         required: true
       responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: Created
         '422':
           $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
         default:
@@ -128,6 +195,12 @@ paths:
   /api/teams/{team_id}/users/{user_id}:
     delete:
       responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsDeleteOutput'
+          description: Created
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
       tags:

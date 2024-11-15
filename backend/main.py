@@ -143,7 +143,7 @@ if __name__ == "__main__":
                 first_name='Admin',
                 last_name='ProjectPulse',
                 password=bcrypt.generate_password_hash('projectpulse123').decode('utf-8'),
-                student_email='admin@projectpulse.com',
+                email='admin@projectpulse.com',
                 github_username='pranjalkar99',
                 discord_username='test123',
                 user_type='Admin',

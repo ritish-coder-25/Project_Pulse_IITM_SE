@@ -43,3 +43,17 @@ class CommonErrorSchema(Schema):
 class CommonErrorErrorSchemaFatal(CommonErrorSchema):
     error = fields.Str(required=True)
 
+
+class MilestoneDeadlineSchema(Schema):
+    milestone_name = fields.String(
+        required=True, description="Name of the milestone")
+    milestone_description = fields.String(
+        required=True, description="Description of the milestone")
+    end_date = fields.String(
+        required=True, description="Formatted end date of the milestone")
+
+
+class SubmitProjectResponseSchema(Schema):
+    message = fields.String(required=True, description="Response message")
+    file_path = fields.String(
+        required=True, description="Path where the file is saved")

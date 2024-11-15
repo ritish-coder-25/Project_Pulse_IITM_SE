@@ -51,6 +51,8 @@ api.register_blueprint(api_bp_users)
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 
+api.register_blueprint(api_bp_stu)
+
 #api.add_namespace(api_bp_ta)
 
 

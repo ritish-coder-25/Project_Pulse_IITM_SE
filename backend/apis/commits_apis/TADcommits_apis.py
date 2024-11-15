@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from models import db, Commit
 from flask_restx import Resource
 from flask_smorest import Blueprint
-from backend.api_outputs.commits_api.TADcommits_api_outputs import CommitsResponse
+from api_outputs.commits_api.TADcommits_api_outputs import CommitsResponse
 from datetime import datetime, timedelta, timezone
 from helpers.ErrorCommonHelpers import createError, createFatalError
 

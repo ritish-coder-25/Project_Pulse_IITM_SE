@@ -12,16 +12,24 @@ from config import Config
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
+from apis.user_apis.TADpending_users_apis import api_bp_pu
+from apis.user_apis.TADuser_approval_apis import api_bp_ua
+from apis.commits_apis.TADcommits_apis import api_bp_commits
+from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
+from apis.submissions_apis.TADuploads_apis import api_bp_uploads
+
+
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
 from flask_cors import CORS
-#from flask_restx import Api
+
+# from flask_restx import Api
 import marshmallow as ma
 from flask_smorest import Api, Blueprint, abort
 
 app = Flask(__name__)
-#CORS(app)
+# CORS(app)
 app.config["API_TITLE"] = "My API"
 app.config["API_VERSION"] = "v1"
 app.config["OPENAPI_VERSION"] = "3.0.2"
@@ -29,7 +37,7 @@ api = Api(app)
 CORS(app)
 app.config.from_object(Config)
 
-#CORS(api)
+# CORS(api)
 # Enable CORS for all routes
 
 # api = Api(
@@ -47,11 +55,16 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
+api.register_blueprint(api_bp_ua)
+api.register_blueprint(api_bp_pu)
+api.register_blueprint(api_bp_uploads)
+api.register_blueprint(api_bp_milestone_completions)
+api.register_blueprint(api_bp_commits)
 
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 
-#api.add_namespace(api_bp_ta)
+# api.add_namespace(api_bp_ta)
 
 
 @app.route("/api/auth/register", methods=["POST"])

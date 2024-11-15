@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from models import db, Submission, Team
 from flask_restx import Resource
 from flask_smorest import Blueprint
-from backend.api_outputs.submissions_api.TADuploads_api_outputs import UploadsResponse
+from api_outputs.submissions_api.TADuploads_api_outputs import UploadsResponse
 from datetime import datetime, timedelta, timezone
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
@@ -14,7 +14,7 @@ api_bp_uploads = Blueprint(
 )
 
 
-@api_bp_uploads.route("/api/uploads")
+@api_bp_uploads.route("/api/submissions/uploads")
 class UploadsResource(Resource):
     @jwt_required()
     @api_bp_uploads.response(200, UploadsResponse)

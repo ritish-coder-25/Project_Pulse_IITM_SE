@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from models import MilestoneStatus
 from flask_restx import Resource
 from flask_smorest import Blueprint
-from backend.api_outputs.project_api.TADmilestone_api_outputs import (
+from api_outputs.project_api.TADmilestone_api_outputs import (
     MilestoneCompletionsResponse,
 )
 from datetime import datetime, timedelta, timezone
@@ -16,7 +16,7 @@ api_bp_milestone_completions = Blueprint(
 )
 
 
-@api_bp_milestone_completions.route("/api/milecomps")
+@api_bp_milestone_completions.route("/api/project/milecomps")
 class MilestoneCompletionsResource(Resource):
     @jwt_required()
     @api_bp_milestone_completions.response(200, MilestoneCompletionsResponse)

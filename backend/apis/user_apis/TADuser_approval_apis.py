@@ -5,8 +5,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db, User
 from flask_restx import Resource
 from flask_smorest import Blueprint
-from backend.api_outputs.user_api.TADuser_approval_outputs import UserApprovalOutput
-from backend.api_parsers.TADuser_approval_parsers import ApproveUsersRequest
+from api_outputs.user_api.TADuser_approval_outputs import UserApprovalOutput
+from api_parsers.TADuser_approval_parsers import ApproveUsersRequest
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
 api_bp_ua = Blueprint(
@@ -14,7 +14,7 @@ api_bp_ua = Blueprint(
 )
 
 
-@api_bp_ua.route("/api/approve_users")
+@api_bp_ua.route("/api/users/approve_users")
 class ApproveUsersResource(Resource):
     @jwt_required()
     @api_bp_ua.arguments(ApproveUsersRequest)

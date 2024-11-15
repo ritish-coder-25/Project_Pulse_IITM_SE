@@ -6,5 +6,4 @@ class MilestoneCompletionOutput(Schema):
 
 
 class MilestoneCompletionsResponse(Schema):
-    message = fields.Str()
     completions = fields.List(fields.Nested(MilestoneCompletionOutput), dump_only=True)

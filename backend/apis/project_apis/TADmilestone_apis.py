@@ -40,7 +40,6 @@ class MilestoneCompletionsResource(Resource):
                     jsonify(
                         {
                             "message": "No milestone completions in the last 7 days",
-                            "completions": [],
                         }
                     ),
                     200,

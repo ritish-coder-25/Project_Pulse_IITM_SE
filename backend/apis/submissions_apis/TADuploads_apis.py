@@ -6,6 +6,7 @@ from flask_smorest import Blueprint
 from api_outputs.submissions_api.TADuploads_api_outputs import UploadsResponse
 from datetime import datetime, timedelta, timezone
 from helpers.ErrorCommonHelpers import createError, createFatalError
+from sqlalchemy.orm import aliased
 
 api_bp_uploads = Blueprint(
     "Uploads-Api",
@@ -21,16 +22,14 @@ class UploadsResource(Resource):
     def get(self):
         try:
             seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-
             recent_submissions = (
-                db.session.query(Submission)
+                db.session.query(Submission, Team.team_name)
                 .join(Team, Submission.team_id == Team.team_id)
                 .filter(Submission.submission_timestamp >= seven_days_ago)
                 .all()
             )
-
             result = [
-                {"team": submission.team.team_name} for submission in recent_submissions
+                {"team": team_name} for submission, team_name in recent_submissions
             ]
 
             if not result:

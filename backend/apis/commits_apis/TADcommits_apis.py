@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required
-from models import db, Commit
+from models import db, Commit, Team, User
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from api_outputs.commits_api.TADcommits_api_outputs import CommitsResponse
@@ -20,21 +20,24 @@ class CommitsResource(Resource):
         try:
             seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
 
-            recent_commits = Commit.query.filter(
-                Commit.commit_timestamp >= seven_days_ago
-            ).all()
+            recent_commits = (
+                db.session.query(Commit, Team.team_name)
+                .join(
+                    Team, Commit.team_id == Team.team_id
+                )  # Join with Team using team_id
+                .join(
+                    User, Commit.user_id == User.user_id
+                )  # Join with User to ensure user exists
+                .filter(Commit.commit_timestamp >= seven_days_ago)
+                .all()
+            )
 
-            result = [
-                {"team": commit.team.team_name}
-                for commit in recent_commits
-                if commit.user and commit.user.team
-            ]
+            # Build the result from the query
+            result = [{"team": team_name} for commit, team_name in recent_commits]
 
             if not result:
                 return (
-                    jsonify(
-                        {"message": "No commits in the last 7 days", "commits": []}
-                    ),
+                    jsonify({"message": "No commits in the last 7 days"}),
                     200,
                 )
 

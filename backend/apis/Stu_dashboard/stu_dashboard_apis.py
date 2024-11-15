@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db, User, Team, MilestoneStatus, Commit
 from flask_restx import Resource
 from flask_smorest import Blueprint
-from api_outputs.api_outputs_common import TeamSchema, CommonErrorSchema, CommonErrorErrorSchemaFatal
+from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
+from api_outputs.teams_api.teams_stuDash_output import StuDashTeamSchema
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
 # Blueprint for Student Dashboard API
@@ -11,14 +12,13 @@ api_bp_stu = Blueprint("StuDashboard-Api", "StuDashboard", description="Display 
 
 @api_bp_stu.route('/api/stu_home/<int:stu_id>')
 class StuDashboard(Resource):
-    @api_bp_stu.response(201, TeamSchema)
+    @api_bp_stu.response(201, StuDashTeamSchema)
     @api_bp_stu.response(404, CommonErrorSchema)
     @jwt_required()
     def get(self, stu_id):
         try:
             current_user = User.query.get_or_404(stu_id)
 
-            # Fetch the user's team if available
             if not current_user.team:
                 return createError("team_get_curr_no_team", "User is not in a team", 404)
             
@@ -40,6 +40,8 @@ class StuDashboard(Resource):
                     'commit_count': Commit.query.filter_by(user_id=member.user_id).count()
                 }
                 team_data['members'].append(member_data)
+
+            return jsonify(team_data), 200
 
         except Exception as e:
             db.session.rollback()

@@ -12,6 +12,10 @@ from config import Config
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
+from apis.project_apis.TADproject_apis import api_bp_projects
+# Import the milestone API blueprints
+from apis.project_apis.TADmilestone_apis import api_bp_milestones
+from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
@@ -47,6 +51,9 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
+api.register_blueprint(api_bp_projects)
+api.register_blueprint(api_bp_milestones)
+api.register_blueprint(api_bp_milestone_completions)
 
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)

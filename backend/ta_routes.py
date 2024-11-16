@@ -194,7 +194,7 @@ def users_approval():
 
     return jsonify({"message": "Users approve status and role Updated"}), 200
 '''
-
+'''
 # Project routes
 @api_ta.route("/api/projects", methods=["POST"])
 @jwt_required()
@@ -571,3 +571,4 @@ def get_team_data_ta(team_id):
             "milestones": milestone_data,
         }
     )
+'''

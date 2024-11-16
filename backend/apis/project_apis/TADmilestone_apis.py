@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import MilestoneStatus
 from flask_restx import Resource
 from flask_smorest import Blueprint
-from backend.api_outputs.project_api.TADmilestone_api_outputs import (
+from api_outputs.project_api.TADmilestone_api_outputs import (
     MilestoneCompletionsResponse,
     MilestoneCreationResponse,
     MilestoneUpdateResponse,

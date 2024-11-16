@@ -1,9 +1,10 @@
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_restx import Resource
 from flask_smorest import Blueprint
 from marshmallow import ValidationError
 from models import User, Project, db
-from backend.api_outputs.project_api.TADmilestone_api_outputs import (
+from api_outputs.project_api.TADmilestone_api_outputs import (
     ProjectCreationResponse,
 )
 from helpers.ErrorCommonHelpers import createFatalError

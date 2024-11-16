@@ -461,10 +461,11 @@ def get_teams_data_ta():
     
     teams = Team.query.all()
 
-    commits = Commit.query.all()
-
+    commit_counts = Commit.query.with_entities(Commit.team_id, func.count(Commit.commit_id)).group_by(Commit.team_id).all()
+    # output format for above query is [ ("team_id", "commit_count"), ("team_id", "commit_count") , ... ]
+    commit_counts = {i[0]: i[1] for i in commit_counts}
+    
     milestones = Milestone.query.all()
-
     milestone_data = { milestone.milestone_id: milestone for milestone in milestones }
 
     milestone_statuses = MilestoneStatus.query.all()
@@ -472,15 +473,8 @@ def get_teams_data_ta():
     dashboard_teams = {}
 
     for team in teams:
-        dashboard_teams[team.team_id] = {
-                    "team_id": team.team_id,
-                    "team_name": team.team_name,
-                    "commits": 0,
-                    "score": 0,
-                    "total_score": 0,
-                    "milestones_completed": 0,
-                    "milestones_missed": 0
-                }
+        dashboard_teams[team.team_id] = { "team_id": team.team_id, "team_name": team.team_name, "commits": commit_counts[team.team_id],
+                    "score": 0, "total_score": 0, "milestones_completed": 0, "milestones_missed": 0 }
 
     for status in milestone_statuses:
 
@@ -490,10 +484,8 @@ def get_teams_data_ta():
             dashboard_teams[status.team_id]['milestones_completed'] += 1
         elif status.milestone_status == "Missed":
             dashboard_teams[status.team_id]['score'] += 0
+            dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
             dashboard_teams[status.team_id]['milestones_missed'] += 1
-
-    for commit in commits:
-        dashboard_teams[commit.team_id]['commits'] += 0
 
     return jsonify({"teams": [dashboard_teams[team] for team in dashboard_teams], "milestones": [milestone.to_dict() for milestone in milestones]})
 
@@ -516,26 +508,17 @@ def get_team_data_ta(team_id):
     
     team = Team.query.get_or_404(team_id)
 
-    commits = Commit.query.filter(Commit.team_id==team_id).all()
+    commit_counts = Commit.query.filter(Commit.team_id==team_id).with_entities(Commit.user_id, func.count(Commit.commit_id)).group_by(Commit.user_id).all()
+    # output format for above query is [ ("user_id", "commit_count"), ("user_id", "commit_count") , ... ]
+    commit_counts = {i[0]: i[1] for i in commit_counts}
 
     members = User.query.filter(User.team_id==team.team_id).all()
-
-    members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "commits": 0} for member in members }
-
-    for commit in commits:
-        if commit.user_id in members_data:
-            members_data[commit.user_id]['commits'] += 1
+    members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "email": member.email, "commits": commit_counts[member.user_id]} for member in members }
 
     milestones = Milestone.query.all()
 
-    milestone_data = { milestone.milestone_id: {"milestone": milestone.to_dict(), "milestonestatus": ""} for milestone in milestones }
 
-    milestone_statuses = MilestoneStatus.query.filter(MilestoneStatus.team_id==team_id).all()
-
-
-    for status in milestone_statuses:
-
-        milestone_data[status.milestone_id]['milestonestatus'] = status.to_dict()
-
-
-    return jsonify({"members": [members_data[member] for member in members_data], "team": team.to_dict(), "milestones": milestone_data})
+    return jsonify({"members": [members_data[member] for member in members_data], 
+                    "team": team.to_dict(), 
+                    "milestones": [milestone.to_dict() for milestone in milestones]
+                    })

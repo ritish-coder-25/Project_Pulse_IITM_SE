@@ -7,6 +7,7 @@ from models import User, Project, db
 from api_outputs.project_api.TADmilestone_api_outputs import (
     ProjectCreationResponse,
 )
+from api_parsers.project_definition_parser import CreateProjectSchema
 from helpers.ErrorCommonHelpers import createFatalError
 
 api_bp_projects = Blueprint(
@@ -22,14 +23,11 @@ class CreateProjectResource(Resource):
     @api_bp_projects.response(201, ProjectCreationResponse)
     def post(self):
         try:
-            if request.is_json:
-                data = request.get_json()
-                print('Received data:', data)
-            else:
-                data = request.form
+            # Parse and validate incoming JSON data using the schema
+            schema = CreateProjectSchema()
+            data = schema.load(request.get_json())
 
-            if not data:
-                return {"message": "No input data provided"}, 400
+            print('Received data:', data)
 
             # Get the current user ID from JWT
             current_user_id = get_jwt_identity()
@@ -38,9 +36,7 @@ class CreateProjectResource(Resource):
             # Check if the user has permission to create a project
             allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
             if current_user.user_type not in allowed_roles:
-                return {
-                    "message": "You do not have permission to create a project"
-                }, 403
+                return {"message": "You do not have permission to create a project"}, 403
 
             # Create a new project
             new_project = Project(
@@ -63,12 +59,15 @@ class CreateProjectResource(Resource):
             }, 201
 
         except KeyError as e:
-            return {
-                "message": f"Missing required field: {str(e)}"
-            }, 400
+            # Handle missing required fields
+            return {"message": f"Missing required field: {str(e)}"}, 400
+
         except ValidationError as e:
+            # Handle validation errors from Marshmallow
             return {"message": f"Validation error: {e.messages}"}, 400
+
         except Exception as e:
+            # Catch any other errors and return a generic error message
             return createFatalError(
                 "project_creation_error",
                 "Error creating the project",

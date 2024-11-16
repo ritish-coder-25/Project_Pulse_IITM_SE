@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import MilestoneStatus
+from models import MilestoneStatus, User, Project, Milestone
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from api_outputs.project_api.TADmilestone_api_outputs import (
@@ -12,6 +12,8 @@ from api_outputs.project_api.TADmilestone_api_outputs import (
 )
 from datetime import datetime, timedelta, timezone
 from helpers.ErrorCommonHelpers import createFatalError
+
+from api_parsers.milestone_definition_parser import MilestoneSchema, MilestoneUpdateSchema
 
 api_bp_milestone_completions = Blueprint(
     "MilestoneCompletions-Api",
@@ -62,6 +64,7 @@ class MilestoneCompletionsResource(Resource):
                 str(e),
             )
 
+
 @api_bp_milestones.route("/api/milestones")
 class MilestonesResource(Resource):
     @jwt_required()
@@ -76,7 +79,8 @@ class MilestonesResource(Resource):
             if current_user.user_type not in allowed_roles:
                 return {"message": "You do not have permission to create a milestone"}, 403
 
-            data = request.get_json()
+            schema = MilestoneSchema()
+            data = schema.load(request.get_json())  # Validate the incoming data
 
             new_milestone = Milestone(
                 name=data["name"],
@@ -100,6 +104,7 @@ class MilestonesResource(Resource):
                 str(e),
             )
 
+
     @jwt_required()
     @api_bp_milestones.response(200, MilestoneListResponse)
     def get(self):
@@ -121,6 +126,7 @@ class MilestonesResource(Resource):
                 str(e),
             )
 
+
 @api_bp_milestones.route("/api/milestones/<int:milestone_id>")
 class MilestoneResource(Resource):
     @jwt_required()
@@ -135,7 +141,9 @@ class MilestoneResource(Resource):
             if current_user.user_type not in allowed_roles:
                 return {"message": "You do not have permission to update milestone"}, 403
 
-            data = request.get_json()
+            schema = MilestoneUpdateSchema()
+            data = schema.load(request.get_json())  # Validate the incoming data
+
             milestone = Milestone.query.get_or_404(milestone_id)
 
             if "name" in data:
@@ -157,6 +165,7 @@ class MilestoneResource(Resource):
                 "Error occurred while updating milestone",
                 str(e),
             )
+
 
     @jwt_required()
     @api_bp_milestones.response(200, MilestoneDeletionResponse)

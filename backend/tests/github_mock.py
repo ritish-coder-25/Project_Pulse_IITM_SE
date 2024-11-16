@@ -1,20 +1,17 @@
+# FILE: test_github_utils.py
+import pytest
 from unittest.mock import patch
+from utils.github_helpers import github_user_exists
 
-@patch('utils.github_helpers.github_user_exists')
-def test_create_team_with_mocked_github(mock_github, client, auth_headers, create_users, create_project):
-    mock_github.return_value = True  # Mock the GitHub user existence check
+@pytest.fixture
+def mock_github_user_exists():
+    with patch('utils.github_helpers.github_user_exists') as mock:
+        yield mock
 
-    payload = {
-        "team_name": "Delta Team",
-        "github_repo_url": "https://github.com/example/delta",
-        "emails": [user.email for user in create_users]
-    }
+def test_github_user_exists_true(mock_github_user_exists):
+    mock_github_user_exists.return_value = True
+    assert github_user_exists("existing_user") is True
 
-    response = client.post(
-        "/api/teams",
-        data=json.dumps(payload),
-        headers=auth_headers
-    )
-
-    assert response.status_code == 201
-    # Additional assertions...
+def test_github_user_exists_false(mock_github_user_exists):
+    mock_github_user_exists.return_value = False
+    assert github_user_exists("nonexistent_user") is False

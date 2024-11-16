@@ -88,7 +88,7 @@ export default {
     },
     async fetchDashboardData() {
       try {
-        const response = await axios.get('http://localhost:5000/api/ta-teams /' + this.$route.params.id,
+        const response = await axios.get('http://localhost:5000/api/ta-teams/' + this.$route.params.id,
           { "headers": { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("access_token") } }
         );
         this.stu_items = response.data.members;

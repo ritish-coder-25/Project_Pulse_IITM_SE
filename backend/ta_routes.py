@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+import os
+from flask import send_file, abort
 from flask_jwt_extended import jwt_required
 from models import (
     db,
@@ -9,6 +11,7 @@ from models import (
     MilestoneStatus,
     Commit,
     Submission,
+    File,
 )
 from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import get_jwt_identity
@@ -539,3 +542,61 @@ def get_team_data_ta(team_id):
 
 
     return jsonify({"members": [members_data[member] for member in members_data], "team": team.to_dict(), "milestones": milestone_data})
+
+
+# (Pranjal) Get Files
+@api_ta.route("/api/files/<int:team_id>", methods=["GET"])
+@jwt_required()
+def get_files(team_id):
+
+        # Get all submissions for the team
+    submissions = Submission.query.filter_by(team_id=team_id).all()
+
+    
+    documents = []
+    for submission in submissions:
+        # Get all files for each submission
+        files = File.query.filter_by(submission_id=submission.submission_id).all()
+        
+        # Get team and milestone names
+        team = Team.query.get(submission.team_id)
+        milestone = Milestone.query.get(submission.milestone_id)
+        
+        # Create document entries for each file
+        for file in files:
+            document = {
+                "id": file.file_id,
+                "name": file.file_name,
+                "url": f"http://localhost:5000/api/download/{file.file_id}",  # Assuming you have a download endpoint
+                "team": team.team_name,
+                "milestone": milestone.milestone_name
+            }
+            documents.append(document)
+    
+    return jsonify({"documents": documents}), 200
+
+
+@api_ta.route("/api/download/<int:file_id>", methods=["GET"])
+@jwt_required()
+def download_file(file_id):
+    try:
+        # Get file details from database
+        file = File.query.get_or_404(file_id)
+        
+        # Construct file path
+        file_path = os.path.join('file_submissions', file.file_name)
+        ## Filenames are assumed to be saved as filename_fileid_submissionid
+        
+        # Check if file exists
+        if not os.path.exists(file_path):
+            abort(404, description="File not found on server")
+            
+        # Return file as attachment
+        return send_file(
+            file_path,
+            as_attachment=True,
+            download_name=file.file_name
+        )
+        
+    except Exception as e:
+        abort(500, description=str(e))

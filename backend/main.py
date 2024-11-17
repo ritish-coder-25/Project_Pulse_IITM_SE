@@ -1,10 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_jwt_extended import (
-    JWTManager,
-    create_access_token,
-    jwt_required,
-    get_jwt_identity,
-)
+from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
@@ -17,12 +12,19 @@ from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
 from apis.Ta_dashboard.ta_dashboard import api_bp_ta_dashboard
-from utils.github_helpers import github_user_exists
-from datetime import timedelta
+from apis.user_apis.userAuthentication import api_bp_auth
+from apis.user_apis.TADuser_approval_apis import api_bp_ua
+from apis.user_apis.TADpending_users_apis import api_bp_pu
+
+# from apis.commits_apis.TADcommits_apis import api_bp_commits
+# from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
+# from apis.submissions_apis.TADuploads_apis import api_bp_uploads
+from apis.taHomeAPIs.taHome_apis import api_bp_tahome
+
+
 import logging
 from flask_cors import CORS
 
-# from flask_restx import Api
 
 # from flask_restx import Api
 import marshmallow as ma
@@ -57,81 +59,24 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
+api.register_blueprint(api_bp_pu)
+api.register_blueprint(api_bp_ua)
+api.register_blueprint(api_bp_tahome)
+# api.register_blueprint(api_bp_commits)
+# api.register_blueprint(api_bp_milestone_completions)
+# api.register_blueprint(api_bp_uploads)
 api.register_blueprint(api_bp_ta_dashboard)
-
-app.register_blueprint(api_bp)
-app.register_blueprint(api_ta)
-
+api.register_blueprint(api_bp_auth)
 api.register_blueprint(api_bp_stu)
 api.register_blueprint(api_bp_submission)
 api.register_blueprint(api_bp_GenAI)
 
+app.register_blueprint(api_bp)
+app.register_blueprint(api_ta)
+
+
 # api.add_namespace(api_bp_ta)
 # api.add_namespace(api_bp_ta)
-
-
-@app.route("/api/auth/register", methods=["POST"])
-def register():
-    data = request.get_json()
-
-    required_fields = [
-        "first_name",
-        "last_name",
-        "password",
-        "email",
-        "github_username",
-        "discord_username",
-    ]
-    for field in required_fields:
-        if field not in data:
-            return jsonify({"message": f"Missing {field}"}), 400
-
-    if User.query.filter_by(email=data["email"]).first():
-        return jsonify({"message": "Email already registered"}), 400
-
-    if User.query.filter_by(github_username=data["github_username"]).first():
-        return jsonify({"message": "GitHub username already registered"}), 400
-
-    if User.query.filter_by(discord_username=data["discord_username"]).first():
-        return jsonify({"message": "Discord username already registered"}), 400
-
-    if len(data["password"]) < 8:
-        return jsonify({"message": "Password must be at least 8 characters long"}), 400
-
-    if not github_user_exists(data["github_username"]):
-        return jsonify({"message": "GitHub username does not exist"}), 400
-
-    hashed_password = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
-
-    new_user = User(
-        first_name=data["first_name"],
-        last_name=data["last_name"],
-        password=hashed_password,
-        email=data["email"],
-        github_username=data["github_username"],
-        discord_username=data["discord_username"],
-        user_type="Registered",
-        approval_status="Inactive",
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({"isSuccess": True, "message": "User registered successfully"}), 201
-
-
-@app.route("/api/auth/login", methods=["POST"])
-def login():
-    data = request.get_json()
-    user = User.query.filter_by(email=data["email"]).first()
-
-    if user and bcrypt.check_password_hash(user.password, data["password"]):
-        expires = timedelta(days=90)
-        access_token = create_access_token(identity=user.user_id, expires_delta=expires)
-        jsonified = jsonify({"access_token": access_token, "user": user.to_dict()})
-        return jsonified, 200
-
-    return jsonify({"message": "Invalid credentials"}), 401
 
 
 @app.route("/api/test", methods=["GET"])

@@ -1,4 +1,3 @@
-# api_outputs/user_approval_outputs.py
 from marshmallow import Schema, fields
 
 

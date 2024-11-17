@@ -16,7 +16,7 @@ api_bp_ua = Blueprint(
 
 @api_bp_ua.route("/api/users/approve_users")
 class ApproveUsersResource(Resource):
-    # @jwt_required()
+    @jwt_required()
     @api_bp_ua.arguments(ApproveUsersRequest)
     @api_bp_ua.response(200, UserApprovalOutput)
     def post(self, data):

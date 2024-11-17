@@ -9,7 +9,9 @@ from helpers.ErrorCommonHelpers import createError, createFatalError
 from marshmallow import Schema, fields
 
 api_bp_pu = Blueprint(
-    "PendingUsers-Api", "PendingUsers", description="Operations to get pending users"
+    "PendingUsers-Api",
+    "PendingUsers",
+    description="Operations to get users awaiting authorization for registration.",
 )
 
 
@@ -18,6 +20,7 @@ class PendingUserListResource(Resource):
     @jwt_required()
     @api_bp_pu.response(200, PendingUserListOutput)
     def get(self):
+        """API to get the pending users awaiting authorization for registration."""
         try:
             pending_users = User.query.filter_by(approval_status="Inactive").all()
             result = [

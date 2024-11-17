@@ -1,0 +1,69 @@
+{
+    "teams": [
+        { "id": 1, "name": "Team A"
+        },
+        { "id": 2, "name": "Team B"
+        },
+        { "id": 3, "name": "Team C"
+        }
+    ],
+    "milestones": [
+        { "id": 1, "name": "Milestone 1"
+        },
+        { "id": 2, "name": "Milestone 2"
+        },
+        { "id": 3, "name": "Milestone 3"
+        }
+    ],
+    "documents": [
+        {
+        "id": 1,
+        "name": "Document X_TeamA_Milestone1",
+        "url": "#",
+        "team": "Team A",
+        "milestone": "Milestone 1"
+        },
+        {
+        "id": 7,
+        "name": "Document Y_TeamA_Milestone1",
+        "url": "#",
+        "team": "Team A",
+        "milestone": "Milestone 1"
+        },
+        {
+        "id": 2,
+        "name": "Document Y_TeamB_Milestone2",
+        "url": "#",
+        "team": "Team B",
+        "milestone": "Milestone 2"
+        },
+        {
+        "id": 3,
+        "name": "Document Z_TeamC_Milestone3",
+        "url": "#",
+        "team": "Team C",
+        "milestone": "Milestone 3"
+        },
+        {
+        "id": 4,
+        "name": "Document P_TeamA_Milestone2",
+        "url": "#",
+        "team": "Team A",
+        "milestone": "Milestone 2"
+        },
+        {
+        "id": 5,
+        "name": "Document Q_TeamB_Milestone3",
+        "url": "#",
+        "team": "Team B",
+        "milestone": "Milestone 3"
+        },
+        {
+        "id": 6,
+        "name": "Document R_TeamC_Milestone1",
+        "url": "#",
+        "team": "Team C",
+        "milestone": "Milestone 1"
+        }
+    ]
+}

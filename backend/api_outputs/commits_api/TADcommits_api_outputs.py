@@ -6,5 +6,4 @@ class CommitOutput(Schema):
 
 
 class CommitsResponse(Schema):
-    message = fields.Str()
     commits = fields.List(fields.Nested(CommitOutput), dump_only=True)

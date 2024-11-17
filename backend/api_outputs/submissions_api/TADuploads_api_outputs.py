@@ -6,5 +6,4 @@ class UploadOutput(Schema):
 
 
 class UploadsResponse(Schema):
-    message = fields.Str()
     uploads = fields.List(fields.Nested(UploadOutput), dump_only=True)

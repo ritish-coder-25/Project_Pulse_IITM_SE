@@ -26,7 +26,7 @@ api_bp_milestones = Blueprint(
 )
 
 
-@api_bp_milestone_completions.route("/api/milecomps")
+@api_bp_milestone_completions.route("/api/project/milecomps")
 class MilestoneCompletionsResource(Resource):
     @jwt_required()
     @api_bp_milestone_completions.response(200, MilestoneCompletionsResponse)
@@ -50,7 +50,6 @@ class MilestoneCompletionsResource(Resource):
                     jsonify(
                         {
                             "message": "No milestone completions in the last 7 days",
-                            "completions": [],
                         }
                     ),
                     200,

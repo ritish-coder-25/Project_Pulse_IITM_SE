@@ -13,12 +13,12 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           <label for="teamSelect" class="form-label">Select Team</label>
           <input
             type="text"
-            v-model="selectedTeam"
+            v-model="selectedTeam.name"
             list="teams"
             class="form-control"
             placeholder="Start typing team name..."
             id="teamSelect"
-            @change="filterDocuments"
+            @change="handleTeamChange"
           />
           <datalist id="teams">
             <option v-for="team in teams" :key="team.id" :value="team.name">
@@ -34,20 +34,20 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           >
           <input
             type="text"
-            v-model="selectedMilestone"
+            v-model="selectedMilestone.milestone_name"
             list="milestones"
             class="form-control"
             placeholder="Start typing milestone name..."
             id="milestoneSelect"
-            @change="filterDocuments"
+            @change="handleMilestoneChange"
           />
           <datalist id="milestones">
             <option
               v-for="milestone in milestones"
               :key="milestone.id"
-              :value="milestone.name"
+              :value="milestone.milestone_name"
             >
-              {{ milestone.name }}
+              {{ milestone.milestone_name }}
             </option>
           </datalist>
         </div>
@@ -65,9 +65,9 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
                   <a
                     v-for="document in filteredDocuments"
                     :key="document.id"
-                    :href="document.url"
-                    target="_blank"
+                    @click="downloadDocument(document.id)"
                     class="d-block text-primary"
+                    style="cursor: pointer;"
                   >
                     {{ document.name }}
                   </a>
@@ -142,122 +142,93 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
 </template>
 
 <script>
-import axios from 'axios'
 
+import { TaScoringApiHelpers } from '@/helpers/ApiHelperFuncs/TaScoringPage'
+import TaScoringApiHelpersJson from '@/helpers/ApiHelperFuncs/TaScoringPage/TaScoringApiHelpers.json' 
 export default {
   name: 'MilestoneReview',
   data() {
     return {
-      selectedTeam: '',
-      selectedMilestone: '',
+      selectedTeam: {
+        id: '',
+        name: ''
+      },
+      selectedMilestone: {
+        id: '',
+        milestone_name: '',
+        max_marks: 0
+      },
       teams: [],
       milestones: [],
       documents: [],
       filteredDocuments: [], // To hold documents filtered by team and milestone
       feedback: '',
       teamScore: 18,
-      maxMilestoneScore: 20,
-      // Local fallback data
-      localTeams: [
-        { id: 1, name: 'Team A' },
-        { id: 2, name: 'Team B' },
-        { id: 3, name: 'Team C' },
-      ],
-      localMilestones: [
-        { id: 1, name: 'Milestone 1' },
-        { id: 2, name: 'Milestone 2' },
-        { id: 3, name: 'Milestone 3' },
-      ],
-      localDocuments: [
-        {
-          id: 1,
-          name: 'Document X_TeamA_Milestone1',
-          url: '#',
-          team: 'Team A',
-          milestone: 'Milestone 1',
-        },
-        {
-          id: 7,
-          name: 'Document Y_TeamA_Milestone1',
-          url: '#',
-          team: 'Team A',
-          milestone: 'Milestone 1',
-        },
-        {
-          id: 2,
-          name: 'Document Y_TeamB_Milestone2',
-          url: '#',
-          team: 'Team B',
-          milestone: 'Milestone 2',
-        },
-        {
-          id: 3,
-          name: 'Document Z_TeamC_Milestone3',
-          url: '#',
-          team: 'Team C',
-          milestone: 'Milestone 3',
-        },
-        {
-          id: 4,
-          name: 'Document P_TeamA_Milestone2',
-          url: '#',
-          team: 'Team A',
-          milestone: 'Milestone 2',
-        },
-        {
-          id: 5,
-          name: 'Document Q_TeamB_Milestone3',
-          url: '#',
-          team: 'Team B',
-          milestone: 'Milestone 3',
-        },
-        {
-          id: 6,
-          name: 'Document R_TeamC_Milestone1',
-          url: '#',
-          team: 'Team C',
-          milestone: 'Milestone 1',
-        },
-        // Add more document data here as needed
-      ],
+      maxMilestoneScore: 20
     }
   },
   methods: {
     async fetchTeams() {
       try {
-        const response = await axios.get('http://localhost:3000/teams')
+        const response =  await TaScoringApiHelpers.fetchTeams()
+        console.log("Teams data received:", response.data)
         this.teams = response.data
       } catch (error) {
         console.warn('Using local teams data due to error:', error)
-        this.teams = this.localTeams
+        this.teams = TaScoringApiHelpersJson.teams
       }
     },
     async fetchMilestones() {
       try {
-        const response = await axios.get('http://localhost:3000/milestones')
+          const response = await TaScoringApiHelpers.fetchMilestones()
+          console.log("Milestones data received:", response.data)
         this.milestones = response.data
+        
       } catch (error) {
         console.warn('Using local milestones data due to error:', error)
-        this.milestones = this.localMilestones
+          this.milestones = TaScoringApiHelpersJson.milestones
       }
     },
     async fetchDocuments() {
       try {
-        const response = await axios.get('http://localhost:3000/documents')
-        this.documents = response.data
+        this.maxMilestoneScore = this.selectedMilestone.max_marks
+        const response = await TaScoringApiHelpers.fetchDocs(this.selectedTeam.id)
+        this.documents = Array.isArray(response.data) ? response.data : []
+        console.log("Documents ye rha:", this.documents)
         this.filterDocuments()
       } catch (error) {
         console.warn('Using local documents data due to error:', error)
-        this.documents = this.localDocuments
+        this.documents = TaScoringApiHelpersJson.documents
         this.filterDocuments()
       }
     },
     filterDocuments() {
-      this.filteredDocuments = this.documents.filter(
-        doc =>
-          doc.team === this.selectedTeam &&
-          doc.milestone === this.selectedMilestone,
-      )
+      // Only filter if both team and milestone are selected
+      if (this.selectedTeam.name && this.selectedMilestone.milestone_name) {
+        this.filteredDocuments = this.documents.filter(doc =>
+          doc.team === this.selectedTeam.name &&
+          doc.milestone === this.selectedMilestone.milestone_name
+        )
+        console.log("Filtered documents:", this.filteredDocuments)
+      }
+    },
+    handleTeamChange(event) {
+      const teamName = event.target.value
+      const team = this.teams.find(t => t.name === teamName)
+      if (team) {
+        this.selectedTeam = team
+        this.filterDocuments()
+      }
+    },
+    handleMilestoneChange(event) {
+      const milestoneName = event.target.value
+      const milestone = this.milestones.find(m => m.milestone_name === milestoneName)
+      if (milestone) {
+        this.selectedMilestone = milestone
+        this.maxMilestoneScore = milestone.max_marks
+        this.fetchDocuments()
+        // this.filterDocuments()
+      }
     },
     async submitForm() {
       alert(
@@ -266,17 +237,45 @@ export default {
       // Add form submission handling here
     },
     resetForm() {
-      this.selectedTeam = ''
-      this.selectedMilestone = ''
+      this.selectedTeam = {
+        id: '',
+        name: ''
+      }
+      this.selectedMilestone = {
+        id: '',
+        milestone_name: '',
+        max_marks: 0
+      }
       this.feedback = ''
       this.teamScore = null
       this.filteredDocuments = []
+    },
+    async downloadDocument(fileId) {
+      try {
+        const response = await TaScoringApiHelpers.downloadFile(fileId)
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.target = '_blank'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+      } catch (error) {
+        console.error('Error downloading file:', error)
+      }
     },
   },
   mounted() {
     this.fetchTeams()
     this.fetchMilestones()
-    this.fetchDocuments()
+    // this.fetchDocuments()
+  },
+  computed: {
+    maxMilestoneScore() {
+      return this.selectedMilestone.max_marks || 0
+      
+    }
   },
 }
 </script>
@@ -299,4 +298,3 @@ export default {
   overflow-y: auto;
 }
 </style>
-

@@ -8,10 +8,11 @@ from flask_jwt_extended import (
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
-from config import Config
+from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
+<<<<<<< HEAD
 from apis.user_apis.TADpending_users_apis import api_bp_pu
 from apis.user_apis.TADuser_approval_apis import api_bp_ua
 from apis.commits_apis.TADcommits_apis import api_bp_commits
@@ -19,6 +20,9 @@ from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
 from apis.submissions_apis.TADuploads_apis import api_bp_uploads
 
 
+=======
+from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+>>>>>>> main
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
@@ -64,6 +68,11 @@ api.register_blueprint(api_bp_commits)
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 
+<<<<<<< HEAD
+=======
+api.register_blueprint(api_bp_stu)
+
+>>>>>>> main
 # api.add_namespace(api_bp_ta)
 
 
@@ -142,33 +151,30 @@ if __name__ == "__main__":
         try:
             db.create_all()
             logging.info("Database created successfully.")
+            if not User.query.filter_by(email="admin@projectpulse.com").first():
+                create_default_objects(db=db, app=app)
+                logging.info("Default admin user created.")
+            else:
+                logging.info("Default admin user already exists.")
         except Exception as e:
             logging.error(f"Error creating database: {e}")
-    app.run(debug=True)
-
     # Create default admin user if not exists
     with app.app_context():
-        if not User.query.filter_by(email="admin@projectpulse.com").first():
+        if not User.query.filter_by(email='admin@projectpulse.com').first():
             admin_user = User(
-                first_name="Admin",
-                last_name="ProjectPulse",
-                password=bcrypt.generate_password_hash("projectpulse123").decode(
-                    "utf-8"
-                ),
-                email="admin@projectpulse.com",
-                github_username="pranjalkar99",
-                discord_username="test123",
-                user_type="Admin",
-                approval_status="Active",
-            )
-            main_project = Project(
-                project_topic="PROJECT DETAILS  SEP’24",
-                statement="Tracking Student Progress in Software Projects",
-                document_url="https://docs.google.com/document/d/1n7AxCUoBJuDVxIVGGz_jh72hGY4ICQ2tg0tAvJHHMqU/edit?tab=t.0#heading=h.uqcmipq6429b",
+                first_name='Admin',
+                last_name='ProjectPulse',
+                password=bcrypt.generate_password_hash('projectpulse123').decode('utf-8'),
+                email='admin@projectpulse.com',
+                github_username='pranjalkar99',
+                discord_username='test123',
+                user_type='Admin',
+                approval_status='Active',
             )
             db.session.add(admin_user)
-            db.session.add(main_project)
             db.session.commit()
             logging.info("Default admin user created.")
         else:
             logging.info("Default admin user already exists.")
+            
+    app.run(debug=True)

@@ -21,7 +21,7 @@ from apis.submissions_apis.TADuploads_apis import api_bp_uploads
 
 
 =======
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 >>>>>>> main
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
@@ -68,11 +68,8 @@ api.register_blueprint(api_bp_commits)
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 
-<<<<<<< HEAD
-=======
 api.register_blueprint(api_bp_stu)
 
->>>>>>> main
 # api.add_namespace(api_bp_ta)
 
 

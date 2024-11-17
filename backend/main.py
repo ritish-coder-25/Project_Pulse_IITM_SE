@@ -12,17 +12,7 @@ from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
-<<<<<<< HEAD
-from apis.user_apis.TADpending_users_apis import api_bp_pu
-from apis.user_apis.TADuser_approval_apis import api_bp_ua
-from apis.commits_apis.TADcommits_apis import api_bp_commits
-from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
-from apis.submissions_apis.TADuploads_apis import api_bp_uploads
-
-
-=======
-from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
->>>>>>> main
+from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
@@ -59,11 +49,6 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
-api.register_blueprint(api_bp_ua)
-api.register_blueprint(api_bp_pu)
-api.register_blueprint(api_bp_uploads)
-api.register_blueprint(api_bp_milestone_completions)
-api.register_blueprint(api_bp_commits)
 
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
@@ -157,21 +142,23 @@ if __name__ == "__main__":
             logging.error(f"Error creating database: {e}")
     # Create default admin user if not exists
     with app.app_context():
-        if not User.query.filter_by(email='admin@projectpulse.com').first():
+        if not User.query.filter_by(email="admin@projectpulse.com").first():
             admin_user = User(
-                first_name='Admin',
-                last_name='ProjectPulse',
-                password=bcrypt.generate_password_hash('projectpulse123').decode('utf-8'),
-                email='admin@projectpulse.com',
-                github_username='pranjalkar99',
-                discord_username='test123',
-                user_type='Admin',
-                approval_status='Active',
+                first_name="Admin",
+                last_name="ProjectPulse",
+                password=bcrypt.generate_password_hash("projectpulse123").decode(
+                    "utf-8"
+                ),
+                email="admin@projectpulse.com",
+                github_username="pranjalkar99",
+                discord_username="test123",
+                user_type="Admin",
+                approval_status="Active",
             )
             db.session.add(admin_user)
             db.session.commit()
             logging.info("Default admin user created.")
         else:
             logging.info("Default admin user already exists.")
-            
+
     app.run(debug=True)

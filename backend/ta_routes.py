@@ -19,130 +19,130 @@ from flask_jwt_extended import get_jwt_identity
 api_ta = Blueprint("api_ta", __name__)
 
 
-# # (Parag) TAHomePage - Fetching pending Users for approval
-# @api_ta.route("/api/pendusers", methods=["GET"])
-# @jwt_required()
-# def get_pending_users():
-#     try:
-#         pending_users = User.query.filter_by(approval_status="Inactive").all()
-#         result = [
-#             {
-#                 "id": user.user_id,
-#                 "name": f"{user.first_name} {user.last_name}",
-#                 "email": user.email,
-#             }
-#             for user in pending_users
-#         ]
-#         return jsonify(result), 200
-#     except Exception as e:
-#         return (
-#             jsonify({"message": "Error fetching pending users", "error": str(e)}),
-#             500,
-#         )
+# (Parag) TAHomePage - Fetching pending Users for approval
+@api_ta.route("/api/pendusers", methods=["GET"])
+@jwt_required()
+def get_pending_users():
+    try:
+        pending_users = User.query.filter_by(approval_status="Inactive").all()
+        result = [
+            {
+                "id": user.user_id,
+                "name": f"{user.first_name} {user.last_name}",
+                "email": user.email,
+            }
+            for user in pending_users
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        return (
+            jsonify({"message": "Error fetching pending users", "error": str(e)}),
+            500,
+        )
 
 
-# # (Parag) TAHomePage - Returning approve/reject for users
-# @api_ta.route("/api/approve_users", methods=["POST"])
-# @jwt_required()
-# def approve_usersTA():
-#     data = request.get_json()
-#     current_user_id = get_jwt_identity()
-#     current_user = User.query.get_or_404(current_user_id)
-#     allowed_roles = ["TA", "Admin", "Instructor", "Developer"]
-#     if current_user.user_type not in allowed_roles:
-#         return jsonify({"message": "You do not have permission to approve users"}), 403
-#     users = data.get("users", [])
-#     for user_data in users:
-#         user_id = user_data.get("id")
-#         approved = user_data.get("approved")
-#         rejected = user_data.get("rejected")
-#         role = user_data.get("role", "Student")  # Default role as 'Student'
-#         user = User.query.get(user_id)
-#         if not user:
-#             continue  # Skip if user not found
-#         # Update user status based on approval or rejection
-#         if approved:
-#             user.approval_status = "Active"
-#         elif rejected:
-#             user.approval_status = "Decline"
-#         # Update the user's role
-#         user.user_type = role
-#         db.session.commit()
+# (Parag) TAHomePage - Returning approve/reject for users
+@api_ta.route("/api/approve_users", methods=["POST"])
+@jwt_required()
+def approve_usersTA():
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get_or_404(current_user_id)
+    allowed_roles = ["TA", "Admin", "Instructor", "Developer"]
+    if current_user.user_type not in allowed_roles:
+        return jsonify({"message": "You do not have permission to approve users"}), 403
+    users = data.get("users", [])
+    for user_data in users:
+        user_id = user_data.get("id")
+        approved = user_data.get("approved")
+        rejected = user_data.get("rejected")
+        role = user_data.get("role", "Student")  # Default role as 'Student'
+        user = User.query.get(user_id)
+        if not user:
+            continue  # Skip if user not found
+        # Update user status based on approval or rejection
+        if approved:
+            user.approval_status = "Active"
+        elif rejected:
+            user.approval_status = "Decline"
+        # Update the user's role
+        user.user_type = role
+        db.session.commit()
 
-#     return jsonify({"message": "User approvals processed successfully"}), 200
-
-
-# # (Parag) TAHomePage - Fetching uploads for last 7 days
-# @api_ta.route("/api/uploads", methods=["GET"])
-# @jwt_required()
-# def get_uploads():
-#     try:
-#         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-#         recent_submissions = (
-#             db.session.query(Submission)
-#             .join(Team, Submission.team_id == Team.team_id)
-#             .filter(Submission.submission_timestamp >= seven_days_ago)
-#             .all()
-#         )
-#         result = [
-#             {"team": submission.team.team_name} for submission in recent_submissions
-#         ]
-#         if not result:
-#             return jsonify({"message": "No uploads in the last 7 days"}), 200
-#         return jsonify(result), 200
-#     except Exception as e:
-#         return jsonify({"message": "Error fetching uploads", "error": str(e)}), 500
+    return jsonify({"message": "User approvals processed successfully"}), 200
 
 
-# # (Parag) TAHomePage - Fetching commits for last 7 days
-# @api_ta.route("/api/commits", methods=["GET"])
-# @jwt_required()
-# def get_commits():
-#     try:
-#         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-#         recent_commits = Commit.query.filter(
-#             Commit.commit_timestamp >= seven_days_ago
-#         ).all()
-#         result = [
-#             {"team": commit.team.team_name}
-#             for commit in recent_commits
-#             if commit.user and commit.user.team
-#         ]
-#         if not result:
-#             return jsonify([{"team": "No commits in the last 7 days"}]), 200
-#         return jsonify(result), 200
-#     except Exception as e:
-#         return jsonify({"message": "Error fetching commits", "error": str(e)}), 500
+# (Parag) TAHomePage - Fetching uploads for last 7 days
+@api_ta.route("/api/uploads", methods=["GET"])
+@jwt_required()
+def get_uploads():
+    try:
+        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+        recent_submissions = (
+            db.session.query(Submission)
+            .join(Team, Submission.team_id == Team.team_id)
+            .filter(Submission.submission_timestamp >= seven_days_ago)
+            .all()
+        )
+        result = [
+            {"team": submission.team.team_name} for submission in recent_submissions
+        ]
+        if not result:
+            return jsonify({"message": "No uploads in the last 7 days"}), 200
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"message": "Error fetching uploads", "error": str(e)}), 500
 
 
-# # (Parag) TAHomePage - Fetching milestone completions for last 7 days
-# @api_ta.route("/api/milecomps", methods=["GET"])
-# @jwt_required()
-# def get_milecomps():
-#     try:
-#         seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-#         recent_milestone_completions = MilestoneStatus.query.filter(
-#             MilestoneStatus.completed_date >= seven_days_ago,
-#             MilestoneStatus.milestone_status == "Completed",
-#         ).all()
-#         result = [
-#             {"team": milestone.team.team_name}
-#             for milestone in recent_milestone_completions
-#             if milestone.team
-#         ]
-#         if not result:
-#             return (
-#                 jsonify({"message": "No milestone completions in the last 7 days"}),
-#                 200,
-#             )
-#         return jsonify(result), 200
-#     except Exception as e:
-#         return (
-#             jsonify(
-#                 {"message": "Error fetching milestone completions", "error": str(e)}
-#             ),
-#             500,
-#         )
+# (Parag) TAHomePage - Fetching commits for last 7 days
+@api_ta.route("/api/commits", methods=["GET"])
+@jwt_required()
+def get_commits():
+    try:
+        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+        recent_commits = Commit.query.filter(
+            Commit.commit_timestamp >= seven_days_ago
+        ).all()
+        result = [
+            {"team": commit.team.team_name}
+            for commit in recent_commits
+            if commit.user and commit.user.team
+        ]
+        if not result:
+            return jsonify([{"team": "No commits in the last 7 days"}]), 200
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"message": "Error fetching commits", "error": str(e)}), 500
+
+
+# (Parag) TAHomePage - Fetching milestone completions for last 7 days
+@api_ta.route("/api/milecomps", methods=["GET"])
+@jwt_required()
+def get_milecomps():
+    try:
+        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+        recent_milestone_completions = MilestoneStatus.query.filter(
+            MilestoneStatus.completed_date >= seven_days_ago,
+            MilestoneStatus.milestone_status == "Completed",
+        ).all()
+        result = [
+            {"team": milestone.team.team_name}
+            for milestone in recent_milestone_completions
+            if milestone.team
+        ]
+        if not result:
+            return (
+                jsonify({"message": "No milestone completions in the last 7 days"}),
+                200,
+            )
+        return jsonify(result), 200
+    except Exception as e:
+        return (
+            jsonify(
+                {"message": "Error fetching milestone completions", "error": str(e)}
+            ),
+            500,
+        )
 
 
 ##########################

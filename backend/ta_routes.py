@@ -639,7 +639,7 @@ def get_files(team_id):
 
 
 
-
+'''
 @api_ta.route("/api/download/<int:file_id>", methods=["GET"])
 @jwt_required()
 def download_file(file_id):
@@ -660,5 +660,5 @@ def download_file(file_id):
 
     except Exception as e:
         abort(500, description=str(e))
-'''
+
 '''

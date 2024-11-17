@@ -17,12 +17,6 @@ from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
 from apis.ta_teams_dashboard.ta_teams_dashboard import api_bp_ta_dashboard
 from apis.user_apis.userAuthentication import api_bp_auth
-from apis.user_apis.TADuser_approval_apis import api_bp_ua
-from apis.user_apis.TADpending_users_apis import api_bp_pu
-
-# from apis.commits_apis.TADcommits_apis import api_bp_commits
-# from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
-# from apis.submissions_apis.TADuploads_apis import api_bp_uploads
 from apis.taHomeAPIs.taHome_apis import api_bp_tahome
 
 
@@ -66,12 +60,7 @@ api.register_blueprint(api_bp_users)
 api.register_blueprint(api_bp_projects)
 api.register_blueprint(api_bp_milestones)
 api.register_blueprint(api_bp_milestone_completions)
-api.register_blueprint(api_bp_pu)
-api.register_blueprint(api_bp_ua)
 api.register_blueprint(api_bp_tahome)
-# api.register_blueprint(api_bp_commits)
-# api.register_blueprint(api_bp_milestone_completions)
-# api.register_blueprint(api_bp_uploads)
 api.register_blueprint(api_bp_ta_dashboard)
 api.register_blueprint(api_bp_auth)
 api.register_blueprint(api_bp_stu)

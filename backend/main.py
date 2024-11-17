@@ -16,7 +16,7 @@ from apis.team_apis.team_apis import api_bp_ta
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
-from apis.ta_dashboard.ta_dashboard import api_bp_ta_dashboard
+from apis.Ta_dashboard.ta_dashboard import api_bp_ta_dashboard
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
@@ -67,8 +67,6 @@ api.register_blueprint(api_bp_submission)
 api.register_blueprint(api_bp_GenAI)
 
 # api.add_namespace(api_bp_ta)
-api.register_blueprint(api_bp_stu)
-
 # api.add_namespace(api_bp_ta)
 
 
@@ -179,7 +177,5 @@ if __name__ == "__main__":
             logging.info("Default admin user created.")
         else:
             logging.info("Default admin user already exists.")
-
-    app.run(debug=True)
 
     app.run(debug=True)

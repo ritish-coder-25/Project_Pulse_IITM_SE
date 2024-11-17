@@ -2,7 +2,6 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from models import User
 from flask_jwt_extended import get_jwt_identity
-from api_parsers import TADpending_user_parsers
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from api_outputs.user_api.TADpending_user_outputs import PendingUserListOutput

@@ -16,7 +16,7 @@ api_bp_ua = Blueprint(
 
 @api_bp_ua.route("/api/users/approve_users")
 class ApproveUsersResource(Resource):
-    @jwt_required()
+    # @jwt_required()
     @api_bp_ua.arguments(ApproveUsersRequest)
     @api_bp_ua.response(200, UserApprovalOutput)
     def post(self, data):
@@ -34,26 +34,29 @@ class ApproveUsersResource(Resource):
 
             results = []
             for user_data in data["users"]:
-                user_id = user_data["id"]
-                approved = user_data.get("approved")
-                rejected = user_data.get("rejected")
-                role = user_data.get("role", "Student")
+                user_id = user_data.get("user_id")
+                approval_status = user_data.get("approval_status")
+                user_type = user_data.get("user_type")
 
                 user = User.query.get(user_id)
                 if not user:
-                    results.append({"id": user_id, "message": "User not found"})
+                    results.append({"user_id": user_id, "message": "User not found"})
+                    continue
+                user.user_type = user_type
+                if approval_status == "Approved":
+                    user.approval_status = "Active"
+                elif approval_status == "Declined":
+                    user.approval_status = "Decline"
+                else:
+                    results.append(
+                        {"user_id": user_id, "message": "Invalid approval_status"}
+                    )
                     continue
 
-                if approved:
-                    user.approval_status = "Active"
-                elif rejected:
-                    user.approval_status = "Decline"
-
-                # Update the user's role
-                user.user_type = role
                 db.session.commit()
-
-                results.append({"id": user_id, "message": "User approval processed"})
+                results.append(
+                    {"user_id": user_id, "message": "User approval processed"}
+                )
 
             return (
                 jsonify(

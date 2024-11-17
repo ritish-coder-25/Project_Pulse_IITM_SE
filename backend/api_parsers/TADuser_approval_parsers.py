@@ -1,15 +1,12 @@
-# api_parsers/user_approval_parser.py
 from marshmallow import Schema, fields, validate
 
 
 class UserApprovalParser(Schema):
-    id = fields.Int(required=True)
-    approved = fields.Bool(required=False)
-    rejected = fields.Bool(required=False)
-    role = fields.Str(
-        missing="Student",
-        validate=validate.OneOf(["TA", "Admin", "Instructor", "Developer", "Student"]),
+    user_id = fields.Int(required=True)
+    approval_status = fields.Str(
+        required=True, validate=validate.OneOf(["Approved", "Declined"])
     )
+    user_type = fields.Str(required=True)
 
 
 class ApproveUsersRequest(Schema):

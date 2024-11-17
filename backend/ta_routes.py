@@ -201,6 +201,8 @@ def users_approval():
     db.session.commit()
 
     return jsonify({"message": "Users approve status and role Updated"}), 200
+'''
+'''
 """
 
 
@@ -285,6 +287,7 @@ def create_milestone():
         201,
     )
 
+#Update Milestones (Ritish)
 
 # Update Milestones (Ritish)
 @api_ta.route("/api/milestones/<int:milestone_id>", methods=["PUT"])
@@ -560,6 +563,14 @@ def get_files(team_id):
     return jsonify({"documents": documents}), 200
 
 
+    return jsonify(
+        {
+            "members": [members_data[member] for member in members_data],
+            "team": team.to_dict(),
+            "milestones": milestone_data,
+        }
+    )
+'''
 @api_ta.route("/api/download/<int:file_id>", methods=["GET"])
 @jwt_required()
 def download_file(file_id):
@@ -649,4 +660,5 @@ def download_file(file_id):
 
     except Exception as e:
         abort(500, description=str(e))
+'''
 '''

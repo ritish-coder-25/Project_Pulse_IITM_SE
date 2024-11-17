@@ -105,6 +105,70 @@ components:
           description: Error name
           type: string
       type: object
+    MilestoneCompletionOutput:
+      properties:
+        team:
+          readOnly: true
+          type: string
+      type: object
+    MilestoneCompletionsResponse:
+      properties:
+        completions:
+          items:
+            $ref: '#/components/schemas/MilestoneCompletionOutput'
+          readOnly: true
+          type: array
+        message:
+          type: string
+      type: object
+    MilestoneCreationResponse:
+      properties:
+        message:
+          type: string
+        milestone_id:
+          readOnly: true
+          type: integer
+      type: object
+    MilestoneDeletionResponse:
+      properties:
+        message:
+          type: string
+      type: object
+    MilestoneListResponse:
+      properties:
+        milestones:
+          items:
+            $ref: '#/components/schemas/MilestoneOutput'
+          readOnly: true
+          type: array
+      type: object
+    MilestoneOutput:
+      properties:
+        description:
+          readOnly: true
+          type: string
+        end_date:
+          format: date
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        max_marks:
+          readOnly: true
+          type: number
+        name:
+          readOnly: true
+          type: string
+        start_date:
+          format: date
+          readOnly: true
+          type: string
+      type: object
+    MilestoneUpdateResponse:
+      properties:
+        message:
+          type: string
     FileChange:
       properties:
         additions:
@@ -191,6 +255,30 @@ components:
         total_pages:
           type: integer
       type: object
+    ProjectCreationResponse:
+      properties:
+        message:
+          type: string
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectOutput'
+          readOnly: true
+      type: object
+    ProjectOutput:
+      properties:
+        document_url:
+          readOnly: true
+          type: string
+        name:
+          readOnly: true
+          type: string
+        project_id:
+          readOnly: true
+          type: integer
+        statement:
+          readOnly: true
+          type: string
+      type: object
     PutTeam:
       properties:
         emails:
@@ -266,6 +354,8 @@ info:
   version: v1
 openapi: 3.0.2
 paths:
+  /api/milecomps:
+    get:
   /api/commits-fetch/{team_id}:
     get:
       description: "Args:\n    - since (str): Start datetime in ISO format.\n    -\
@@ -280,6 +370,56 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/MilestoneCompletionsResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      tags:
+      - MilestoneCompletions-Api
+  /api/milestones:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneListResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Retrieve all milestones
+      tags:
+      - Milestones-Api
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneCreationResponse'
+          description: Created
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Create a new milestone
+      tags:
+      - Milestones-Api
+  /api/milestones/{milestone_id}:
+    delete:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneDeletionResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Delete a milestone
+      tags:
+      - Milestones-Api
+    parameters:
+    - in: path
+      name: milestone_id
                 $ref: '#/components/schemas/CommitsResponse'
           description: OK
         '404':
@@ -307,6 +447,7 @@ paths:
       schema:
         minimum: 0
         type: integer
+    put:
   /api/download/{file_id}:
     get:
       description: "Args:\n    file_id (int): The ID of the file to download.\n\n\
@@ -318,6 +459,27 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/MilestoneUpdateResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Update an existing milestone
+      tags:
+      - Milestones-Api
+  /api/projects:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreationResponse'
+          description: Created
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      tags:
+      - Projects-Api
+  /api/teams:
                 $ref: '#/components/schemas/FileDownload'
           description: OK
         '404':
@@ -519,6 +681,12 @@ tags:
   name: Teams-Api
 - description: Operations on users
   name: api_bp_users
+- description: Operations related to creating and managing projects
+  name: Projects-Api
+- description: Operations for managing milestones
+  name: Milestones-Api
+- description: Operation for getting milestone completions in last 7 days
+  name: MilestoneCompletions-Api
 - description: Display of Student dashboard
   name: StuDashboard-Api
 - description: Operations on teams milestone submissions and scoring

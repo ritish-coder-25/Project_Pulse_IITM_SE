@@ -8,6 +8,10 @@ from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
+from apis.project_apis.TADproject_apis import api_bp_projects
+# Import the milestone API blueprints
+from apis.project_apis.TADmilestone_apis import api_bp_milestones
+from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
@@ -59,6 +63,9 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
+api.register_blueprint(api_bp_projects)
+api.register_blueprint(api_bp_milestones)
+api.register_blueprint(api_bp_milestone_completions)
 api.register_blueprint(api_bp_pu)
 api.register_blueprint(api_bp_ua)
 api.register_blueprint(api_bp_tahome)

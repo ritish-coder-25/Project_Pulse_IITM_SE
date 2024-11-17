@@ -128,7 +128,8 @@ class SubmitProject(Resource):
 
 @api_bp_stu.route('/api/milestones/deadlines')
 class MilestoneDeadlines(Resource):
-    @api_bp_stu.response(200, fields.List(fields.Nested(MilestoneDeadlineSchema)))
+    @api_bp_stu.response(200, MilestoneDeadlineSchema(many=True))
+    @api_bp_stu.response(400, CommonErrorSchema)
     @jwt_required()
     def get(self):
         try:

@@ -8,5 +8,4 @@ class UserApprovalResult(Schema):
 
 
 class UserApprovalOutput(Schema):
-    message = fields.Str()
     results = fields.List(fields.Nested(UserApprovalResult))

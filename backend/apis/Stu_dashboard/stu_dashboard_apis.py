@@ -86,6 +86,7 @@ class SubmitProject(Resource):
     @api_bp_stu.response(400, CommonErrorSchema)
     @jwt_required()
     def post(self):
+        """This API handles project file submissions, saves file details, and optionally marks the milestone as complete for a student. """
         try:
             # Ensure required data is present
             if 'file' not in request.files or 'student_id' not in request.form or 'project_id' not in request.form:
@@ -135,6 +136,7 @@ class MilestoneDeadlines(Resource):
     @api_bp_stu.response(400, CommonErrorSchema)
     @jwt_required()
     def get(self):
+        """This API retrieves and returns a list of all milestones with their names, descriptions, and deadlines."""
         try:
             # Query all milestones and get their name, description, and end date
             milestones = Milestone.query.all()

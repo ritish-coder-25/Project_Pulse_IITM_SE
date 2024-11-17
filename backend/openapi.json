@@ -201,6 +201,8 @@ paths:
           description: Not Found
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: This API endpoint is to retrieve information about a student's team,
+        providing an overview of the student's team activities and progress.
       tags:
       - StuDashboard-Api
     parameters:
@@ -213,12 +215,12 @@ paths:
   /api/teams:
     get:
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Team'
-          description: Created
+          description: OK
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
       tags:
@@ -250,6 +252,18 @@ paths:
       tags:
       - Teams-Api
   /api/teams/{team_id}:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      tags:
+      - Teams-Api
     parameters:
     - in: path
       name: team_id
@@ -280,12 +294,12 @@ paths:
   /api/teams/{team_id}/users/{user_id}:
     delete:
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TeamsDeleteOutput'
-          description: Created
+          description: OK
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
       tags:

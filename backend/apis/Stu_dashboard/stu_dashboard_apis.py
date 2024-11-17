@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, User, Team, MilestoneStatus, Commit, File, Milestone
+from models import db, User, Team, MilestoneStatus, Commit, File, Milestone, Milestone
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from werkzeug.utils import secure_filename
@@ -31,27 +31,30 @@ class StuDashboard(Resource):
     @api_bp_stu.response(404, CommonErrorSchema)
     @jwt_required()
     def get(self, stu_id):
+        """This API endpoint is to retrieve information about a student's team, providing an overview of the student's team activities and progress."""
         try:
             current_user = User.query.get_or_404(stu_id)
-
-            if not current_user.team:
+            if not current_user.team_id:
                 return createError("team_get_curr_no_team", "User is not in a team", 404)
-
+            team = Team.query.get_or_404(current_user.team_id)
+            
             team_data = {
-                'team_name': current_user.team.team_name,
+                'team_name': team.team_name,
                 'team_score': 0,
                 'members': [],
                 'milestones': []
             }
-
             # Retrieve and add the team's score from milestones
             statuses = MilestoneStatus.query.filter_by(
                 team_id=current_user.team.team_id).all()
             team_data['team_score'] = sum(
                 status.eval_score for status in statuses)
 
+            statuses = MilestoneStatus.query.filter_by(team_id=team.team_id).all()
+            team_data['team_score'] = sum(status.eval_score or 0 for status in statuses)
+            
             # Retrieve member data for the team, including commit counts
-            for member in current_user.team.members:
+            for member in team.members:
                 member_data = {
                     'name': f"{member.first_name} {member.last_name}",
                     'email': member.email,

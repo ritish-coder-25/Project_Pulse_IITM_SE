@@ -4,6 +4,7 @@ from flask import send_file, abort
 import os
 from flask import send_file, abort
 from flask_jwt_extended import jwt_required
+from sqlalchemy import func
 from models import (
     db,
     User,

@@ -13,6 +13,7 @@ from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
+from apis.ta_dashboard.ta_dashboard import api_bp_ta_dashboard
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
@@ -55,6 +56,7 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
+api.register_blueprint(api_bp_ta_dashboard)
 
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)

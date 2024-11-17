@@ -21,7 +21,7 @@ from flask_jwt_extended import get_jwt_identity
 
 api_ta = Blueprint("api_ta", __name__)
 
-
+"""
 # (Parag) TAHomePage - Fetching pending Users for approval
 @api_ta.route("/api/pendusers", methods=["GET"])
 @jwt_required()
@@ -147,7 +147,7 @@ def get_milecomps():
             500,
         )
 
-
+"""
 ##########################
 
 

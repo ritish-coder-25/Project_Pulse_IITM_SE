@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 import os
 from flask import send_file, abort
+from api_outputs.teams_api.teams_api_output import TeamsDownloadOutput
 from flask_jwt_extended import jwt_required
 from models import (
     db,
@@ -579,6 +580,20 @@ def get_files(team_id):
 @api_ta.route("/api/download/<int:file_id>", methods=["GET"])
 @jwt_required()
 def download_file(file_id):
+    """Download a submitted file by file ID.
+    
+    Args:
+        file_id (int): The ID of the file to download
+        
+    Returns:
+        file: The requested file as an attachment
+        
+    Raises:
+        404: If file not found in database or on server
+        500: If there is a server error
+    ---
+
+    """
     try:
         # Get file details from database
         file = File.query.get_or_404(file_id)

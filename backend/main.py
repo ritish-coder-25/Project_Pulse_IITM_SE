@@ -12,7 +12,9 @@ from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Ta_dashboard.submission_files import api_bp_submission
+from apis.Ta_dashboard.commits_github import api_bp_GenAI
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
@@ -54,6 +56,8 @@ app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 
 api.register_blueprint(api_bp_stu)
+api.register_blueprint(api_bp_submission)
+api.register_blueprint(api_bp_GenAI)
 
 # api.add_namespace(api_bp_ta)
 

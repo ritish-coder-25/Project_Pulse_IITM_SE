@@ -57,6 +57,57 @@ components:
           description: Error name
           type: string
       type: object
+    Member:
+      properties:
+        commit_count:
+          description: Number of commits by the member
+          type: integer
+        email:
+          description: Member's email address
+          format: email
+          type: string
+        name:
+          description: Member's full name
+          type: string
+      required:
+      - commit_count
+      - email
+      - name
+      type: object
+    Milestone:
+      properties:
+        end_date:
+          description: End date of the milestone
+          format: date-time
+          type: string
+        milestone_name:
+          description: Name of the milestone
+          type: string
+        milestone_status:
+          description: Status of the milestone (e.g., Evaluated, Completed, Pending,
+            Missed)
+          type: string
+      required:
+      - end_date
+      - milestone_name
+      - milestone_status
+      type: object
+    MilestoneDeadline:
+      properties:
+        end_date:
+          description: Formatted end date of the milestone
+          type: string
+        milestone_description:
+          description: Description of the milestone
+          type: string
+        milestone_name:
+          description: Name of the milestone
+          type: string
+      required:
+      - end_date
+      - milestone_description
+      - milestone_name
+      type: object
     PaginationMetadata:
       properties:
         first_page:
@@ -86,6 +137,42 @@ components:
       required:
       - emails
       - team_id
+      type: object
+    StuDashTeam:
+      properties:
+        members:
+          description: List of team members
+          items:
+            $ref: '#/components/schemas/Member'
+          type: array
+        milestones:
+          description: List of milestones with details
+          items:
+            $ref: '#/components/schemas/Milestone'
+          type: array
+        team_name:
+          description: Name of the team
+          type: string
+        team_score:
+          description: Total score for the team
+          type: number
+      required:
+      - members
+      - milestones
+      - team_name
+      - team_score
+      type: object
+    SubmitProjectResponse:
+      properties:
+        file_path:
+          description: Path where the file is saved
+          type: string
+        message:
+          description: Response message
+          type: string
+      required:
+      - file_path
+      - message
       type: object
     Team:
       properties:
@@ -125,6 +212,72 @@ info:
   version: v1
 openapi: 3.0.2
 paths:
+  /api/milestones/deadlines:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/MilestoneDeadline'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Bad Request
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      tags:
+      - StuDashboard-Api
+  /api/stu_home/{stu_id}:
+    get:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StuDashTeam'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      tags:
+      - StuDashboard-Api
+    parameters:
+    - in: path
+      name: stu_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/submit_project:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitProjectResponse'
+          description: Created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Bad Request
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      tags:
+      - StuDashboard-Api
   /api/teams:
     get:
       responses:
@@ -230,3 +383,5 @@ tags:
   name: Teams-Api
 - description: Operations on users
   name: api_bp_users
+- description: Display of Student dashboard
+  name: StuDashboard-Api

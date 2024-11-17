@@ -553,6 +553,8 @@ paths:
           description: Not Found
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: This API endpoint is to retrieve information about a student's team,
+        providing an overview of the student's team activities and progress.
       tags:
       - StuDashboard-Api
     parameters:

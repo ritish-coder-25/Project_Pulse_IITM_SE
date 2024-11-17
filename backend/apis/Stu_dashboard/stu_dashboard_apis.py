@@ -16,6 +16,7 @@ class StuDashboard(Resource):
     @api_bp_stu.response(404, CommonErrorSchema)
     @jwt_required()
     def get(self, stu_id):
+        """This API endpoint is to retrieve information about a student's team, providing an overview of the student's team activities and progress."""
         try:
             current_user = User.query.get_or_404(stu_id)
             if not current_user.team_id:

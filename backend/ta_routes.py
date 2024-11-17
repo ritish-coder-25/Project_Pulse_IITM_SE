@@ -475,6 +475,7 @@ def create_milestone_status():
     return jsonify({"message": "Milestone status created successfully"}), 201
 
 
+"""
 # (Pranjal) Get Files
 @api_ta.route("/api/files/<int:team_id>", methods=["GET"])
 @jwt_required()
@@ -505,8 +506,10 @@ def get_files(team_id):
 
     return jsonify({"documents": documents}), 200
 
+"""
 
-@api_ta.route("/api/download/<int:file_id>", methods=["GET"])
+
+"""@api_ta.route("/api/download/<int:file_id>", methods=["GET"])
 @jwt_required()
 def download_file(file_id):
     try:
@@ -526,8 +529,9 @@ def download_file(file_id):
 
     except Exception as e:
         abort(500, description=str(e))
+"""
 
-
+'''
 # (Pranjal) Get Files
 @api_ta.route("/api/files/<int:team_id>", methods=["GET"])
 @jwt_required()
@@ -634,6 +638,8 @@ def get_files(team_id):
     return jsonify({"documents": documents}), 200
 
 
+
+
 @api_ta.route("/api/download/<int:file_id>", methods=["GET"])
 @jwt_required()
 def download_file(file_id):
@@ -654,4 +660,5 @@ def download_file(file_id):
 
     except Exception as e:
         abort(500, description=str(e))
+'''
 '''

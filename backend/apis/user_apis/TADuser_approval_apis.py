@@ -10,7 +10,9 @@ from api_parsers.TADuser_approval_parsers import ApproveUsersRequest
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
 api_bp_ua = Blueprint(
-    "UserApproval-Api", "UserApproval", description="Operations for approving users"
+    "UserApproval-Api",
+    "UserApproval",
+    description="Operations for approving users (app only)",
 )
 
 
@@ -20,6 +22,7 @@ class ApproveUsersResource(Resource):
     @api_bp_ua.arguments(ApproveUsersRequest)
     @api_bp_ua.response(200, UserApprovalOutput)
     def post(self, data):
+        """API for TA to approve the new user registrations (app only)"""
         try:
             current_user_id = get_jwt_identity()
             current_user = User.query.get_or_404(current_user_id)

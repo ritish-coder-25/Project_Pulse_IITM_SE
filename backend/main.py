@@ -9,22 +9,27 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
 from config import Config, create_default_objects
+from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
+from apis.ta_dashboard.ta_dashboard import api_bp_ta_dashboard
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 import logging
 from flask_cors import CORS
 
 # from flask_restx import Api
+
+# from flask_restx import Api
 import marshmallow as ma
 from flask_smorest import Api, Blueprint, abort
 
 app = Flask(__name__)
+# CORS(app)
 # CORS(app)
 app.config["API_TITLE"] = "My API"
 app.config["API_VERSION"] = "v1"
@@ -33,6 +38,7 @@ api = Api(app)
 CORS(app)
 app.config.from_object(Config)
 
+# CORS(api)
 # CORS(api)
 # Enable CORS for all routes
 
@@ -51,6 +57,7 @@ bcrypt = Bcrypt(app)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_users)
+api.register_blueprint(api_bp_ta_dashboard)
 
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
@@ -58,6 +65,9 @@ app.register_blueprint(api_ta)
 api.register_blueprint(api_bp_stu)
 api.register_blueprint(api_bp_submission)
 api.register_blueprint(api_bp_GenAI)
+
+# api.add_namespace(api_bp_ta)
+api.register_blueprint(api_bp_stu)
 
 # api.add_namespace(api_bp_ta)
 
@@ -142,25 +152,34 @@ if __name__ == "__main__":
                 logging.info("Default admin user created.")
             else:
                 logging.info("Default admin user already exists.")
+            if not User.query.filter_by(email="admin@projectpulse.com").first():
+                create_default_objects(db=db, app=app)
+                logging.info("Default admin user created.")
+            else:
+                logging.info("Default admin user already exists.")
         except Exception as e:
             logging.error(f"Error creating database: {e}")
     # Create default admin user if not exists
     with app.app_context():
-        if not User.query.filter_by(email='admin@projectpulse.com').first():
+        if not User.query.filter_by(email="admin@projectpulse.com").first():
             admin_user = User(
-                first_name='Admin',
-                last_name='ProjectPulse',
-                password=bcrypt.generate_password_hash('projectpulse123').decode('utf-8'),
-                email='admin@projectpulse.com',
-                github_username='pranjalkar99',
-                discord_username='test123',
-                user_type='Admin',
-                approval_status='Active',
+                first_name="Admin",
+                last_name="ProjectPulse",
+                password=bcrypt.generate_password_hash("projectpulse123").decode(
+                    "utf-8"
+                ),
+                email="admin@projectpulse.com",
+                github_username="pranjalkar99",
+                discord_username="test123",
+                user_type="Admin",
+                approval_status="Active",
             )
             db.session.add(admin_user)
             db.session.commit()
             logging.info("Default admin user created.")
         else:
             logging.info("Default admin user already exists.")
-            
+
+    app.run(debug=True)
+
     app.run(debug=True)

@@ -13,6 +13,46 @@ components:
             $ref: '#/components/schemas/Error'
       description: Unprocessable Entity
   schemas:
+    CommitDetail:
+      properties:
+        commit_sha:
+          type: string
+        date:
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          type: string
+        file_changes:
+          items:
+            $ref: '#/components/schemas/FileChange'
+          type: array
+        message:
+          type: string
+      required:
+      - commit_sha
+      - date
+      - file_changes
+      - message
+      type: object
+    CommitUser:
+      properties:
+        commit_details:
+          items:
+            $ref: '#/components/schemas/CommitDetail'
+          type: array
+        total_commits:
+          type: integer
+      required:
+      - commit_details
+      - total_commits
+      type: object
+    CommitsResponse:
+      properties:
+        users:
+          additionalProperties:
+            $ref: '#/components/schemas/CommitUser'
+          type: object
+      required:
+      - users
+      type: object
     CommonError:
       properties:
         errorCode:
@@ -41,6 +81,14 @@ components:
       - github_repo_url
       - team
       type: object
+    DocumentList:
+      properties:
+        documents:
+          items:
+            additionalProperties: {}
+            type: object
+          type: array
+      type: object
     Error:
       properties:
         code:
@@ -56,6 +104,40 @@ components:
         status:
           description: Error name
           type: string
+      type: object
+    FileChange:
+      properties:
+        additions:
+          type: integer
+        changes_str:
+          type: string
+        code_changes:
+          nullable: true
+          type: string
+        deletions:
+          type: integer
+        filename:
+          type: string
+        status:
+          enum:
+          - added
+          - modified
+          - removed
+          type: string
+        total_changes:
+          type: integer
+      required:
+      - additions
+      - changes_str
+      - deletions
+      - filename
+      - status
+      - total_changes
+      type: object
+    FileDownload:
+      properties:
+        file:
+          description: The downloaded file
       type: object
     Member:
       properties:
@@ -184,6 +266,114 @@ info:
   version: v1
 openapi: 3.0.2
 paths:
+  /api/commits-fetch/{team_id}:
+    get:
+      description: "Args:\n    - since (str): Start datetime in ISO format.\n    -\
+        \ until (str): End datetime in ISO format.\n    - repo_owner (str): GitHub\
+        \ repository owner.\n    - repo_name (str): GitHub repository name.\n\nReturns:\n\
+        \    JSON response containing commit details grouped by user.\n\nExample Response:\n\
+        \    {\n        \"users\": {\n            \"ishdeep\": {\n               \
+        \ \"total_commits\": 6,\n                \"commit_details\": [...]\n     \
+        \       },\n            \"Ritish Kumar Das\": {...}\n        }\n    }"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitsResponse'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get all commits with file changes in a specified time frame from Github(to
+        be used Internally using Celery).
+      tags:
+      - Commits
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/download/{file_id}:
+    get:
+      description: "Args:\n    file_id (int): The ID of the file to download.\n\n\
+        Returns:\n    The requested file as an attachment.\n\nRaises:\n    - 404:\
+        \ If file not found in database or on server.\n    - 500: If there is a server\
+        \ error."
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownload'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Download a submitted file by its ID.
+      tags:
+      - Submissions
+    parameters:
+    - in: path
+      name: file_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/files/{team_id}:
+    get:
+      description: "Query Parameters:\n    - team_id (int): The ID of the team whose\
+        \ submissions are being queried.\n\nReturns:\n    List of documents with their\
+        \ metadata."
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get all files submitted by a specific team.
+      tags:
+      - Submissions
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
   /api/stu_home/{stu_id}:
     get:
       responses:
@@ -331,3 +521,7 @@ tags:
   name: api_bp_users
 - description: Display of Student dashboard
   name: StuDashboard-Api
+- description: Operations on teams milestone submissions and scoring
+  name: Submissions
+- description: Operations on team submissions scoring Analysis from Github
+  name: Commits

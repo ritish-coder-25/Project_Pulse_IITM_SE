@@ -10,7 +10,7 @@ from apis.team_apis.team_apis import api_bp_ta
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
-from apis.project_apis.ManageMilestone_apis import api_bp_milestones
+from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
 from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu

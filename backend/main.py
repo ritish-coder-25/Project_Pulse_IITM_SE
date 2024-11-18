@@ -34,7 +34,7 @@ from flask_smorest import Api, Blueprint, abort
 app = Flask(__name__)
 # CORS(app)
 # CORS(app)
-app.config["API_TITLE"] = "My API"
+app.config["API_TITLE"] = "Project Pulse API"
 app.config["API_VERSION"] = "v1"
 app.config["OPENAPI_VERSION"] = "3.0.2"
 api = Api(app)

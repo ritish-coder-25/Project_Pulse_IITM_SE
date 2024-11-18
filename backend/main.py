@@ -4,15 +4,13 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User
 from config import Config, create_default_objects
-from routes import api_bp, api_bp_users
-from ta_routes import api_ta
+
 from apis.team_apis.team_apis import api_bp_ta
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
-from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
 from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
@@ -57,18 +55,14 @@ bcrypt = Bcrypt(app)
 
 
 api.register_blueprint(api_bp_ta)
-api.register_blueprint(api_bp_users)
 api.register_blueprint(api_bp_projects)
 api.register_blueprint(api_bp_milestones)
-api.register_blueprint(api_bp_milestone_completions)
 api.register_blueprint(api_bp_tahome)
 api.register_blueprint(api_bp_ta_dashboard)
 api.register_blueprint(api_bp_auth)
 api.register_blueprint(api_bp_stu)
 api.register_blueprint(api_bp_submission)
 api.register_blueprint(api_bp_GenAI)
-app.register_blueprint(api_bp)
-app.register_blueprint(api_ta)
 
 
 # api.add_namespace(api_bp_ta)

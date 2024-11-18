@@ -341,100 +341,100 @@ def delete_milestone(milestone_id):
 
 
 # ( Ankush ) Get Milestones
-@api_ta.route("/api/milestones", methods=["GET"])
-@jwt_required()
-def get_milestones():
+# @api_ta.route("/api/milestones", methods=["GET"])
+# @jwt_required()
+# def get_milestones():
 
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get_or_404(current_user_id)
+#     current_user_id = get_jwt_identity()
+#     current_user = User.query.get_or_404(current_user_id)
 
-    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
-    if current_user.user_type not in allowed_roles:
-        return (
-            jsonify({"message": "You do not have permission to read milestones"}),
-            403,
-        )
+#     allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+#     if current_user.user_type not in allowed_roles:
+#         return (
+#             jsonify({"message": "You do not have permission to read milestones"}),
+#             403,
+#         )
 
-    milestones = Milestone.query.all()
+#     milestones = Milestone.query.all()
 
-    return jsonify([milestone.to_dict() for milestone in milestones])
+#     return jsonify([milestone.to_dict() for milestone in milestones])
 
 
-# ( Ankush ) Get Milestone
-@api_ta.route("/api/milestones/<int:milestone_id>", methods=["GET"])
-@jwt_required()
-def get_milestone(milestone_id):
+# # ( Ankush ) Get Milestone
+# @api_ta.route("/api/milestones/<int:milestone_id>", methods=["GET"])
+# @jwt_required()
+# def get_milestone(milestone_id):
 
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get_or_404(current_user_id)
+#     current_user_id = get_jwt_identity()
+#     current_user = User.query.get_or_404(current_user_id)
 
-    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
-    if current_user.user_type not in allowed_roles:
-        return (
-            jsonify({"message": "You do not have permission to read milestones"}),
-            403,
-        )
+#     allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+#     if current_user.user_type not in allowed_roles:
+#         return (
+#             jsonify({"message": "You do not have permission to read milestones"}),
+#             403,
+#         )
 
-    milestone = Milestone.query.get_or_404(milestone_id)
+#     milestone = Milestone.query.get_or_404(milestone_id)
 
-    return jsonify(milestone.to_dict())
+#     return jsonify(milestone.to_dict())
 
 
 # ( Ankush ) Get Milestone Statuses
-@api_ta.route("/api/milestone-status", methods=["GET"])
-@jwt_required()
-def get_milestone_statuses():
+# @api_ta.route("/api/milestone-status", methods=["GET"])
+# @jwt_required()
+# def get_milestone_statuses():
 
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get_or_404(current_user_id)
+#     current_user_id = get_jwt_identity()
+#     current_user = User.query.get_or_404(current_user_id)
 
-    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
-    if current_user.user_type not in allowed_roles:
-        return (
-            jsonify(
-                {"message": "You do not have permission to read milestone statuses"}
-            ),
-            403,
-        )
+#     allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+#     if current_user.user_type not in allowed_roles:
+#         return (
+#             jsonify(
+#                 {"message": "You do not have permission to read milestone statuses"}
+#             ),
+#             403,
+#         )
 
-    if current_user.user_type == "Student":
-        milestone_statuses = MilestoneStatus.query.filter(
-            MilestoneStatus.team_id == current_user.team_id
-        ).all()
-    else:
-        milestone_statuses = MilestoneStatus.query.all()
+#     if current_user.user_type == "Student":
+#         milestone_statuses = MilestoneStatus.query.filter(
+#             MilestoneStatus.team_id == current_user.team_id
+#         ).all()
+#     else:
+#         milestone_statuses = MilestoneStatus.query.all()
 
-    return jsonify([status.to_dict() for status in milestone_statuses])
+#     return jsonify([status.to_dict() for status in milestone_statuses])
 
 
-# ( Ankush ) Get Milestone Status
-@api_ta.route("/api/milestone-status/<int:milestonestatus_id>", methods=["GET"])
-@jwt_required()
-def get_milestone_status(milestonestatus_id):
+# # ( Ankush ) Get Milestone Status
+# @api_ta.route("/api/milestone-status/<int:milestonestatus_id>", methods=["GET"])
+# @jwt_required()
+# def get_milestone_status(milestonestatus_id):
 
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get_or_404(current_user_id)
+#     current_user_id = get_jwt_identity()
+#     current_user = User.query.get_or_404(current_user_id)
 
-    allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
-    if current_user.user_type not in allowed_roles:
-        return (
-            jsonify(
-                {"message": "You do not have permission to read milestone statuses"}
-            ),
-            403,
-        )
+#     allowed_roles = ["Admin", "TA", "Instructor", "Developer", "Student"]
+#     if current_user.user_type not in allowed_roles:
+#         return (
+#             jsonify(
+#                 {"message": "You do not have permission to read milestone statuses"}
+#             ),
+#             403,
+#         )
 
-    if current_user.user_type == "Student":
-        data = MilestoneStatus.query.filter(
-            MilestoneStatus.team_id == current_user.team_id,
-            MilestoneStatus.milestonestatus_id == milestonestatus_id,
-        ).first()
-        if not data:
-            return jsonify({"message": "Milestone Status does not exist!"})
-    else:
-        milestonestatus = MilestoneStatus.query.get_or_404(milestonestatus_id)
+#     if current_user.user_type == "Student":
+#         data = MilestoneStatus.query.filter(
+#             MilestoneStatus.team_id == current_user.team_id,
+#             MilestoneStatus.milestonestatus_id == milestonestatus_id,
+#         ).first()
+#         if not data:
+#             return jsonify({"message": "Milestone Status does not exist!"})
+#     else:
+#         milestonestatus = MilestoneStatus.query.get_or_404(milestonestatus_id)
 
-    return jsonify(milestonestatus.to_dict())
+#     return jsonify(milestonestatus.to_dict())
 
 
 # MilestoneStatus routes

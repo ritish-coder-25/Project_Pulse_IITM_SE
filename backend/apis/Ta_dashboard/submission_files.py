@@ -14,7 +14,7 @@ from api_outputs.teams_api.teams_api_output import TeamsCreateOutput, TeamsDelet
 from api_outputs.teams_api.submission_output import DocumentListSchema, FileDownloadSchema
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
-api_bp_submission = Blueprint("Submissions", "Milestones", description="Operations on teams milestone submissions and scoring")
+api_bp_submission = Blueprint("Fetch Submissions APIs", "Fetch Submissions", description="Operations on teams milestone submissions and scoring")
 
 @api_bp_submission.route("/api/files/<int:team_id>", methods=["GET"])
 class SubmissionFileResource(Resource):

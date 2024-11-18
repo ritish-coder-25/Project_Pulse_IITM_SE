@@ -11,8 +11,8 @@ from api_parsers.project_definition_parser import CreateProjectSchema
 from helpers.ErrorCommonHelpers import createFatalError
 
 api_bp_projects = Blueprint(
-    "Projects-Api",
-    "Projects",
+    "Manage Projects APIs",
+    "Manage Projects",
     description="Operations related to creating and managing projects",
 )
 

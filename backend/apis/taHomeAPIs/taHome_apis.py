@@ -12,8 +12,8 @@ from datetime import datetime, timedelta, timezone
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
 api_bp_tahome = Blueprint(
-    "TAHomepage_APIs",
-    "TAHomepage",
+    "Fetch TAHomepage APIs",
+    "Fetch TAHomepage",
     description="Operations for getting last 7 day's activity for TA Homepage",
 )
 

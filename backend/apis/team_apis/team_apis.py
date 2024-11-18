@@ -13,7 +13,7 @@ from api_outputs.api_outputs_common import (
 from api_outputs.teams_api.teams_api_output import TeamsCreateOutput, TeamsDeleteOutput
 from helpers.ErrorCommonHelpers import createError, createFatalError
 
-api_bp_ta = Blueprint("Teams-Api", "Teams", description="Operations on teams")
+api_bp_ta = Blueprint("Teams APIs", "Teams APIs", description="Operations for creating and editing Teams and fetching a team")
 
 
 @api_bp_ta.route("/api/teams")

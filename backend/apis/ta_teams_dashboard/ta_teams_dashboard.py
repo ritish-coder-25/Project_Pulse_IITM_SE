@@ -15,7 +15,7 @@ from api_outputs.ta_dashboard_api.ta_dashboard_api_output import TADashboardTeam
 from helpers.ErrorCommonHelpers import createError, createFatalError
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
 
-api_bp_ta_dashboard = Blueprint("TA-Dashboard", "TA-Dashboard", description="fetch TA Dashboard")
+api_bp_ta_dashboard = Blueprint("Fetch TADashboard APIs", "Fetch TADashboard", description="Operations to fetch TA Dashboard")
 
 
 @api_bp_ta_dashboard.route("/api/ta-teams")

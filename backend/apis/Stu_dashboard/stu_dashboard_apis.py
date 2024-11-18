@@ -12,7 +12,7 @@ from helpers.ErrorCommonHelpers import createError, createFatalError
 from flask_restx import fields
 
 # Blueprint for Student Dashboard API
-api_bp_stu = Blueprint("StuDashboard-Api", "StuDashboard",
+api_bp_stu = Blueprint("Student Dashboard APIs", "Student Dashboard",
                        description="Display of Student dashboard")
 
 # Constants
@@ -31,7 +31,7 @@ class StuDashboard(Resource):
     @api_bp_stu.response(404, CommonErrorSchema)
     @jwt_required()
     def get(self, stu_id):
-        """This API endpoint is to retrieve information about a student's team, providing an overview of the student's team activities and progress."""
+        """Retrieve information about a student's team, providing an overview of the student's team activities and progress."""
         try:
             current_user = User.query.get_or_404(stu_id)
             if not current_user.team_id:
@@ -86,7 +86,7 @@ class SubmitProject(Resource):
     @api_bp_stu.response(400, CommonErrorSchema)
     @jwt_required()
     def post(self):
-        """This API handles project file submissions, saves file details, and optionally marks the milestone as complete for a student. """
+        """Handle project file submissions, save file details and optionally mark the milestone as complete for a student. """
         try:
             # Ensure required data is present
             if 'file' not in request.files or 'student_id' not in request.form or 'project_id' not in request.form:
@@ -136,7 +136,7 @@ class MilestoneDeadlines(Resource):
     @api_bp_stu.response(400, CommonErrorSchema)
     @jwt_required()
     def get(self):
-        """This API retrieves and returns a list of all milestones with their names, descriptions, and deadlines."""
+        """Retrieve and return a list of all milestones with their names, descriptions, and deadlines."""
         try:
             # Query all milestones and get their name, description, and end date
             milestones = Milestone.query.all()

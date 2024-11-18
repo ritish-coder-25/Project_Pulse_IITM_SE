@@ -17,7 +17,7 @@ from utils.github_helpers import get_commits_with_changes_files
 from api_parsers.commit_github_parsers import CommitQueryParamsSchema
 from api_outputs.teams_api.commit_github_output import CommitsResponseSchema
 
-api_bp_GenAI = Blueprint("Commits", "Scoring Analysis", description="Operations on team submissions scoring Analysis from Github")
+api_bp_GenAI = Blueprint("Fetch Commits APIs", "Fetch Commits", description="Fetch commit informaiton from GitHub for scoring analysis")
 
 @api_bp_GenAI.route("/api/commits-fetch/<int:team_id>", methods=["GET"])
 class GetAllCommitsResource(Resource):

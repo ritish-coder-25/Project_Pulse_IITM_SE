@@ -16,7 +16,7 @@ from api_parsers.milestone_definition_parser import MilestoneSchema, MilestoneUp
 
 
 api_bp_milestones = Blueprint(
-    "Milestones-Api", "Milestones", description="Operations for managing milestones"
+    "Manage Milestones APIs", "Manage Milestones", description="Operations for managing milestones"
 )
 
 

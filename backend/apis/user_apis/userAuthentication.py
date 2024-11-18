@@ -18,8 +18,8 @@ from api_outputs.user_api.TADuser_approval_outputs import UserApprovalOutput
 from api_parsers.TADuser_approval_parsers import ApproveUsersRequest
 
 api_bp_auth = Blueprint(
-    "User_APIs",
-    "User_APIs",
+    "User Mantainence APIs",
+    "User Mantainence APIs",
     description="Operations for User Registration, Approval and Login",
 )
 

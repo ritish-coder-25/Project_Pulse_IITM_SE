@@ -2,20 +2,18 @@ from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
-from config import Config, create_default_objects
+from models import db, User
 from config import Config, create_default_objects
 from routes import api_bp, api_bp_users
 from ta_routes import api_ta
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
+from apis.project_apis.ManageMilestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
-# Import the milestone API blueprints
-from apis.project_apis.TADmilestone_apis import api_bp_milestones
 from apis.project_apis.TADmilestone_apis import api_bp_milestone_completions
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
 from apis.ta_teams_dashboard.ta_teams_dashboard import api_bp_ta_dashboard
@@ -69,7 +67,6 @@ api.register_blueprint(api_bp_auth)
 api.register_blueprint(api_bp_stu)
 api.register_blueprint(api_bp_submission)
 api.register_blueprint(api_bp_GenAI)
-
 app.register_blueprint(api_bp)
 app.register_blueprint(api_ta)
 

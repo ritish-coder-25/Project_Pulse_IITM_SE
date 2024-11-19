@@ -32,17 +32,7 @@ app = Flask(__name__)
 # CORS(app)
 app.config["API_TITLE"] = "Project Pulse API" 
 app.config["API_VERSION"] = "v1" 
-app.config["OPENAPI_VERSION"] = "3.0.2" 
-app.config["API_DESCRIPTION"] = """ ### Project Pulse is a web-based system designed for project management, collaboration, and student activity tracking. 
-This API allows users to: 
-1. Manage user registration, authentication, and authorization. 
-2. Create and manage teams and projects for different terms. 
-3. Track milestone submissions and commits. 
-4. Monitor and analyze student progress through dashboards for TAs, 
-5. Document reviews and evaluations, provide feedback using GenAI. 
-6. View various team activities, commits, and project progress. .
-"""
-
+app.config["OPENAPI_VERSION"] = "3.1.0" 
 api = Api(app)
 CORS(app)
 app.config.from_object(Config)

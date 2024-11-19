@@ -11,8 +11,8 @@ from api_parsers.project_definition_parser import CreateProjectSchema
 from helpers.ErrorCommonHelpers import createFatalError
 
 api_bp_projects = Blueprint(
-    "Projects-Api",
-    "Projects",
+    "Manage Projects APIs",
+    "Manage Projects",
     description="Operations related to creating and managing projects",
 )
 
@@ -22,6 +22,7 @@ class CreateProjectResource(Resource):
     @jwt_required()
     @api_bp_projects.response(201, ProjectCreationResponse)
     def post(self):
+        """ API to allow TAs and other allowed roles to create the project statement. """
         try:
             # Parse and validate incoming JSON data using the schema
             schema = CreateProjectSchema()

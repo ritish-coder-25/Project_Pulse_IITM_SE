@@ -15,7 +15,7 @@ from api_outputs.ta_dashboard_api.ta_dashboard_api_output import TADashboardTeam
 from helpers.ErrorCommonHelpers import createError, createFatalError
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
 
-api_bp_ta_dashboard = Blueprint("TA-Dashboard", "TA-Dashboard", description="fetch TA Dashboard")
+api_bp_ta_dashboard = Blueprint("Fetch TADashboard APIs", "Fetch TADashboard", description="Operations to fetch TA Dashboard")
 
 
 @api_bp_ta_dashboard.route("/api/ta-teams")
@@ -26,6 +26,9 @@ class TATeamDashboard(MethodView):
     @api_bp_ta_dashboard.response(403, CommonErrorSchema)
     @api_bp_ta_dashboard.response(500, CommonErrorSchema)
     def get(self):
+        """
+        API to get data for rendering Teams Dashboard for TA
+        """
         try:
             current_user_id = get_jwt_identity()
             current_user = User.query.get_or_404(current_user_id)
@@ -78,6 +81,9 @@ class TATeamDashboard(MethodView):
     @api_bp_ta_dashboard.response(403, CommonErrorSchema)
     @api_bp_ta_dashboard.response(500, CommonErrorSchema)
     def get(self, team_id):
+        """
+        API to get data for rendering Individual Team's Dashboard for TA
+        """
         try:
             current_user_id = get_jwt_identity()
             current_user = User.query.get_or_404(current_user_id)

@@ -1,4 +1,4 @@
-# To be included in openapi.yaml line 605
+# To be included in openapi.yaml line 603
 
   description: | 
     ### The Project Pulse is an online server designed using the OpenAPI 3.1.0 specification for project management, collaboration, and student activity tracking. You can access the application at [http://localhost:5000/]. 

@@ -1,0 +1,1280 @@
+components:
+  responses:
+    DEFAULT_ERROR:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Default error response
+    UNPROCESSABLE_ENTITY:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable Entity
+  schemas:
+    ApproveUsersRequest:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserApprovalParser'
+          minItems: 1
+          type: array
+      required:
+      - users
+      type: object
+    CommitDetail:
+      properties:
+        commit_sha:
+          type: string
+        date:
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+          type: string
+        file_changes:
+          items:
+            $ref: '#/components/schemas/FileChange'
+          type: array
+        message:
+          type: string
+      required:
+      - commit_sha
+      - date
+      - file_changes
+      - message
+      type: object
+    CommitOutput:
+      properties:
+        team:
+          readOnly: true
+          type: string
+      type: object
+    CommitUser:
+      properties:
+        commit_details:
+          items:
+            $ref: '#/components/schemas/CommitDetail'
+          type: array
+        total_commits:
+          type: integer
+      required:
+      - commit_details
+      - total_commits
+      type: object
+    CommitsResponse:
+      properties:
+        users:
+          additionalProperties:
+            $ref: '#/components/schemas/CommitUser'
+          type: object
+      required:
+      - users
+      type: object
+    CommonError:
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
+      required:
+      - errorCode
+      - message
+      type: object
+    CreateTeam:
+      properties:
+        emails:
+          items:
+            type: string
+          minItems: 1
+          type: array
+        github_repo_url:
+          minLength: 1
+          type: string
+        team:
+          minLength: 1
+          type: string
+      required:
+      - emails
+      - github_repo_url
+      - team
+      type: object
+    DocumentList:
+      properties:
+        documents:
+          items:
+            additionalProperties: {}
+            type: object
+          type: array
+      type: object
+    Error:
+      properties:
+        code:
+          description: Error code
+          type: integer
+        errors:
+          additionalProperties: {}
+          description: Errors
+          type: object
+        message:
+          description: Error message
+          type: string
+        status:
+          description: Error name
+          type: string
+      type: object
+    FileChange:
+      properties:
+        additions:
+          type: integer
+        changes_str:
+          type: string
+        code_changes:
+          type: string
+        deletions:
+          type: integer
+        filename:
+          type: string
+        status:
+          enum:
+          - added
+          - modified
+          - removed
+          type: string
+        total_changes:
+          type: integer
+      required:
+      - additions
+      - changes_str
+      - deletions
+      - filename
+      - status
+      - total_changes
+      type: object
+    FileDownload:
+      properties:
+        file:
+          description: The downloaded file
+      type: object
+    Member:
+      properties:
+        commit_count:
+          description: Number of commits by the member
+          type: integer
+        email:
+          description: Member's email address
+          format: email
+          type: string
+        name:
+          description: Member's full name
+          type: string
+      required:
+      - commit_count
+      - email
+      - name
+      type: object
+    MemberCommitsDetails:
+      properties:
+        commits:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+      type: object
+    MemberDetails:
+      properties:
+        approval_status:
+          type: string
+        discord_username:
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        github_username:
+          type: string
+        last_name:
+          type: integer
+        team_id:
+          type: integer
+        user_id:
+          type: integer
+        user_type:
+          type: string
+      type: object
+    Milestone:
+      properties:
+        end_date:
+          description: End date of the milestone
+          format: date-time
+          type: string
+        milestone_name:
+          description: Name of the milestone
+          type: string
+        milestone_status:
+          description: Status of the milestone (e.g., Evaluated, Completed, Pending,
+            Missed)
+          type: string
+      required:
+      - end_date
+      - milestone_name
+      - milestone_status
+      type: object
+    MilestoneCompletionOutput:
+      properties:
+        team:
+          readOnly: true
+          type: string
+      type: object
+    MilestoneCompletionsResponse:
+      properties:
+        completions:
+          items:
+            $ref: '#/components/schemas/MilestoneCompletionOutput'
+          readOnly: true
+          type: array
+      type: object
+    MilestoneCreationResponse:
+      properties:
+        message:
+          type: string
+        milestone_id:
+          readOnly: true
+          type: integer
+      type: object
+    MilestoneDeadline:
+      properties:
+        end_date:
+          description: Formatted end date of the milestone
+          type: string
+        milestone_description:
+          description: Description of the milestone
+          type: string
+        milestone_name:
+          description: Name of the milestone
+          type: string
+      required:
+      - end_date
+      - milestone_description
+      - milestone_name
+      type: object
+    MilestoneDeletionResponse:
+      properties:
+        message:
+          type: string
+      type: object
+    MilestoneDetails:
+      properties:
+        end_date:
+          format: date-time
+          type: string
+        max_marks:
+          type: number
+        milestone_description:
+          type: string
+        milestone_id:
+          type: integer
+        milestone_name:
+          type: string
+        project_id:
+          type: integer
+        start_date:
+          format: date-time
+          type: string
+      type: object
+    MilestoneListResponse:
+      properties:
+        milestones:
+          items:
+            $ref: '#/components/schemas/MilestoneOutput'
+          readOnly: true
+          type: array
+      type: object
+    MilestoneOutput:
+      properties:
+        end_date:
+          format: date
+          readOnly: true
+          type: string
+        max_marks:
+          readOnly: true
+          type: number
+        milestone_description:
+          readOnly: true
+          type: string
+        milestone_id:
+          readOnly: true
+          type: integer
+        milestone_name:
+          readOnly: true
+          type: string
+        start_date:
+          format: date
+          readOnly: true
+          type: string
+      type: object
+    MilestoneReview:
+      properties:
+        eval_feedback:
+          description: Evaluation feedback
+          type: string
+        eval_score:
+          description: Evaluation score for the team
+          type: number
+        id:
+          description: Unique ID of the milestone review
+          readOnly: true
+          type: integer
+        max_milestone_score:
+          description: Maximum possible milestone score
+          type: number
+        milestone_id:
+          description: ID of the milestone
+          type: integer
+        milestone_name:
+          description: Name of the milestone
+          readOnly: true
+          type: string
+        milestone_status:
+          description: Status of the milestone evaluation
+          type: string
+        team_id:
+          description: ID of the team
+          type: integer
+        team_name:
+          description: Name of the team
+          readOnly: true
+          type: string
+      required:
+      - eval_feedback
+      - eval_score
+      - milestone_id
+      - milestone_status
+      - team_id
+      type: object
+    MilestoneStatusDetails:
+      properties:
+        eval_feedback:
+          type: string
+        eval_score:
+          type: number
+        milestone_id:
+          type: integer
+        milestone_status:
+          type: string
+        milestonestatus_id:
+          type: integer
+        submission_id:
+          type: integer
+        team_id:
+          type: integer
+      type: object
+    MilestoneUpdateResponse:
+      properties:
+        message:
+          type: string
+      type: object
+    PaginationMetadata:
+      properties:
+        first_page:
+          type: integer
+        last_page:
+          type: integer
+        next_page:
+          type: integer
+        page:
+          type: integer
+        previous_page:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+      type: object
+    PendingUserListOutput:
+      properties:
+        pending_users:
+          items:
+            $ref: '#/components/schemas/PendingUserOutput'
+          type: array
+      type: object
+    PendingUserOutput:
+      properties:
+        email:
+          format: email
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        name:
+          readOnly: true
+          type: string
+        role:
+          readOnly: true
+          type: string
+      type: object
+    ProjectCreationResponse:
+      properties:
+        message:
+          type: string
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectOutput'
+          readOnly: true
+      type: object
+    ProjectOutput:
+      properties:
+        document_url:
+          readOnly: true
+          type: string
+        name:
+          readOnly: true
+          type: string
+        project_id:
+          readOnly: true
+          type: integer
+        statement:
+          readOnly: true
+          type: string
+      type: object
+    PutTeam:
+      properties:
+        emails:
+          items:
+            type: string
+          minItems: 1
+          type: array
+        team_id:
+          type: integer
+      required:
+      - emails
+      - team_id
+      type: object
+    StuDashTeam:
+      properties:
+        members:
+          description: List of team members
+          items:
+            $ref: '#/components/schemas/Member'
+          type: array
+        milestones:
+          description: List of milestones with details
+          items:
+            $ref: '#/components/schemas/Milestone'
+          type: array
+        team_name:
+          description: Name of the team
+          type: string
+        team_score:
+          description: Total score for the team
+          type: number
+      required:
+      - members
+      - milestones
+      - team_name
+      - team_score
+      type: object
+    SubmitProjectResponse:
+      properties:
+        file_path:
+          description: Path where the file is saved
+          type: string
+        message:
+          description: Response message
+          type: string
+      required:
+      - file_path
+      - message
+      type: object
+    TACommitsResponse:
+      properties:
+        commits:
+          items:
+            $ref: '#/components/schemas/CommitOutput'
+          readOnly: true
+          type: array
+      type: object
+    TADashboardTeamGetOutput:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/MemberCommitsDetails'
+          type: array
+        milestones:
+          items:
+            $ref: '#/components/schemas/MilestoneDetails'
+          type: array
+        team:
+          $ref: '#/components/schemas/TeamDetails'
+      type: object
+    TADashboardTeamsGetOutput:
+      properties:
+        milestones:
+          items:
+            $ref: '#/components/schemas/MilestoneDetails'
+          type: array
+        teams:
+          items:
+            $ref: '#/components/schemas/TeamAggDetails'
+          type: array
+      type: object
+    Team:
+      properties:
+        github_repo_url:
+          format: url
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        project_id:
+          type: integer
+        team_lead_id:
+          type: integer
+        team_name:
+          type: string
+      required:
+      - github_repo_url
+      - project_id
+      - team_lead_id
+      - team_name
+      type: object
+    TeamAggDetails:
+      properties:
+        commits:
+          type: integer
+        milestones_completed:
+          type: integer
+        milestones_missed:
+          type: integer
+        score:
+          type: number
+        team_id:
+          type: integer
+        team_name:
+          type: string
+        total_score:
+          type: number
+      type: object
+    TeamDetails:
+      properties:
+        github_repo_url:
+          type: string
+        members:
+          items:
+            $ref: '#/components/schemas/MemberDetails'
+          type: array
+        milestone_statuses:
+          items:
+            $ref: '#/components/schemas/MilestoneStatusDetails'
+          type: array
+        project_id:
+          type: integer
+        team_id:
+          type: integer
+        team_lead_id:
+          type: integer
+        team_name:
+          type: string
+      type: object
+    TeamsCreateOutput:
+      properties:
+        message:
+          type: string
+        team_id:
+          readOnly: true
+          type: integer
+      type: object
+    TeamsDeleteOutput:
+      properties:
+        message:
+          type: string
+      type: object
+    UploadOutput:
+      properties:
+        team:
+          readOnly: true
+          type: string
+      type: object
+    UploadsResponse:
+      properties:
+        uploads:
+          items:
+            $ref: '#/components/schemas/UploadOutput'
+          readOnly: true
+          type: array
+      type: object
+    UserApprovalOutput:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/UserApprovalResult'
+          type: array
+      type: object
+    UserApprovalParser:
+      properties:
+        approval_status:
+          enum:
+          - Approved
+          - Declined
+          type: string
+        user_id:
+          type: integer
+        user_type:
+          type: string
+      required:
+      - approval_status
+      - user_id
+      - user_type
+      type: object
+    UserApprovalResult:
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        message:
+          readOnly: true
+          type: string
+      type: object
+info:
+  title: Project Pulse API
+  version: v1
+openapi: 3.1.0
+paths:
+  /api/auth/login:
+    post:
+      responses:
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API for user login
+      tags:
+      - User Mantainence APIs
+  /api/auth/register:
+    post:
+      responses:
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API for new user registration
+      tags:
+      - User Mantainence APIs
+  /api/commits:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TACommitsResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get teams who have done commits in last 7 days
+      tags:
+      - Fetch TAHomepage APIs
+  /api/commits-fetch/{team_id}:
+    get:
+      description: "Args:\n    - since (str): Start datetime in ISO format.\n    -\
+        \ until (str): End datetime in ISO format.\n    - repo_owner (str): GitHub\
+        \ repository owner.\n    - repo_name (str): GitHub repository name.\n\nReturns:\n\
+        \    JSON response containing commit details grouped by user.\n\nExample Response:\n\
+        \    {\n        \"users\": {\n            \"ishdeep\": {\n               \
+        \ \"total_commits\": 6,\n                \"commit_details\": [...]\n     \
+        \       },\n            \"Ritish Kumar Das\": {...}\n        }\n    }"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitsResponse'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get all commits with file changes in a specified time frame from Github(to
+        be used Internally using Celery).
+      tags:
+      - Fetch Commits APIs
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/download/{file_id}:
+    get:
+      description: "Args:\n    file_id (int): The ID of the file to download.\n\n\
+        Returns:\n    The requested file as an attachment.\n\nRaises:\n    - 404:\
+        \ If file not found in database or on server.\n    - 500: If there is a server\
+        \ error."
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownload'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Download a submitted file by its ID.
+      tags:
+      - Fetch Submissions APIs
+    parameters:
+    - in: path
+      name: file_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/files/{team_id}:
+    get:
+      description: "Query Parameters:\n    - team_id (int): The ID of the team whose\
+        \ submissions are being queried.\n\nReturns:\n    List of documents with their\
+        \ metadata."
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get all files submitted by a specific team.
+      tags:
+      - Fetch Submissions APIs
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/genai-commits-analysis/{team_id}:
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+    post:
+      description: "Args:\n    - team_id (str): Identifier for the team/project.\n\
+        \nBody:\n    {\n        \"file_path\": \"path_to_json_file\"\n    }\n\nReturns:\n\
+        \    JSON response with the summarized results.\n\nExample Response:\n   \
+        \ {\n        \"summary\": {\n            \"Marmik Thaker\": {\n          \
+        \      \"commit_details\": [...]\n            }\n        }\n    }"
+      responses:
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Process and summarize code changes from a JSON file for a specific
+        team.
+      tags:
+      - Fetch Commits APIs
+  /api/milestone-review:
+    get:
+      responses:
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get all milestone reviews.
+      tags:
+      - Fetch Submissions APIs
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneReview'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Create or update milestone review data.
+      tags:
+      - Fetch Submissions APIs
+  /api/milestone-review/{milestonestatus_id}:
+    delete:
+      responses:
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Delete a specific milestone review by ID.
+      tags:
+      - Fetch Submissions APIs
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneReview'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get a specific milestone review by ID.
+      tags:
+      - Fetch Submissions APIs
+    parameters:
+    - in: path
+      name: milestonestatus_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+    put:
+      responses:
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Update a specific milestone review by ID.
+      tags:
+      - Fetch Submissions APIs
+  /api/milestones:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneListResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Retrieve all milestones
+      tags:
+      - Manage Milestones APIs
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneCreationResponse'
+          description: Created
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Create a new milestone
+      tags:
+      - Manage Milestones APIs
+  /api/milestones/deadlines:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/MilestoneDeadline'
+                type: array
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Bad Request
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Retrieve and return a list of all milestones with their names, descriptions,
+        and deadlines.
+      tags:
+      - Student Dashboard APIs
+  /api/milestones/{milestone_id}:
+    delete:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneDeletionResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Delete a milestone
+      tags:
+      - Manage Milestones APIs
+    parameters:
+    - in: path
+      name: milestone_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+    put:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneUpdateResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Update an existing milestone
+      tags:
+      - Manage Milestones APIs
+  /api/project/milecomps:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneCompletionsResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get teams who have marked milestones as completed in last 7 days
+      tags:
+      - Fetch TAHomepage APIs
+  /api/projects:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreationResponse'
+          description: Created
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API to allow TAs and other allowed roles to create the project statement.
+      tags:
+      - Manage Projects APIs
+  /api/stu_home/{stu_id}:
+    get:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StuDashTeam'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Retrieve information about a student's team, providing an overview
+        of the student's team activities and progress.
+      tags:
+      - Student Dashboard APIs
+    parameters:
+    - in: path
+      name: stu_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/submissions/uploads:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadsResponse'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Get teams who have uploaded documents in last 7 days
+      tags:
+      - Fetch TAHomepage APIs
+  /api/submit_project:
+    post:
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitProjectResponse'
+          description: Created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Bad Request
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: Handle project file submissions, save file details and optionally mark
+        the milestone as complete for a student.
+      tags:
+      - Student Dashboard APIs
+  /api/ta-teams:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TADashboardTeamsGetOutput'
+          description: OK
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Forbidden
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API to get data for rendering Teams Dashboard for TA
+      tags:
+      - Fetch TADashboard APIs
+  /api/ta-teams/{team_id}:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TADashboardTeamGetOutput'
+          description: OK
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Forbidden
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Internal Server Error
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API to get data for rendering Individual Team's Dashboard for TA
+      tags:
+      - Fetch TADashboard APIs
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/teams:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API for fetching current user's team
+      tags:
+      - Teams APIs
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeam'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsCreateOutput'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonError'
+          description: Not Found
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API for creating a new team
+      tags:
+      - Teams APIs
+  /api/teams/{team_id}:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API to get any team using the team_id
+      tags:
+      - Teams APIs
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutTeam'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: Created
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API for editig team, adding more users to the team
+      tags:
+      - Teams APIs
+  /api/teams/{team_id}/users/{user_id}:
+    delete:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsDeleteOutput'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API to delete user from team
+      tags:
+      - Teams APIs
+    parameters:
+    - in: path
+      name: team_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+    - in: path
+      name: user_id
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+  /api/users/approve_users:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveUsersRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserApprovalOutput'
+          description: OK
+        '422':
+          $ref: '#/components/responses/UNPROCESSABLE_ENTITY'
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API for TA to approve the new user registrations (app only)
+      tags:
+      - User Mantainence APIs
+  /api/users/pendusers:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PendingUserListOutput'
+          description: OK
+        default:
+          $ref: '#/components/responses/DEFAULT_ERROR'
+      summary: API to get the pending users awaiting authorization for registration.
+      tags:
+      - User Mantainence APIs
+tags:
+- description: Operations for creating and editing Teams and fetching a team
+  name: Teams APIs
+- description: Operations related to creating and managing projects
+  name: Manage Projects APIs
+- description: Operations for managing milestones
+  name: Manage Milestones APIs
+- description: Operations for getting last 7 day's activity for TA Homepage
+  name: Fetch TAHomepage APIs
+- description: Operations to fetch TA Dashboard
+  name: Fetch TADashboard APIs
+- description: Operations for User Registration, Approval and Login
+  name: User Mantainence APIs
+- description: Display of Student dashboard
+  name: Student Dashboard APIs
+- description: Operations on teams milestone submissions and scoring
+  name: Fetch Submissions APIs
+- description: Fetch commit informaiton from GitHub for scoring analysis
+  name: Fetch Commits APIs

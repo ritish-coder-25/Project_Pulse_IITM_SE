@@ -41,13 +41,15 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
             id="milestoneSelect"
             @change="handleMilestoneChange"
           />
+
+          
           <datalist id="milestones">
             <option
               v-for="milestone in milestones"
-              :key="milestone.id"
+              :key="milestone.milestone_id"
               :value="milestone.milestone_name"
-            >
-              {{ milestone.milestone_name }}
+            > 
+              {{ milestone_name }}
             </option>
           </datalist>
         </div>
@@ -61,6 +63,7 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
                 Documents Uploaded
               </div>
               <div class="card-body">
+       
                 <div v-if="filteredDocuments.length">
                   <a
                     v-for="document in filteredDocuments"
@@ -182,7 +185,7 @@ export default {
       try {
           const response = await TaScoringApiHelpers.fetchMilestones()
           console.log("Milestones data received:", response.data)
-        this.milestones = response.data
+        this.milestones = response.data.milestones;
         
       } catch (error) {
         console.warn('Using local milestones data due to error:', error)

@@ -34,7 +34,7 @@ GITHUB_TOKEN=''
 
 
 8. Generate openapi yaml
-> flask openapi write --format=yaml openapi.json  
+> flask openapi write --format=yaml openapi.yaml 
 if you get an error saying could not find flask project please run 
 > $env:FLASK_APP = "main.py" for windows or set FLASK_APP=main.py for ubuntu and try again
 

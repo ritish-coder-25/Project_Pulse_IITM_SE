@@ -46,4 +46,21 @@ export class TaHomePageApiHelpers {
       return TaHomePageApiHelpersJson.localMilecomps
     }
   }
+
+  static async approveuser(userData) {
+    try {
+      const response = await mainAxios.post('/users/approve_users', JSON.stringify(userData),
+        { "headers": { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("access_token") } });
+
+      return response.data
+    } catch (error) {
+      console.warn("Error approving user:", error.message)
+      if (error.response) {
+        console.warn('Error response:', error.response.data)
+      } else if (error.request) {
+        console.warn('No response received:', error.request)
+      }
+      throw error
+    }
+  }
 }

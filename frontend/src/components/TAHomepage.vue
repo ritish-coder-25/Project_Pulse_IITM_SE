@@ -144,38 +144,69 @@ export default {
         )
       }
     },
+    
     async submitForm() {
-      const allChecked = this.pendusers.every(
-        user => user.approved || user.rejected,
-      )
-      if (!allChecked) {
-        alert('Please select either Approve or Decline for all users.')
-        return // Exit the function if not all checkboxes are selected
-      }
-      const confirmed = confirm(`Are you sure you want to submit?`)
-      if (confirmed) {
-        alert('Form submitted!')
-        this.resetForm()
-        // Send data to server
-      } else {
-        alert('Submission canceled.')
-      }
+        // Check if all users have a decision
+        const allChecked = this.pendusers.every(
+            (user) => user.approved || user.rejected
+        );
+        if (!allChecked) {
+            alert("Please select either Approve or Decline for all users.");
+            return; // Exit the function if not all checkboxes are selected
+        }
+
+        // Prepare user data for submission
+        const Data = this.pendusers.map((user) => ({
+            user_id: user.id,
+            approval_status: user.approved ? "Active" : "Decline",
+            user_type: user.role,
+        }));
+        const usersData = (Data);
+        console.log(usersData)
+        try {
+            // Replace with your API helper or axios call
+            const response = await TaHomePageApiHelpers.approveuser(usersData);
+            console.log("User approvals submitted successfully:", response);
+
+            // Reset the form
+            this.resetForm();
+            alert("User approvals submitted successfully.");
+        } catch (error) {
+            console.error("Failed to submit user approvals:", error);
+
+            if (error.response) {
+                console.error("Error data:", error.response.data);
+                console.error("Error status:", error.response.status);
+                console.error("Error headers:", error.response.headers);
+            } else if (error.request) {
+                console.error("Error request:", error.request);
+            } else {
+                console.error("Error message:", error.message);
+            }
+
+            alert("Failed to submit user approvals. Please try again.");
+        }
     },
     resetForm() {
-      this.pendusers.forEach(user => {
-        user.approved = false
-        user.rejected = false
-        user.role = ''
-      })
+        this.pendusers.forEach((user) => {
+            user.approved = false;
+            user.rejected = false;
+            user.role = "Student"; // Reset to the default role
+        });
+    },
+    handleCancel() {
+        // Reset form values to their default state
+        this.resetForm();
     },
   },
   mounted() {
-    this.fetchPendusers()
-    this.fetchUploads()
-    this.fetchCommits()
-    this.fetchMilecomps()
+    // Fetch data when the component is loaded
+    this.fetchPendusers();
+    this.fetchUploads();
+    this.fetchCommits();
+    this.fetchMilecomps();
   },
-}
+};
 </script>
 
 <style scoped>

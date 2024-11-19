@@ -129,7 +129,6 @@ class PendingUserListResource(Resource):
                 "pending_users_fetch_error", "Error fetching pending users", str(e)
             )
 
-
 @api_bp_auth.route("/api/users/approve_users")
 class ApproveUsersResource(Resource):
     @jwt_required()
@@ -160,9 +159,9 @@ class ApproveUsersResource(Resource):
                     results.append({"user_id": user_id, "message": "User not found"})
                     continue
                 user.user_type = user_type
-                if approval_status == "Approved":
+                if approval_status == "Active":
                     user.approval_status = "Active"
-                elif approval_status == "Declined":
+                elif approval_status == "Decline":
                     user.approval_status = "Decline"
                 else:
                     results.append(
@@ -185,6 +184,7 @@ class ApproveUsersResource(Resource):
                 200,
             )
         except Exception as e:
+            print("Error processing user approvals:", str(e))  # Add this line for debugging
             return createFatalError(
                 "user_approval_processing_error",
                 "Error processing user approvals",

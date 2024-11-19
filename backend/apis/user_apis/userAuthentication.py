@@ -13,7 +13,7 @@ from flask_jwt_extended import (
 )
 from datetime import timedelta
 from flask_bcrypt import Bcrypt
-from api_outputs.user_api.TADpending_user_outputs import PendingUserListOutput
+from api_outputs.user_api.TADpending_user_outputs import PendingUserOutput
 from api_outputs.user_api.TADuser_approval_outputs import UserApprovalOutput
 from api_parsers.TADuser_approval_parsers import ApproveUsersRequest
 
@@ -107,7 +107,7 @@ class LoginResource(Resource):
 @api_bp_auth.route("/api/users/pendusers")
 class PendingUserListResource(Resource):
     @jwt_required()
-    @api_bp_auth.response(200, PendingUserListOutput)
+    @api_bp_auth.response(200, PendingUserOutput)
     def get(self):
         """API to get the pending users awaiting authorization for registration."""
         try:
@@ -122,6 +122,7 @@ class PendingUserListResource(Resource):
                 for user in pending_users
             ]
             return jsonify(result)
+
 
         except Exception as e:
             return createFatalError(

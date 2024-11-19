@@ -5,7 +5,7 @@ import { UserRoleEnums } from '@/enums'
 export class TaHomePageApiHelpers {
   static async fetchPendusers() {
     try {
-      const response = await mainAxios.get('/pendusers')
+      const response = await mainAxios.get('/users/pendusers')
       return response.data
     } catch (error) {
       console.warn('Using local pending user data due to error:', error)
@@ -16,7 +16,7 @@ export class TaHomePageApiHelpers {
 
   static async fetchUploads() {
     try {
-      const response = await mainAxios.get('/uploads')
+      const response = await mainAxios.get('/submissions/uploads')
       return response.data
     } catch (error) {
       console.warn('Using local uploads data due to error:', error)
@@ -38,7 +38,7 @@ export class TaHomePageApiHelpers {
 
   static async fetchMilecomps() {
     try {
-      const response = await mainAxios.get('/milecomps')
+      const response = await mainAxios.get('/project/milecomps')
       return response.data
     } catch (error) {
       console.warn('Using local milestone completion data due to error:', error)

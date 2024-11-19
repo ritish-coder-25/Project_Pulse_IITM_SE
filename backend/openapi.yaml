@@ -598,7 +598,7 @@ components:
           type: string
       type: object
 info:
-  title: My API
+  title: Project Pulse API
   version: v1
 openapi: 3.0.2
 paths:
@@ -609,7 +609,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API for user login
       tags:
-      - User_APIs
+      - User Mantainence APIs
   /api/auth/register:
     post:
       responses:
@@ -617,7 +617,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API for new user registration
       tags:
-      - User_APIs
+      - User Mantainence APIs
   /api/commits:
     get:
       responses:
@@ -631,7 +631,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Get teams who have done commits in last 7 days
       tags:
-      - TAHomepage_APIs
+      - Fetch TAHomepage APIs
   /api/commits-fetch/{team_id}:
     get:
       description: "Args:\n    - since (str): Start datetime in ISO format.\n    -\
@@ -665,7 +665,7 @@ paths:
       summary: Get all commits with file changes in a specified time frame from Github(to
         be used Internally using Celery).
       tags:
-      - Commits
+      - Fetch Commits APIs
     parameters:
     - in: path
       name: team_id
@@ -702,7 +702,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Download a submitted file by its ID.
       tags:
-      - Submissions
+      - Fetch Submissions APIs
     parameters:
     - in: path
       name: file_id
@@ -732,7 +732,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Get all files submitted by a specific team.
       tags:
-      - Submissions
+      - Fetch Submissions APIs
     parameters:
     - in: path
       name: team_id
@@ -753,7 +753,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Retrieve all milestones
       tags:
-      - Milestones-Api
+      - Manage Milestones APIs
     post:
       responses:
         '201':
@@ -766,7 +766,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Create a new milestone
       tags:
-      - Milestones-Api
+      - Manage Milestones APIs
   /api/milestones/deadlines:
     get:
       responses:
@@ -786,10 +786,10 @@ paths:
           description: Bad Request
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
-      summary: This API retrieves and returns a list of all milestones with their
-        names, descriptions, and deadlines.
+      summary: Retrieve and return a list of all milestones with their names, descriptions,
+        and deadlines.
       tags:
-      - StuDashboard-Api
+      - Student Dashboard APIs
   /api/milestones/{milestone_id}:
     delete:
       responses:
@@ -803,7 +803,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Delete a milestone
       tags:
-      - Milestones-Api
+      - Manage Milestones APIs
     parameters:
     - in: path
       name: milestone_id
@@ -823,7 +823,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Update an existing milestone
       tags:
-      - Milestones-Api
+      - Manage Milestones APIs
   /api/project/milecomps:
     get:
       responses:
@@ -837,7 +837,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Get teams who have marked milestones as completed in last 7 days
       tags:
-      - TAHomepage_APIs
+      - Fetch TAHomepage APIs
   /api/projects:
     post:
       responses:
@@ -851,7 +851,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API to allow TAs and other allowed roles to create the project statement.
       tags:
-      - Projects-Api
+      - Manage Projects APIs
   /api/stu_home/{stu_id}:
     get:
       responses:
@@ -869,10 +869,10 @@ paths:
           description: Not Found
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
-      summary: This API endpoint is to retrieve information about a student's team,
-        providing an overview of the student's team activities and progress.
+      summary: Retrieve information about a student's team, providing an overview
+        of the student's team activities and progress.
       tags:
-      - StuDashboard-Api
+      - Student Dashboard APIs
     parameters:
     - in: path
       name: stu_id
@@ -893,7 +893,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: Get teams who have uploaded documents in last 7 days
       tags:
-      - TAHomepage_APIs
+      - Fetch TAHomepage APIs
   /api/submit_project:
     post:
       responses:
@@ -911,10 +911,10 @@ paths:
           description: Bad Request
         default:
           $ref: '#/components/responses/DEFAULT_ERROR'
-      summary: This API handles project file submissions, saves file details, and
-        optionally marks the milestone as complete for a student.
+      summary: Handle project file submissions, save file details and optionally mark
+        the milestone as complete for a student.
       tags:
-      - StuDashboard-Api
+      - Student Dashboard APIs
   /api/ta-teams:
     get:
       responses:
@@ -940,7 +940,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API to get data for rendering Teams Dashboard for TA
       tags:
-      - TA-Dashboard
+      - Fetch TADashboard APIs
   /api/ta-teams/{team_id}:
     get:
       responses:
@@ -966,7 +966,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API to get data for rendering Individual Team's Dashboard for TA
       tags:
-      - TA-Dashboard
+      - Fetch TADashboard APIs
     parameters:
     - in: path
       name: team_id
@@ -987,7 +987,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API for fetching current user's team
       tags:
-      - Teams-Api
+      - Teams APIs
     post:
       requestBody:
         content:
@@ -1014,7 +1014,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API for creating a new team
       tags:
-      - Teams-Api
+      - Teams APIs
   /api/teams/{team_id}:
     get:
       responses:
@@ -1028,7 +1028,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API to get any team using the team_id
       tags:
-      - Teams-Api
+      - Teams APIs
     parameters:
     - in: path
       name: team_id
@@ -1056,7 +1056,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API for editig team, adding more users to the team
       tags:
-      - Teams-Api
+      - Teams APIs
   /api/teams/{team_id}/users/{user_id}:
     delete:
       responses:
@@ -1070,7 +1070,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API to delete user from team
       tags:
-      - Teams-Api
+      - Teams APIs
     parameters:
     - in: path
       name: team_id
@@ -1084,13 +1084,6 @@ paths:
       schema:
         minimum: 0
         type: integer
-  /api/users:
-    get:
-      responses:
-        default:
-          $ref: '#/components/responses/DEFAULT_ERROR'
-      tags:
-      - api_bp_users
   /api/users/approve_users:
     post:
       requestBody:
@@ -1112,7 +1105,7 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API for TA to approve the new user registrations (app only)
       tags:
-      - User_APIs
+      - User Mantainence APIs
   /api/users/pendusers:
     get:
       responses:
@@ -1126,27 +1119,23 @@ paths:
           $ref: '#/components/responses/DEFAULT_ERROR'
       summary: API to get the pending users awaiting authorization for registration.
       tags:
-      - User_APIs
+      - User Mantainence APIs
 tags:
-- description: Operations on teams
-  name: Teams-Api
-- description: Operations on users
-  name: api_bp_users
+- description: Operations for creating and editing Teams and fetching a team
+  name: Teams APIs
 - description: Operations related to creating and managing projects
-  name: Projects-Api
+  name: Manage Projects APIs
 - description: Operations for managing milestones
-  name: Milestones-Api
-- description: Operation for getting milestone completions in last 7 days
-  name: MilestoneCompletions-Api
+  name: Manage Milestones APIs
 - description: Operations for getting last 7 day's activity for TA Homepage
-  name: TAHomepage_APIs
-- description: fetch TA Dashboard
-  name: TA-Dashboard
+  name: Fetch TAHomepage APIs
+- description: Operations to fetch TA Dashboard
+  name: Fetch TADashboard APIs
 - description: Operations for User Registration, Approval and Login
-  name: User_APIs
+  name: User Mantainence APIs
 - description: Display of Student dashboard
-  name: StuDashboard-Api
+  name: Student Dashboard APIs
 - description: Operations on teams milestone submissions and scoring
-  name: Submissions
-- description: Operations on team submissions scoring Analysis from Github
-  name: Commits
+  name: Fetch Submissions APIs
+- description: Fetch commit informaiton from GitHub for scoring analysis
+  name: Fetch Commits APIs

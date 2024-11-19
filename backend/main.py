@@ -6,12 +6,12 @@ from models import db, User
 from config import Config, create_default_objects
 
 from apis.team_apis.team_apis import api_bp_ta
-from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
-from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.Ta_dashboard.submission_files import api_bp_submission
 from apis.Ta_dashboard.commits_github import api_bp_GenAI
 from apis.ta_teams_dashboard.ta_teams_dashboard import api_bp_ta_dashboard
@@ -30,9 +30,19 @@ from flask_smorest import Api, Blueprint, abort
 app = Flask(__name__)
 # CORS(app)
 # CORS(app)
-app.config["API_TITLE"] = "Project Pulse API"
-app.config["API_VERSION"] = "v1"
-app.config["OPENAPI_VERSION"] = "3.0.2"
+app.config["API_TITLE"] = "Project Pulse API" 
+app.config["API_VERSION"] = "v1" 
+app.config["OPENAPI_VERSION"] = "3.0.2" 
+app.config["API_DESCRIPTION"] = """ ### Project Pulse is a web-based system designed for project management, collaboration, and student activity tracking. 
+This API allows users to: 
+1. Manage user registration, authentication, and authorization. 
+2. Create and manage teams and projects for different terms. 
+3. Track milestone submissions and commits. 
+4. Monitor and analyze student progress through dashboards for TAs, 
+5. Document reviews and evaluations, provide feedback using GenAI. 
+6. View various team activities, commits, and project progress. .
+"""
+
 api = Api(app)
 CORS(app)
 app.config.from_object(Config)

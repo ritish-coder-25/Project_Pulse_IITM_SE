@@ -44,11 +44,15 @@ class CommitsResource(Resource):
 
             if not result:
                 return (
-                    jsonify({"message": "No commits in the last 7 days"}),
+                    jsonify(
+                        {
+                            "team": "No commits in the last 7 days",
+                        }
+                    ),
                     200,
                 )
 
-            return jsonify({"commits": result}), 200
+            return jsonify(result), 200
         except Exception as e:
             return createFatalError(
                 "commits_fetching_error", "Error fetching commits", str(e)
@@ -79,13 +83,13 @@ class MilestoneCompletionsResource(Resource):
                 return (
                     jsonify(
                         {
-                            "message": "No milestone completions in the last 7 days",
+                            "team": "No milestone completions in the last 7 days",
                         }
                     ),
                     200,
                 )
 
-            return jsonify({"completions": result}), 200
+            return jsonify(result), 200
         except Exception as e:
             return createFatalError(
                 "milecomps_fetching_error",
@@ -113,9 +117,16 @@ class UploadsResource(Resource):
             ]
 
             if not result:
-                return jsonify({"message": "No uploads in the last 7 days"}), 200
+                return (
+                    jsonify(
+                        {
+                            "team": "No uploads in the last 7 days",
+                        }
+                    ),
+                    200,
+                )
 
-            return jsonify({"uploads": result}), 200
+            return jsonify(result), 200
         except Exception as e:
             return createFatalError(
                 "uploads_fetching_error", "Error fetching uploads", str(e)

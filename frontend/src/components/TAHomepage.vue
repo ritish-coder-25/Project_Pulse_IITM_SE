@@ -105,7 +105,8 @@ export default {
     async fetchPendusers() {
       try {
         const response = await TaHomePageApiHelpers.fetchPendusers()
-        this.pendusers = response.map(user => ({
+        const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
+        this.pendusers = parsedResponse.map((user) => ({
           ...user,
           role: user.role || 'Student', // Set 'Student' if role is not defined
         }))
@@ -116,7 +117,8 @@ export default {
     async fetchUploads() {
       try {
         const response = await TaHomePageApiHelpers.fetchUploads()
-        this.uploads = response
+        const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
+        this.uploads = parsedResponse || []
       } catch (error) {
         console.warn('Using local uploads data due to error:', error)
       }
@@ -124,7 +126,8 @@ export default {
     async fetchCommits() {
       try {
         const response = await TaHomePageApiHelpers.fetchCommits()
-        this.commits = response
+        const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
+        this.commits = parsedResponse || []
       } catch (error) {
         console.warn('Using local commit data due to error:', error)
       }
@@ -132,7 +135,8 @@ export default {
     async fetchMilecomps() {
       try {
         const response = await TaHomePageApiHelpers.fetchMilecomps()
-        this.milecomps = response
+        const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
+        this.milecomps = parsedResponse
       } catch (error) {
         console.warn(
           'Using local milestone completion data due to error:',

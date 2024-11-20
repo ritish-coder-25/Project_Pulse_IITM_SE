@@ -1,35 +1,46 @@
 <template>
   <div>
-    <!-- Team Dashboard Header -->
-    <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-      <h3>Team name: {{ team_name }}</h3>
-      <p style="margin-left: auto;">Team's Score: {{ team_score }}/100</p>
+    <!-- Loading Indicator -->
+    <div v-if="loading" class="loading">
+      Loading team data, please wait...
     </div>
+    <div v-else>
+      <!-- Team Dashboard Header -->
+      <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+        <h3>Team name: {{ team_name }}</h3>
+        <p style="margin-left: auto;">Team's Score: {{ team_score }}/100</p>
+      </div>
 
-    <!-- Student Data Table -->
-    <div class="table-spacing">
-      <EasyDataTable
-        :headers="stu_headers"
-        :items="stu_items"
-        :hide-footer="true"
-        :alternating="true"
-        body-text-direction="center"
-        header-text-direction="center"
-        table-class-name="customize-table"
-      />
-    </div>
+      <!-- Error Message -->
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
 
-    <!-- Milestone Data Table -->
-    <div class="table-spacing">
-      <EasyDataTable
-        :headers="milestone_headers"
-        :items="milestone_items"
-        :hide-footer="true"
-        :alternating="true"
-        body-text-direction="center"
-        header-text-direction="center"
-        table-class-name="customize-table"
-      />
+      <!-- Student Data Table -->
+      <div v-if="!error" class="table-spacing">
+        <EasyDataTable
+          :headers="stu_headers"
+          :items="stu_items"
+          :hide-footer="true"
+          :alternating="true"
+          body-text-direction="center"
+          header-text-direction="center"
+          table-class-name="customize-table"
+        />
+      </div>
+
+      <!-- Milestone Data Table -->
+      <div v-if="!error" class="table-spacing">
+        <EasyDataTable
+          :headers="milestone_headers"
+          :items="milestone_items"
+          :hide-footer="true"
+          :alternating="true"
+          body-text-direction="center"
+          header-text-direction="center"
+          table-class-name="customize-table"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -46,6 +57,8 @@ export default {
   },
   data() {
     return {
+      loading: true, 
+      error: null, 
       team_name: "",
       team_score: 0,
       stu_headers: [
@@ -65,8 +78,15 @@ export default {
   methods: {
     async fetchTeamData() {
       try {
-        const response = await axios.get("http://localhost:5000/api/team_dashboard");
-        const { members, milestones, team_name, team_score } = response.data;
+        const stuId = this.$route.params.stu_id; 
+        const response = await axios.get(`http://localhost:5000/api/stu_home/${stuId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        });
+
+        const { team_name, team_score, members, milestones } = response.data;
 
         // Populate team name and score
         this.team_name = team_name;
@@ -86,7 +106,10 @@ export default {
           milestone_status: milestone.milestone_status,
         }));
       } catch (error) {
-        console.warn("Failed to fetch data from the API:", error);
+        console.error("Failed to fetch data from the API:", error);
+        this.error = "Unable to load team data. Please try again later.";
+      } finally {
+        this.loading = false; // Stop loading state
       }
     },
   },
@@ -99,5 +122,26 @@ export default {
 <style scoped>
 .table-spacing {
   margin-bottom: 50px;
+}
+.loading {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+}
+.error-message {
+  color: red;
+  text-align: center;
+  margin: 20px 0;
+}
+@media (max-width: 768px) {
+  h3 {
+    font-size: 16px;
+  }
+  p {
+    font-size: 14px;
+  }
+  .table-spacing {
+    margin-bottom: 20px;
+  }
 }
 </style>

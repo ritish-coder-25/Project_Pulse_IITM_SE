@@ -37,19 +37,17 @@ class StuDashboard(Resource):
             if not current_user.team_id:
                 return createError("team_get_curr_no_team", "User is not in a team", 404)
             team = Team.query.get_or_404(current_user.team_id)
+            print (team)
             
             team_data = {
+                'user_name': f"{current_user.first_name} {current_user.last_name}",
                 'team_name': team.team_name,
                 'team_score': 0,
                 'members': [],
-                'milestones': []
+                'milestones': [],
+                'total_max_marks':0
             }
             # Retrieve and add the team's score from milestones
-            statuses = MilestoneStatus.query.filter_by(
-                team_id=current_user.team.team_id).all()
-            team_data['team_score'] = sum(
-                status.eval_score for status in statuses)
-
             statuses = MilestoneStatus.query.filter_by(team_id=team.team_id).all()
             team_data['team_score'] = sum(status.eval_score or 0 for status in statuses)
             
@@ -60,18 +58,23 @@ class StuDashboard(Resource):
                     'email': member.email,
                     'commit_count': Commit.query.filter_by(user_id=member.user_id).count()
                 }
+                print(member_data)
                 team_data['members'].append(member_data)
 
             # Fetch milestone details
+            max_marks=0
             for status in statuses:
                 milestone = Milestone.query.get(status.milestone_id)
                 if milestone:
+                    max_marks += milestone.max_marks
                     milestone_data = {
                         'milestone_name': milestone.milestone_name,
                         'milestone_status': status.milestone_status,
-                        'end_date': milestone.end_date
+                        'end_date': milestone.end_date,
                     }
                     team_data['milestones'].append(milestone_data)
+                    team_data['total_max_marks'] = max_marks
+            print(team_data)
 
             return jsonify(team_data), 200
 

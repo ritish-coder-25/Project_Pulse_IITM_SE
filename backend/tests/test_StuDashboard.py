@@ -272,3 +272,51 @@ def test_stu_dashboard_all_milestones_pending(client, auth_headers, create_users
         assert 'milestone_status' in milestone
         assert 'end_date' in milestone
 
+def test_team_with_no_members(client, auth_headers, create_team):
+    """
+    Test fetching a student's dashboard where their team has no members.
+    """
+    team = create_team
+    db.session.query(User).filter(User.team_id == team.team_id).update({User.team_id: None})
+    db.session.commit()
+
+    user = User.query.filter_by(team_id=None).first()
+    if not user:
+        pytest.fail("No user available without a team")
+
+    response = client.get(
+        f"/api/stu_home/{user.user_id}",
+        headers=auth_headers
+    )
+
+    assert response.status_code == 404
+    data = response.get_json()
+
+    assert data['errorCode'] == "team_get_curr_no_team"
+    assert data['message'] == "User is not in a team"
+
+def test_user_with_no_commits(client, auth_headers, create_users, create_team):
+    """
+    Test fetching a student's dashboard where the user has no associated commits.
+    """
+    user = create_users[0]
+    user.team_id = create_team.team_id 
+    db.session.commit()
+    db.session.query(Commit).filter_by(user_id=user.user_id).delete()
+    db.session.commit()
+
+    response = client.get(
+        f"/api/stu_home/{user.user_id}",
+        headers=auth_headers
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+
+    assert 'user_name' in data
+    assert 'team_name' in data
+    assert 'members' in data
+
+    member = next((m for m in data['members'] if m['email'] == user.email), None)
+    assert member is not None
+    assert member['commit_count'] == 0

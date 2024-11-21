@@ -320,3 +320,30 @@ def test_user_with_no_commits(client, auth_headers, create_users, create_team):
     member = next((m for m in data['members'] if m['email'] == user.email), None)
     assert member is not None
     assert member['commit_count'] == 0
+    
+def test_team_score_less_than_or_equal_total_marks(client, auth_headers, create_users, create_team, create_milestones, create_milestone_statuses):
+    """
+    Test to ensure that the total_max_marks is always greater than or equal to the team_score in the response.
+    """
+    user = create_users[0]
+    user.team_id = create_team.team_id  # Assign the user to the team
+    db.session.commit()
+
+    response = client.get(
+        f"/api/stu_home/{user.user_id}",
+        headers=auth_headers
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+
+    # Assertions for total_max_marks and team_score
+    assert 'team_score' in data
+    assert 'total_max_marks' in data
+
+    team_score = data['team_score']
+    total_max_marks = data['total_max_marks']
+
+    assert total_max_marks >= team_score, (
+        f"Expected total_max_marks ({total_max_marks}) to be greater than or equal to team_score ({team_score})"
+    )

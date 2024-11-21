@@ -173,7 +173,8 @@ def test_stu_dashboard_success(client, auth_headers, create_users, create_team):
     # Additional checks for correctness
     assert data['user_name'] == f"{user.first_name} {user.last_name}"
     assert data['team_name'] == create_team.team_name
-    assert isinstance(data['team_score'], int)
+    print (data['team_score'])
+    assert isinstance(data['team_score'], float)
     assert len(data['members']) > 0
     assert len(data['milestones']) >= 0
 

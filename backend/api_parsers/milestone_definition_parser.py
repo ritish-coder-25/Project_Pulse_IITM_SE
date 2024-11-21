@@ -24,8 +24,8 @@ class MilestoneSchema(Schema):
     project_id = fields.Int(required=True)
 
 class MilestoneUpdateSchema(Schema):
-    name = fields.Str(validate=validate.Length(min=1))
-    description = fields.Str(validate=validate.Length(min=1))
+    milestone_name = fields.Str(validate=validate.Length(min=1))
+    milestone_description = fields.Str(validate=validate.Length(min=1))
     start_date = fields.Str(
         validate=validate.Regexp(
             r"^\d{4}-\d{2}-\d{2}$", 

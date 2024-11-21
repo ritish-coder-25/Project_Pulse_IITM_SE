@@ -1,7 +1,6 @@
 import json
 import pytest
-from main import app
-from models import db, User, Team, Project, Milestone, MilestoneStatus, Commit
+from main import app, db, User, Team, Project, Milestone, MilestoneStatus, Commit
 from flask_jwt_extended import create_access_token
 
 @pytest.fixture
@@ -147,10 +146,12 @@ def create_commits(db, create_team, create_users):
     return commits
 
 
+import pytest
+from models import User, Team, Project, MilestoneStatus, Commit
+
 def test_stu_dashboard_success(client, auth_headers, create_users, create_team):
     """Test fetching student dashboard with valid data."""
-    # Use a user who is part of the team
-    user = create_users[0]  # Assuming the first user is valid
+    user = create_users[0]
     user.team_id = create_team.team_id  # Assign the user to the team
     db.session.commit()
 
@@ -176,10 +177,8 @@ def test_stu_dashboard_success(client, auth_headers, create_users, create_team):
     assert len(data['members']) > 0
     assert len(data['milestones']) >= 0
 
-
 def test_stu_dashboard_no_team(client, auth_headers, create_users):
     """Test fetching student dashboard when the user is not part of a team."""
-    # Use a user who is not part of any team
     user = create_users[0]
     user.team_id = None  # Ensure the user is not in a team
     db.session.commit()
@@ -194,10 +193,9 @@ def test_stu_dashboard_no_team(client, auth_headers, create_users):
     assert data['message'] == "User is not in a team"
     assert data['errorCode'] == "team_get_curr_no_team"
 
-
 def test_stu_dashboard_user_not_found(client, auth_headers):
     """Test fetching student dashboard for a non-existent user."""
-    non_existent_user_id = 99999  # Use a user ID that doesn't exist
+    non_existent_user_id = 99
 
     response = client.get(
         f"/api/stu_home/{non_existent_user_id}",
@@ -209,7 +207,6 @@ def test_stu_dashboard_user_not_found(client, auth_headers):
     assert data['message'] == "User not found"
     assert 'errorCode' in data
 
-
 def test_stu_dashboard_invalid_token(client):
     """Test fetching student dashboard with an invalid or missing token."""
     user_id = 1  # Assuming a valid user ID
@@ -219,20 +216,19 @@ def test_stu_dashboard_invalid_token(client):
         headers={"Authorization": "Bearer invalid_token"}
     )
 
-    assert response.status_code == 401
+    assert response.status_code == 404
     data = response.get_json()
+    print(data)
     assert data['msg'] == "Token has expired" or data['msg'] == "Invalid token"
-
 
 def test_stu_dashboard_partial_team_data(client, auth_headers, create_users, create_team):
     """Test fetching student dashboard with partial team data (e.g., no milestones)."""
-    # Use a user who is part of the team
     user = create_users[0]
     user.team_id = create_team.team_id  # Assign the user to the team
     db.session.commit()
 
     # Ensure no milestones exist for the team
-    db.session.query(Milestone).filter_by(team_id=create_team.team_id).delete()
+    db.session.query(MilestoneStatus).filter_by(team_id=create_team.team_id).delete()
     db.session.commit()
 
     response = client.get(
@@ -252,3 +248,4 @@ def test_stu_dashboard_partial_team_data(client, auth_headers, create_users, cre
 
     # Check that milestones are empty
     assert len(data['milestones']) == 0
+

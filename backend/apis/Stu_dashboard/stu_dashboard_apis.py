@@ -4,6 +4,7 @@ from models import db, User, Team, MilestoneStatus, Commit, File, Milestone, Mil
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import NotFound
 from datetime import datetime
 import os
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
@@ -29,13 +30,16 @@ def allowed_file(filename):
 class StuDashboard(Resource):
     @api_bp_stu.response(201, StuDashTeamSchema)
     @api_bp_stu.response(404, CommonErrorSchema)
+    @api_bp_stu.response(500, CommonErrorSchema)
     @jwt_required()
     def get(self, stu_id):
         """Retrieve information about a student's team, providing an overview of the student's team activities and progress."""
         try:
             current_user = User.query.get_or_404(stu_id)
+            print (current_user)
             if not current_user.team_id:
                 return createError("team_get_curr_no_team", "User is not in a team", 404)
+            
             team = Team.query.get_or_404(current_user.team_id)
             print (team)
             
@@ -77,11 +81,13 @@ class StuDashboard(Resource):
             print(team_data)
 
             return jsonify(team_data), 200
-
-        except Exception as e:
-            db.session.rollback()
-            return createFatalError("error", "An error occurred", str(e))
-
+        except NotFound as e:
+            # Return 404 if the user or team is not found
+            return createError("user_not_found", "User not found", 404)
+        except Exception as e: 
+            db.session.rollback() 
+            return createError("unknown_error", "An error occurred", 500)
+        
 
 @api_bp_stu.route('/api/submit_project')
 class SubmitProject(Resource):

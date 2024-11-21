@@ -82,7 +82,6 @@ class StuDashboard(Resource):
 
             return jsonify(team_data), 200
         except NotFound as e:
-            # Return 404 if the user or team is not found
             return createError("user_not_found", "User not found", 404)
         except Exception as e: 
             db.session.rollback() 

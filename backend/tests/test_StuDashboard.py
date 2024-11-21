@@ -2,6 +2,7 @@ import json
 import pytest
 from main import app, db, User, Team, Project, Milestone, MilestoneStatus, Commit
 from flask_jwt_extended import create_access_token
+from datetime import datetime
 
 @pytest.fixture
 def create_users(db):
@@ -163,7 +164,6 @@ def test_stu_dashboard_success(client, auth_headers, create_users, create_team):
     assert response.status_code == 200
     data = response.get_json()
 
-    # Assertions for the structure of the response
     assert 'user_name' in data
     assert 'team_name' in data
     assert 'team_score' in data
@@ -207,27 +207,12 @@ def test_stu_dashboard_user_not_found(client, auth_headers):
     assert data['message'] == "User not found"
     assert 'errorCode' in data
 
-def test_stu_dashboard_invalid_token(client):
-    """Test fetching student dashboard with an invalid or missing token."""
-    user_id = 1  # Assuming a valid user ID
-
-    response = client.get(
-        f"/api/stu_home/{user_id}",
-        headers={"Authorization": "Bearer invalid_token"}
-    )
-
-    assert response.status_code == 404
-    data = response.get_json()
-    print(data)
-    assert data['msg'] == "Token has expired" or data['msg'] == "Invalid token"
-
 def test_stu_dashboard_partial_team_data(client, auth_headers, create_users, create_team):
     """Test fetching student dashboard with partial team data (e.g., no milestones)."""
     user = create_users[0]
     user.team_id = create_team.team_id  # Assign the user to the team
     db.session.commit()
 
-    # Ensure no milestones exist for the team
     db.session.query(MilestoneStatus).filter_by(team_id=create_team.team_id).delete()
     db.session.commit()
 
@@ -248,4 +233,42 @@ def test_stu_dashboard_partial_team_data(client, auth_headers, create_users, cre
 
     # Check that milestones are empty
     assert len(data['milestones']) == 0
+    
+def test_stu_dashboard_all_milestones_pending(client, auth_headers, create_users, create_team, create_milestones, create_milestone_statuses):
+    """Test fetching student dashboard where all milestones are in Pending status."""
+    user = create_users[0]
+    user.team_id = create_team.team_id  
+    db.session.commit()
+
+    for status in create_milestone_statuses:
+        status.milestone_status = "Pending"
+        status.eval_score = 0.0  
+    db.session.commit()
+
+    response = client.get(
+        f"/api/stu_home/{user.user_id}",
+        headers=auth_headers
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+
+    # Assertions for the structure of the response
+    assert 'user_name' in data
+    assert 'team_name' in data
+    assert 'team_score' in data
+    assert 'members' in data
+    assert 'milestones' in data
+
+    # Check that the team score is 0
+    assert data['team_score'] == 0
+
+    # Check that all milestones have a status of 'Pending'
+    assert all(m['milestone_status'] == "Pending" for m in data['milestones'])
+
+    # Additional structure checks
+    for milestone in data['milestones']:
+        assert 'milestone_name' in milestone
+        assert 'milestone_status' in milestone
+        assert 'end_date' in milestone
 

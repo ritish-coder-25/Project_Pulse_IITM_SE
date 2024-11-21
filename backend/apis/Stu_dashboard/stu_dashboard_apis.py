@@ -78,7 +78,6 @@ class StuDashboard(Resource):
                     }
                     team_data['milestones'].append(milestone_data)
                     team_data['total_max_marks'] = max_marks
-            print(team_data)
 
             return jsonify(team_data), 200
         except NotFound as e:

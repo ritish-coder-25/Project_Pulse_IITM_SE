@@ -9,6 +9,7 @@ from api_outputs.project_api.TADmilestone_api_outputs import (
 )
 from api_parsers.project_definition_parser import CreateProjectSchema
 from helpers.ErrorCommonHelpers import createFatalError
+import jwt
 
 api_bp_projects = Blueprint(
     "Manage Projects APIs",
@@ -32,6 +33,9 @@ class CreateProjectResource(Resource):
 
             # Get the current user ID from JWT
             current_user_id = get_jwt_identity()
+            if current_user_id is None:
+                return {"message": "Missing or invalid JWT token"}, 403
+            
             current_user = User.query.get_or_404(current_user_id)
 
             # Check if the user has permission to create a project
@@ -66,6 +70,11 @@ class CreateProjectResource(Resource):
         except ValidationError as e:
             # Handle validation errors from Marshmallow
             return {"message": f"Validation error: {e.messages}"}, 400
+        
+        except jwt.ExpiredSignatureError:
+            return jsonify({"message": "Token has expired"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"message": "Invalid token"}), 401
 
         except Exception as e:
             # Catch any other errors and return a generic error message

@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from models import db, User
+from models import db, User, Project, Milestone, MilestoneStatus, Member, Commit, Team, Submission, File
 from config import Config, create_default_objects
 
 from apis.team_apis.team_apis import api_bp_ta

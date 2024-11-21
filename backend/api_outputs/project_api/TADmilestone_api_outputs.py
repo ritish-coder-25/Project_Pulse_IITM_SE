@@ -28,6 +28,7 @@ class MilestoneOutput(Schema):
     start_date = fields.Date(dump_only=True)  # Start date
     end_date = fields.Date(dump_only=True)  # End date
     max_marks = fields.Float(dump_only=True)  # Maximum marks
+    project_id = fields.Int(dump_only=True)
 
 
 class MilestoneCreationResponse(Schema):

@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 class MilestoneSchema(Schema):
-    name = fields.Str(required=True, validate=validate.Length(min=1))
-    description = fields.Str(required=True, validate=validate.Length(min=1))
+    milestone_name = fields.Str(required=True, validate=validate.Length(min=1))
+    milestone_description = fields.Str(required=True, validate=validate.Length(min=1))
     start_date = fields.Str(
         required=True, 
         validate=validate.Regexp(
@@ -21,6 +21,7 @@ class MilestoneSchema(Schema):
         )
     )
     max_marks = fields.Float(required=True, validate=validate.Range(min=0))
+    project_id = fields.Int(required=True)
 
 class MilestoneUpdateSchema(Schema):
     name = fields.Str(validate=validate.Length(min=1))

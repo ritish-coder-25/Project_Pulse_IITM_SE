@@ -33,6 +33,35 @@ def ta_auth_headers(app, db):
     else:
         print("Error while accessing TA User")
 
+
+@pytest.fixture
+def inactive_ta_auth_headers(app, db):
+    """Generate authentication headers for TA."""
+    try:
+        ta_user = User(
+            first_name="TA",
+            last_name="User",
+            email="inactive.ta.user@example.com",
+            password='ta',
+            user_type="TA",
+            approval_status="Inactive"
+        )
+        db.session.add(ta_user)
+        db.session.commit()
+    
+    except:
+        db.session.rollback()
+        ta_user = User.query.filter_by(email='inactive.ta.user@example.com').first()
+
+    if ta_user:
+        access_token = create_access_token(identity=ta_user.user_id)
+        return {
+            'Authorization': f'Bearer {access_token}'
+        }
+    else:
+        print("Error while accessing TA User")
+
+
 @pytest.fixture
 def student_auth_headers(app, db):
     """Generate authentication headers for Student."""
@@ -226,6 +255,13 @@ def test_ta_teams_dashboard_unauthorized_role(client, student_auth_headers):
     assert response.status_code == 403
 
 
+def test_ta_teams_dashboard_inactive_role(client, inactive_ta_auth_headers):
+
+    response = client.get(f"/api/ta-teams", headers=inactive_ta_auth_headers)
+
+    assert response.status_code == 403
+
+
 def test_ta_teams_dashboard_unauthorized_access(client):
 
     response = client.get(f"/api/ta-teams")
@@ -258,6 +294,15 @@ def test_ta_team_dashboard_unauthorized_role(client, student_auth_headers, creat
     team = Team.query.first()
 
     response = client.get(f"/api/ta-teams/{team.team_id}", headers=student_auth_headers)
+
+    assert response.status_code == 403
+
+
+def test_ta_team_dashboard_inactive_role(client, inactive_ta_auth_headers, create_commits):
+
+    team = Team.query.first()
+
+    response = client.get(f"/api/ta-teams/{team.team_id}", headers=inactive_ta_auth_headers)
 
     assert response.status_code == 403
 

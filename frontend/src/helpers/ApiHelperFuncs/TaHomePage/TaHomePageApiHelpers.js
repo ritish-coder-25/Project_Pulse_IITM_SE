@@ -46,4 +46,14 @@ export class TaHomePageApiHelpers {
       return TaHomePageApiHelpersJson.localMilecomps
     }
   }
+static async approveUsers(payload) {
+  try {
+    const response = await mainAxios.post('/users/approve_users', payload);
+    console.log("mainAxios approveUsers", response);
+    return response.data;
+  } catch (error) {
+    console.warn('Failed to approve users', error);
+  }
+}
+
 }

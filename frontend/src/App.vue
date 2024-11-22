@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+
 </script>
 
 <template>
@@ -98,6 +98,12 @@ import HelloWorld from './components/HelloWorld.vue'
     </div>
   </header>
   <body class="container-fluid">
+    <div class="container mt-3">
+    <!-- Warning for inactive approval status -->
+    <div v-if="isApproved" class="alert alert-warning" role="alert">
+      Your account is currently inactive.Kindly wait for approval from an Admin or TA. For assistance, contact support at <a href="mailto:support@projectpulse.com" class="alert-link">support@projectpulse.com</a>.
+    </div>
+    </div>
     <RouterView />
   </body>
 </template>
@@ -117,7 +123,14 @@ export default {
   computed: {
     isLoggedIn() {
       const authStore = useAuthStore()
+      console.log("AuthStore",authStore)
       return !!authStore.accessToken
+    },
+    isApproved() {
+      const authStore = useAuthStore()
+      const user = authStore.user || {} // Get user from store
+      console.log("User --->",user)
+      return user.approval_status === 'Inactive'
     },
   },
   watch: {},

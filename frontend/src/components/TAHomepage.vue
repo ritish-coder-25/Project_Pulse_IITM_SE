@@ -154,8 +154,25 @@ export default {
       }
       const confirmed = confirm(`Are you sure you want to submit?`)
       if (confirmed) {
+
+        try {
+          const payload = {
+          users: this.pendusers.map(user => ({
+            user_id: user.id,
+            approval_status: user.approvalStatus, // Adjust as per your data model
+            user_type: user.userType, // Adjust as per your data model
+          })),
+        };  
+        console.log('ye hai payload: --->', payload)
+        const response = await TaHomePageApiHelpers.approveUsers(payload)
+        const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
+        console.log('ye hai Response: --->', parsedResponse)
+      } catch (error) {
+        console.warn('Using local uploads data due to error:', error)
+      }
+
         alert('Form submitted!')
-        this.resetForm()
+        // this.resetForm()
         // Send data to server
       } else {
         alert('Submission canceled.')

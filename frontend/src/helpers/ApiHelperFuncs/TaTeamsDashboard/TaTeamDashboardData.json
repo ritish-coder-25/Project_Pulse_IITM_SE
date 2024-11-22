@@ -1,0 +1,219 @@
+{
+    "members": [
+        {
+            "commits": 8,
+            "email": "user0@ds.study.iitm.ac.in",
+            "name": "User 0"
+        },
+        {
+            "commits": 11,
+            "email": "user1@ds.study.iitm.ac.in",
+            "name": "User 1"
+        },
+        {
+            "commits": 9,
+            "email": "user3@ds.study.iitm.ac.in",
+            "name": "User 3"
+        },
+        {
+            "commits": 12,
+            "email": "user4@ds.study.iitm.ac.in",
+            "name": "User 4"
+        },
+        {
+            "commits": 15,
+            "email": "user5@ds.study.iitm.ac.in",
+            "name": "User 5"
+        }
+    ],
+    "milestones": [
+        {
+            "end_date": "Mon, 21 Oct 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 1",
+            "milestone_id": 1,
+            "milestone_name": "Milestone 1",
+            "project_id": 1,
+            "start_date": "Wed, 09 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 28 Oct 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 2",
+            "milestone_id": 2,
+            "milestone_name": "Milestone 2",
+            "project_id": 1,
+            "start_date": "Wed, 16 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 04 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 3",
+            "milestone_id": 3,
+            "milestone_name": "Milestone 3",
+            "project_id": 1,
+            "start_date": "Wed, 23 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 11 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 4",
+            "milestone_id": 4,
+            "milestone_name": "Milestone 4",
+            "project_id": 1,
+            "start_date": "Wed, 30 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 18 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 5",
+            "milestone_id": 5,
+            "milestone_name": "Milestone 5",
+            "project_id": 1,
+            "start_date": "Wed, 06 Nov 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 25 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 6",
+            "milestone_id": 6,
+            "milestone_name": "Milestone 6",
+            "project_id": 1,
+            "start_date": "Wed, 13 Nov 2024 00:00:00 GMT"
+        }
+    ],
+    "team": {
+        "github_repo_url": "https://github.com/ritish-coder-25/Project_Pulse_IITM_SE.git",
+        "id": 1,
+        "members": [
+            {
+                "approval_status": "Active",
+                "discord_username": "user0",
+                "email": "user0@ds.study.iitm.ac.in",
+                "first_name": "User",
+                "github_username": "user0",
+                "last_name": "0",
+                "team_id": 1,
+                "user_id": 2,
+                "user_type": "Student"
+            },
+            {
+                "approval_status": "Active",
+                "discord_username": "user1",
+                "email": "user1@ds.study.iitm.ac.in",
+                "first_name": "User",
+                "github_username": "user1",
+                "last_name": "1",
+                "team_id": 1,
+                "user_id": 3,
+                "user_type": "Student"
+            },
+            {
+                "approval_status": "Active",
+                "discord_username": "user3",
+                "email": "user3@ds.study.iitm.ac.in",
+                "first_name": "User",
+                "github_username": "user3",
+                "last_name": "3",
+                "team_id": 1,
+                "user_id": 4,
+                "user_type": "Student"
+            },
+            {
+                "approval_status": "Active",
+                "discord_username": "user4",
+                "email": "user4@ds.study.iitm.ac.in",
+                "first_name": "User",
+                "github_username": "user4",
+                "last_name": "4",
+                "team_id": 1,
+                "user_id": 5,
+                "user_type": "Student"
+            },
+            {
+                "approval_status": "Active",
+                "discord_username": "user5",
+                "email": "user5@ds.study.iitm.ac.in",
+                "first_name": "User",
+                "github_username": "user5",
+                "last_name": "5",
+                "team_id": 1,
+                "user_id": 6,
+                "user_type": "Student"
+            }
+        ],
+        "milestone_statuses": [
+            {
+                "completed_date": "Tue, 15 Oct 2024 00:00:00 GMT",
+                "eval_date": "Thu, 17 Oct 2024 00:00:00 GMT",
+                "eval_feedback": "Good Work",
+                "eval_score": 65.0,
+                "milestone_id": 1,
+                "milestone_status": "Evaluated",
+                "milestonestatus_id": 1,
+                "submission_id": null,
+                "team_id": 1
+            },
+            {
+                "completed_date": "Mon, 28 Oct 2024 00:00:00 GMT",
+                "eval_date": "Sat, 26 Oct 2024 00:00:00 GMT",
+                "eval_feedback": "Latest Feedback",
+                "eval_score": 14.0,
+                "milestone_id": 2,
+                "milestone_status": "Evaluated",
+                "milestonestatus_id": 2,
+                "submission_id": null,
+                "team_id": 1
+            },
+            {
+                "completed_date": "Mon, 28 Oct 2024 00:00:00 GMT",
+                "eval_date": "Sat, 26 Oct 2024 00:00:00 GMT",
+                "eval_feedback": "Latest Feedback",
+                "eval_score": 14.0,
+                "milestone_id": 3,
+                "milestone_status": "Evaluated",
+                "milestonestatus_id": 3,
+                "submission_id": null,
+                "team_id": 1
+            },
+            {
+                "completed_date": "Wed, 06 Nov 2024 00:00:00 GMT",
+                "eval_date": "Wed, 06 Nov 2024 00:00:00 GMT",
+                "eval_feedback": null,
+                "eval_score": null,
+                "milestone_id": 4,
+                "milestone_status": "Completed",
+                "milestonestatus_id": 4,
+                "submission_id": null,
+                "team_id": 1
+            },
+            {
+                "completed_date": null,
+                "eval_date": null,
+                "eval_feedback": null,
+                "eval_score": null,
+                "milestone_id": 5,
+                "milestone_status": "Pending",
+                "milestonestatus_id": 5,
+                "submission_id": null,
+                "team_id": 1
+            },
+            {
+                "completed_date": null,
+                "eval_date": null,
+                "eval_feedback": null,
+                "eval_score": null,
+                "milestone_id": 6,
+                "milestone_status": "Pending",
+                "milestonestatus_id": 6,
+                "submission_id": null,
+                "team_id": 1
+            }
+        ],
+        "name": "Team A",
+        "project_id": 1,
+        "team_id": 1,
+        "team_lead_id": 2,
+        "team_name": "Team A"
+    }
+}

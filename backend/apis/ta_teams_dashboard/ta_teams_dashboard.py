@@ -29,14 +29,15 @@ class TATeamDashboard(MethodView):
         """
         API to get data for rendering Teams Dashboard for TA
         """
-        try:
-            current_user_id = get_jwt_identity()
-            current_user = User.query.get_or_404(current_user_id)
+        
+        current_user_id = get_jwt_identity()
+        current_user = User.query.get_or_404(current_user_id)
 
-            allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
-            if current_user.user_type not in allowed_roles:
-                return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
+        allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+        if current_user.user_type not in allowed_roles:
+            return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
             
+        try:
             teams = Team.query.all()
 
             commit_counts = Commit.query.with_entities(Commit.team_id, func.count(Commit.commit_id)).group_by(Commit.team_id).all()
@@ -84,15 +85,17 @@ class TATeamDashboard(MethodView):
         """
         API to get data for rendering Individual Team's Dashboard for TA
         """
-        try:
-            current_user_id = get_jwt_identity()
-            current_user = User.query.get_or_404(current_user_id)
+        
+        current_user_id = get_jwt_identity()
+        current_user = User.query.get_or_404(current_user_id)
 
-            allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
-            if current_user.user_type not in allowed_roles:
-                return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
-            
-            team = Team.query.get_or_404(team_id)
+        allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+        if current_user.user_type not in allowed_roles:
+            return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
+        
+        team = Team.query.get_or_404(team_id)
+
+        try:
 
             commit_counts = Commit.query.filter(Commit.team_id==team_id).with_entities(Commit.user_id, func.count(Commit.commit_id)).group_by(Commit.user_id).all()
             # output format for above query is [ ("user_id", "commit_count"), ("user_id", "commit_count") , ... ]

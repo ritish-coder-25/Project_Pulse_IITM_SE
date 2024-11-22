@@ -1,8 +1,65 @@
 import json
 import pytest
+from flask_jwt_extended import create_access_token
 from main import app, db
 from datetime import datetime
 from models import User, Team, Milestone, MilestoneStatus, Commit, Project
+
+
+@pytest.fixture
+def ta_auth_headers(app, db):
+    """Generate authentication headers for TA."""
+    try:
+        ta_user = User(
+            first_name="TA",
+            last_name="User",
+            email="ta.user@example.com",
+            password='ta',
+            user_type="TA",
+            approval_status="Active"
+        )
+        db.session.add(ta_user)
+        db.session.commit()
+    
+    except:
+        db.session.rollback()
+        ta_user = User.query.filter_by(email='ta.user@example.com').first()
+
+    if ta_user:
+        access_token = create_access_token(identity=ta_user.user_id)
+        return {
+            'Authorization': f'Bearer {access_token}'
+        }
+    else:
+        print("Error while accessing TA User")
+
+@pytest.fixture
+def student_auth_headers(app, db):
+    """Generate authentication headers for Student."""
+
+    try:
+        student_user = User(
+            first_name="Student",
+            last_name="User",
+            email="student.user@example.com",
+            password='student',
+            user_type="Student",
+            approval_status="Active"
+        )
+        db.session.add(student_user)
+        db.session.commit()
+    except:
+        db.session.rollback()
+        student_user = User.query.filter_by(email='student.user@example.com').first()
+
+    if student_user:
+        access_token = create_access_token(identity=student_user.user_id)
+        return {
+            'Authorization': f'Bearer {access_token}'
+        }
+    else:
+        print("Error while accessing Student user")
+
 
 @pytest.fixture
 def create_users(db):

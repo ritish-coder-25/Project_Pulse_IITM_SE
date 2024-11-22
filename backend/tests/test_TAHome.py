@@ -186,7 +186,7 @@ def test_get_commit_1commit(client, auth_headersTA, create_team, reset_db):
     print(db.session.query(Commit.commit_timestamp).all())
     response = client.get(
         "/api/commits",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -212,7 +212,7 @@ def test_get_commit_5commits_with2from1team(client, auth_headersTA, create_team,
     db.session.commit()
     response = client.get(
         "/api/commits",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -230,7 +230,7 @@ def test_get_commit_noCommits(client, auth_headersTA, reset_db):
     reset_db
     response = client.get(
         "/api/commits",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -278,7 +278,7 @@ def test_get_milecomp_1milecomp(client, auth_headersTA, create_team, create_mile
     print(db.session.query(MilestoneStatus.completed_date).all())
     response = client.get(
         "/api/project/milecomps",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -307,7 +307,7 @@ def test_get_milecomp_5milecomps_with2from1team(client, auth_headersTA, create_t
     # print(db.session.query(MilestoneStatus.completed_date).all())
     response = client.get(
         "/api/project/milecomps",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -328,7 +328,7 @@ def test_get_milecomps_noMilecomps(client, auth_headersTA, reset_db):
     reset_db
     response = client.get(
         "/api/project/milecomps",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -371,7 +371,7 @@ def test_get_upload_1upload(client, auth_headersTA, create_team, create_mileston
     db.session.commit()
     response = client.get(
         "/api/submissions/uploads",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -400,7 +400,7 @@ def test_get_upload_5uploads_with2from1team(client, auth_headersTA, create_team,
     # print(db.session.query(MilestoneStatus.completed_date).all())
     response = client.get(
         "/api/submissions/uploads",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -421,7 +421,7 @@ def test_get_uploads_noUploads(client, auth_headersTA, reset_db):
     reset_db
     response = client.get(
         "/api/submissions/uploads",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
     data = response.get_json()
@@ -450,9 +450,19 @@ def test_get_pendusers_not_loggedin(client, reset_db):
     )
     assert response.status_code == 401
 
-def test_get_pendusers_no_pending_users(client, auth_headersTA, reset_db):
+def test_get_pendusers_0pending_user(client, auth_headersTA):
     """Test retrieving users with no users awaiting registration approval."""
-    reset_db
+    response = client.get(
+        "/api/users/pendusers",
+        headers={**auth_headersTA, "Content-Type": "application/json"}
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data) == 0
+
+
+def test_get_pendusers_1pending_user(client, auth_headersTA):
+    """Test retrieving users with 1 user awaiting registration approval."""
     user = User(
         first_name=f"Student1",
         last_name=f"Test1",
@@ -467,6 +477,221 @@ def test_get_pendusers_no_pending_users(client, auth_headersTA, reset_db):
     db.session.commit()
     response = client.get(
         "/api/users/pendusers",
-        headers=auth_headersTA
+        headers={**auth_headersTA, "Content-Type": "application/json"}
     )
     assert response.status_code == 200
+    data = response.get_json()
+    assert data[0]['id'] == 2 
+    assert len(data) == 1
+
+def test_get_pendusers_2pending_users(client, auth_headersTA):
+    """Test retrieving users with 2 users (TA and Student) awaiting registration approval."""
+    userSt = User(
+        first_name=f"Student1",
+        last_name=f"Test1",
+        password="password123",
+        email=f"userSt@example.com",
+        github_username=f"githubuserStu2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    userTA = User(
+        first_name=f"TA1",
+        last_name=f"Test1",
+        password="password123",
+        email=f"userTA2@example.com",
+        github_username=f"githubuserTA2",
+        discord_username=f"discorduser",
+        user_type="TA",
+        approval_status="Inactive"
+    )
+    db.session.add_all([userSt, userTA])
+    db.session.commit()
+    response = client.get(
+        "/api/users/pendusers",
+        headers={**auth_headersTA, "Content-Type": "application/json"}
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data[0]['id'] == 2 
+    assert len(data) == 2
+
+def test_post_approve_users_no_login(client, db):
+    """Test approving a user without loggin in."""
+    userSt = User(
+        first_name=f"Studentx1",
+        last_name=f"Testx1",
+        password="password123",
+        email=f"userStx@example.com",
+        github_username=f"githubuserStux2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    db.session.add(userSt)
+    db.session.commit()
+    payload = {
+        "users": [
+            {
+                "user_id": 2,
+                "approval_status": "Approved",
+                "user_type": "Student"
+            }
+        ]}
+    response = client.post(
+        "/api/users/approve_users",
+        data=json.dumps(payload)
+    )
+    assert response.status_code == 401
+
+def test_post_approve_users_StuLogin(client, db, auth_headersStu):
+    """Test approving a user with a student login."""
+    userSt = User(
+        first_name=f"Studentx1",
+        last_name=f"Testx1",
+        password="password123",
+        email=f"userStx@example.com",
+        github_username=f"githubuserStux2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    db.session.add(userSt)
+    db.session.commit()
+    payload = {
+        "users": [
+            {
+                "user_id": 2,
+                "approval_status": "Approved",
+                "user_type": "Student"
+            }
+        ]}
+    response = client.post(
+        "/api/users/approve_users",
+        data=json.dumps(payload),
+        headers={**auth_headersStu, "Content-Type": "application/json"}
+    )
+    assert response.status_code == 403
+
+    
+
+def test_post_approve_users_TAlogin(client, db, auth_headersTA):
+    """Test approving a user with a TA login."""
+    userSt = User(
+        first_name=f"Studentx1",
+        last_name=f"Testx1",
+        password="password123",
+        email=f"userStx@example.com",
+        github_username=f"githubuserStux2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    db.session.add(userSt)
+    db.session.commit()
+    payload = {
+        "users": [
+            {
+                "user_id": 2,
+                "approval_status": "Approved",
+                "user_type": "Student"
+            }
+        ]}
+    response = client.post(
+        "/api/users/approve_users",
+        data=json.dumps(payload),
+        headers={**auth_headersTA, "Content-Type": "application/json"}
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["message"] == "User approvals processed successfully"
+    assert len(data["results"]) == 1
+    assert data["results"][0]["user_id"] == userSt.user_id
+    assert data["results"][0]["message"] == "User approval processed"
+    updated_user = db.session.query(User).get(userSt.user_id)
+    assert updated_user.approval_status == "Active"
+    assert updated_user.user_type == "Student"
+
+def test_post_approve_users_1TA1Stu(client, db, auth_headersTA):
+    """Test approving 1TA and 1Student in a single request."""
+    userSt = User(
+        first_name=f"Studentx1",
+        last_name=f"Testx1",
+        password="password123",
+        email=f"userStx@example.com",
+        github_username=f"githubuserStux2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    userTA = User(
+        first_name=f"TAx1",
+        last_name=f"TAx1",
+        password="password123",
+        email=f"userTAx@example.com",
+        github_username=f"githubuserTAx2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    db.session.add_all([userSt, userTA])
+    db.session.commit()
+    payload = {
+        "users": [
+            {
+                "user_id": 2,
+                "approval_status": "Approved",
+                "user_type": "Student"
+            },
+            {
+                "user_id": 3,
+                "approval_status": "Approved",
+                "user_type": "TA"
+            }
+        ]}
+    response = client.post(
+        "/api/users/approve_users",
+        data=json.dumps(payload),
+        headers={**auth_headersTA, "Content-Type": "application/json"}
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["message"] == "User approvals processed successfully"
+    assert len(data["results"]) == 2
+    assert data["results"][0]["user_id"] == userSt.user_id
+    assert data["results"][1]["user_id"] == userTA.user_id
+    updated_user = db.session.query(User).get(userSt.user_id)
+    assert updated_user.approval_status == "Active"
+    assert updated_user.user_type == "Student"
+    updated_user2 = db.session.query(User).get(userTA.user_id)
+    assert updated_user2.approval_status == "Active"
+    assert updated_user2.user_type == "TA"
+
+def test_post_approve_users_invalid_JSON(client, db, auth_headersTA):
+    """Test approving a user with a TA login."""
+    userSt = User(
+        first_name=f"Studentx1",
+        last_name=f"Testx1",
+        password="password123",
+        email=f"userStx@example.com",
+        github_username=f"githubuserStux2",
+        discord_username=f"discorduser",
+        user_type="Student",
+        approval_status="Inactive"
+    )
+    db.session.add(userSt)
+    db.session.commit()
+    payload = [
+            {
+                "user_id": 2,
+                "approval_status": "Approved",
+                "user_type": "Student"
+            }
+        ]
+    response = client.post(
+        "/api/users/approve_users",
+        data=json.dumps(payload),
+        headers={**auth_headersTA, "Content-Type": "application/json"}
+    )
+    assert response.status_code == 422

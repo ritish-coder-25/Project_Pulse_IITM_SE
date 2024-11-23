@@ -84,8 +84,8 @@ class SubmissionFileResource(Resource):
                         "milestone": milestone.milestone_name,
                     }
                     documents.append(document)
-            print(documents)
-            return {"documents": documents}, 200
+            print("Documents:",documents)
+            return jsonify({"documents": documents}), 200 
         except Exception as e:
             return {
                 "errorCode": "error",

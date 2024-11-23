@@ -140,7 +140,7 @@ def test_create_milestone_invalid_date(client, auth_headers):
     assert data['message'] == "Validation error: {'start_date': ['Start date must be in the format YYYY-MM-DD']}"
 
 
-def test_create_milestone_unauthorized(client, create_users):
+def test_create_milestone_wrong_role(client, create_users):
     """Test creating a milestone when the user is not authorized."""
     # Create a regular user with a non-admin role (e.g., "Student")
     user = create_users[0]
@@ -153,7 +153,7 @@ def test_create_milestone_unauthorized(client, create_users):
     }
 
     payload = {
-        "milestone_name": "Unauthorized Milestone",
+        "milestone_name": "Wrong Role Milestone",
         "milestone_description": "This milestone creation attempt should fail due to user permissions.",
         "start_date": "2024-12-01",
         "end_date": "2024-12-31",
@@ -171,10 +171,11 @@ def test_create_milestone_unauthorized(client, create_users):
     data = response.get_json()
     assert data['message'] == "You do not have permission to create a milestone"
 
-'''def test_create_milestone_missing_name(client, auth_headers):
-    """Test creating a milestone with missing name field."""
+def test_create_milestones_unauthorized(client):
+    """Test unauthorized access to creating milestones"""
     payload = {
-        "milestone_description": "This milestone is missing a name.",
+        "milestone_name": "Unauthorized Milestone",
+        "milestone_description": "This milestone creation attempt should fail due to user permissions.",
         "start_date": "2024-12-01",
         "end_date": "2024-12-31",
         "max_marks": 100.0,
@@ -183,36 +184,13 @@ def test_create_milestone_unauthorized(client, create_users):
 
     response = client.post(
         "/api/milestones",
-        data=json.dumps(payload),
-        headers={**auth_headers, "Content-Type": "application/json"}
+        headers={"Content-Type": "application/json"}
     )
 
-    assert response.status_code == 400
+    assert response.status_code == 401 #Unauthorized status
     data = response.get_json()
-    assert data['message'] == "Validation error: {'milestone_name': ['Missing data for required field.']}"
-'''
+    assert data['msg'] == "Missing Authorization Header"
 
-'''def test_create_milestone_with_empty_name(client, auth_headers):
-    """Test creating a milestone with an empty name."""
-    payload = {
-        "milestone_name": "",  # Empty string for name
-        "milestone_description": "This milestone has an empty name.",
-        "start_date": "2024-12-01",
-        "end_date": "2024-12-31",
-        "max_marks": 100.0,
-        "project_id": 1
-    }
-
-    response = client.post(
-        "/api/milestones",
-        data=json.dumps(payload),
-        headers={**auth_headers, "Content-Type": "application/json"}
-    )
-
-    assert response.status_code == 400
-    data = response.get_json()
-    assert data['message'] == "Validation error: {'milestone_name': ['Shorter than minimum length 1.']}"
-'''
 
 def test_get_milestones(client, auth_headers, create_milestone):
     """Test retrieving all milestones."""
@@ -225,6 +203,17 @@ def test_get_milestones(client, auth_headers, create_milestone):
     data = response.get_json()
     assert isinstance(data['milestones'], list)  # Check that the response is a list of milestones
     assert len(data['milestones']) > 0  # Check that there is at least one milestone
+
+def test_get_milestones_unauthorized(client):
+    """Test unauthorized access to get milestones."""
+    response = client.get(
+        "/api/milestones",
+        headers={"Content-Type": "application/json"}
+    )
+
+    assert response.status_code == 401  # Unauthorized status
+    data = response.get_json()
+    assert data['msg'] == "Missing Authorization Header"
 
 
 def test_update_milestone(client, auth_headers, create_milestone, create_users):
@@ -255,14 +244,105 @@ def test_update_milestone(client, auth_headers, create_milestone, create_users):
     data = response.get_json()
     assert data['message'] == 'Milestone updated successfully'
 
+def test_update_milestone_unauthorized(client, create_milestone):
+    """Test unauthorized user trying to update a milestone."""
+    payload = {
+        "milestone_name": "Unauthorized Updated Milestone Name",
+        "milestone_description": "Unauthorized Updated milestone description.",
+        "start_date": "2025-01-01",
+        "end_date": "2025-02-24",
+        "max_marks": 60.0,
+    }
+    response = client.put(
+        f"/api/milestones/{create_milestone.milestone_id}",
+        data=json.dumps(payload),
+        headers={"Content-Type": "application/json"}
+    )
 
-def test_delete_milestone(client, auth_headers, create_milestone):
+    assert response.status_code == 401  # Unauthorized status
+    data = response.get_json()
+    assert data['msg'] == "Missing Authorization Header"
+
+def test_update_milestone_wrong_role(client, create_users, create_milestone):
+    """Test creating a milestone when the user is not authorized."""
+    # Create a regular user with a non-admin role (e.g., "Student")
+    user = create_users[0]
+    user.user_type = "Student"  # Ensure user has no permission
+    db.session.commit()
+    
+    access_token = create_access_token(identity=user.user_id)
+    newHeaders = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    payload = {
+        "milestone_name": "Wrong Role Updating Milestone",
+        "milestone_description": "This milestone update attempt should fail due to user permissions.",
+        "start_date": "2024-12-01",
+        "end_date": "2024-12-31",
+        "max_marks": 100.0,
+    }
+
+    response = client.put(
+        f"/api/milestones/{create_milestone.milestone_id}",
+        data=json.dumps(payload),
+        headers={**newHeaders, "Content-Type": "application/json"}
+    )
+
+    assert response.status_code == 403
+    data = response.get_json()
+    assert data['message'] == "You do not have permission to update milestone"
+
+
+def test_delete_milestone(client, create_milestone, create_users):
     """Test deleting a milestone."""
+    user = create_users[0]
+    user.user_type = "TA"
+    db.session.commit()
+
+    access_token = create_access_token(identity=user.user_id)
+    newHeaders = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
     response = client.delete(
         f"/api/milestones/{create_milestone.milestone_id}",
-        headers={**auth_headers, "Content-Type": "application/json"}
+        headers={**newHeaders, "Content-Type": "application/json"}
     )
 
     assert response.status_code == 200
     data = response.get_json()
     assert data['message'] == 'Milestone deleted successfully'
+
+def test_delete_milestone_unauthorized(client, create_milestone):
+    """Test unauthorized user trying to delete a milestone."""
+    response = client.delete(
+        f"/api/milestones/{create_milestone.milestone_id}",
+        headers={"Content-Type": "application/json"}
+    )
+
+    assert response.status_code == 401  # Unauthorized status
+    data = response.get_json()
+    assert data['msg'] == "Missing Authorization Header"
+
+def test_delete_milestone_wrong_role(client, create_users, create_milestone):
+    """Test wrong role trying to delete a milestone"""
+    user = create_users[0]
+    user.user_type = "Student"
+    db.session.commit()
+
+    access_token = create_access_token(identity=user.user_id)
+    newHeaders = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    response = client.delete(
+        f"/api/milestones/{create_milestone.milestone_id}",
+        headers={**newHeaders, "Content-Type": "application/json"}
+    )
+
+    assert response.status_code == 403
+    data = response.get_json()
+    assert data['message'] == "You do not have permission to delete milestones"
+
+

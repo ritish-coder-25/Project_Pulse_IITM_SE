@@ -13,7 +13,7 @@ from datetime import datetime
 from helpers.ErrorCommonHelpers import createFatalError
 from flask import request
 from api_parsers.milestone_definition_parser import MilestoneSchema, MilestoneUpdateSchema
-
+from marshmallow import ValidationError
 
 api_bp_milestones = Blueprint(
     "Manage Milestones APIs", "Manage Milestones", description="Operations for managing milestones"
@@ -35,12 +35,19 @@ class MilestonesResource(Resource):
 
             schema = MilestoneSchema()
             data = schema.load(request.get_json())  # Validate the incoming data
-
+            
+            #Parse dates with proper validation
+            try:
+                start_date = datetime.strptime(data['start_date'], "%Y-%m-%d")
+                end_date = datetime.strptime(data['end_date'], "%Y-%m-%d")
+            except ValueError:
+                return {"message": "Invalid date format. Use YYYY-MM-DD"}, 400
+            
             new_milestone = Milestone(
                 milestone_name=data["milestone_name"],
                 milestone_description=data["milestone_description"],
-                start_date=datetime.strptime(data["start_date"], "%Y-%m-%d"),
-                end_date=datetime.strptime(data["end_date"], "%Y-%m-%d"),
+                start_date=start_date,
+                end_date=end_date,
                 max_marks=data["max_marks"],
                 project_id=data['project_id']
             )
@@ -52,6 +59,9 @@ class MilestonesResource(Resource):
                 "message": "Milestone created successfully",
                 "milestone_id": new_milestone.milestone_id,
             }, 201
+        
+        except ValidationError as e:
+            return {"message": f"Validation error: {e.messages}"}, 400
         except Exception as e:
             return createFatalError(
                 "milestone_creation_error",

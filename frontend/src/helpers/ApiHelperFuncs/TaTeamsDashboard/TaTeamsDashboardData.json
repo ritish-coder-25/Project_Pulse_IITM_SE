@@ -1,0 +1,105 @@
+{
+    "milestones": [
+        {
+            "end_date": "Mon, 21 Oct 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 1",
+            "milestone_id": 1,
+            "milestone_name": "Milestone 1",
+            "project_id": 1,
+            "start_date": "Wed, 09 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 28 Oct 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 2",
+            "milestone_id": 2,
+            "milestone_name": "Milestone 2",
+            "project_id": 1,
+            "start_date": "Wed, 16 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 04 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 3",
+            "milestone_id": 3,
+            "milestone_name": "Milestone 3",
+            "project_id": 1,
+            "start_date": "Wed, 23 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 11 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 4",
+            "milestone_id": 4,
+            "milestone_name": "Milestone 4",
+            "project_id": 1,
+            "start_date": "Wed, 30 Oct 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 18 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 5",
+            "milestone_id": 5,
+            "milestone_name": "Milestone 5",
+            "project_id": 1,
+            "start_date": "Wed, 06 Nov 2024 00:00:00 GMT"
+        },
+        {
+            "end_date": "Mon, 25 Nov 2024 00:00:00 GMT",
+            "max_marks": 100.0,
+            "milestone_description": "Milestone 6",
+            "milestone_id": 6,
+            "milestone_name": "Milestone 6",
+            "project_id": 1,
+            "start_date": "Wed, 13 Nov 2024 00:00:00 GMT"
+        }
+    ],
+    "teams": [
+        {
+            "commits": 55,
+            "milestones_completed": 3,
+            "milestones_missed": 0,
+            "score": 93.0,
+            "team_id": 1,
+            "team_name": "Team A",
+            "total_score": 300.0
+        },
+        {
+            "commits": 40,
+            "milestones_completed": 0,
+            "milestones_missed": 2,
+            "score": 0,
+            "team_id": 2,
+            "team_name": "Team B",
+            "total_score": 200.0
+        },
+        {
+            "commits": 37,
+            "milestones_completed": 3,
+            "milestones_missed": 0,
+            "score": 217.0,
+            "team_id": 3,
+            "team_name": "Team C",
+            "total_score": 300.0
+        },
+        {
+            "commits": 41,
+            "milestones_completed": 1,
+            "milestones_missed": 2,
+            "score": 56.0,
+            "team_id": 4,
+            "team_name": "Team D",
+            "total_score": 300.0
+        },
+        {
+            "commits": 19,
+            "milestones_completed": 2,
+            "milestones_missed": 1,
+            "score": 66.0,
+            "team_id": 5,
+            "team_name": "Team E",
+            "total_score": 300.0
+        }
+    ]
+}

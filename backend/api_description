@@ -1,0 +1,35 @@
+# To be included in openapi.yaml line 603
+
+  description: | 
+    ### The Project Pulse is an online server designed using the OpenAPI 3.1.0 specification for project management, collaboration, and student activity tracking. You can access the application at [http://localhost:5000/]. 
+    ## This API enables users to: 
+    ### 1. Manage user registration, login, authentication, and logout. 
+    ### 2. Create and manage teams, projects, milestones, and tasks. 
+    ### 3. Track project progress, milestone submissions, and commits. 
+    ### 4. Monitor and analyze student progress through dashboards designed for TAs. 
+    ### 5. Conduct document reviews and evaluations, providing feedback using GenAI. 
+    ### 6. View various team activities, commits, and overall project progress. 
+    ## **Additional Resources:** 
+      ### 1. [User Stories/Requirements](https://docs.google.com/document/d/1EXVZk19C1FH9fh4aJusvG6OzxyJQivaB/edit?usp=drive_link&ouid=110654162658683764096&rtpof=true&sd=true) 
+      ### 2. [Story Board and Wireframes](https://docs.google.com/presentation/d/14GXzLAvE5igBfSZ6rJGkM1-JMnKAW7du/edit?usp=drive_link&ouid=110654162658683764096&rtpof=true&sd=true) 
+      ### 3. [Project Documentation](https://drive.google.com/file/d/1DqB--EJyU85XBMwgtFT_OWoUNk4oaWua/view?usp=drive_link) 
+servers: 
+  - url: http://127.0.0.1:5000 
+    variables: {} 
+tags:
+  - name: User
+    description: "User Management and Administration"
+  - name: Teams
+    description: "Management of project teams"
+  - name: Projects
+    description: "Creation and management of projects"
+  - name: Milestones
+    description: "Creation and Tracking of project milestones"
+  - name: Tasks
+    description: "Managing individual tasks within a milestone"
+  - name: Progress Tracking
+    description: "Tracking Milestone progress, submissions, and commits"
+  - name: Performance Monitoring
+    description: "Monitoring and analyzing team and project performance"
+  - name: Evaluation and Feedback
+    description: "Performing evaluation of each milestone and providing score and feedback using GenAI"

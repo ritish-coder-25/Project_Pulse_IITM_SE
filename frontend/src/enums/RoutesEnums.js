@@ -8,12 +8,12 @@ export const RoutesEnums = {
     student: {
       root: {
         name: 'student-dashboard-root',
-        url: '/dashboard/student',
+        url: `/dashboard/student/home/`,
         relUrl: 'student',
       },
       home: {
         name: 'student-dashboard-home',
-        url: '/dashboard/student/home',
+        url: '/dashboard/student/home/:u_id',
         relUrl: 'home',
       },
       team: {

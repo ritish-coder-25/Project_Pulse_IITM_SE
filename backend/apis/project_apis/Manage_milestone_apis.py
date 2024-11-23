@@ -132,7 +132,7 @@ class MilestoneResource(Resource):
             )
 
 
-    #@jwt_required()
+    @jwt_required()
     @api_bp_milestones.response(200, MilestoneDeletionResponse)
     def delete(self, milestone_id):
         """Delete a milestone"""

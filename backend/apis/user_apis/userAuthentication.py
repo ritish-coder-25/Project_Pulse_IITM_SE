@@ -23,7 +23,7 @@ api_bp_auth = Blueprint(
     description="Operations for User Registration, Approval and Login",
 )
 
-
+bcrypt = Bcrypt()
 @api_bp_auth.route("/api/auth/register", methods=["POST"])
 class RegisterResource(Resource):
     # @jwt_required()
@@ -92,7 +92,7 @@ class LoginResource(Resource):
         """API for user login"""
         data = request.get_json()
         user = User.query.filter_by(email=data["email"]).first()
-        bcrypt = Bcrypt()
+        
         if user and bcrypt.check_password_hash(user.password, data["password"]):
             expires = timedelta(days=90)
             access_token = create_access_token(
@@ -101,7 +101,7 @@ class LoginResource(Resource):
             jsonified = jsonify({"access_token": access_token, "user": user.to_dict()})
             return jsonified, 200
 
-        return jsonify({"message": "Invalid credentials"}), 401
+        return jsonify({"errorCode": "invalid_login","message": "Invalid credentials"}), 401
 
 
 @api_bp_auth.route("/api/users/pendusers")

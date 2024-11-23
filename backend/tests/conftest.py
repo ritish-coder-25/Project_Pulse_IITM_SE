@@ -2,6 +2,7 @@ import pytest
 from flask_jwt_extended import create_access_token
 import sys
 import os
+from datetime import datetime
 # Add the project root to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -92,3 +93,47 @@ def auth_headers(app):
 #     return {
 #         'Authorization': f'Bearer {access_token}'
 #     }
+
+@pytest.fixture
+def create_student_user(db, approval_status="Active"):
+    """Create multiple sample users for testing."""
+    curr_d_time = datetime.now()
+    password = "password123"
+    user = User(
+            first_name=f"User-student{curr_d_time}",
+            last_name=f"Test{curr_d_time}",
+            password=password,
+            email=f"user{curr_d_time}@example.com",
+            github_username=f"githubuser{curr_d_time}",
+            discord_username=f"discorduser{curr_d_time}",
+            user_type="Student",
+            approval_status=approval_status
+        )
+    db.session.add(user)
+    db.session.commit()
+    return user, password
+
+@pytest.fixture
+def create_ta_user(db, approval_status="Active"):
+    """Create multiple sample users for testing."""
+    curr_d_time = datetime.now()
+    password = "password123"
+    user = User(
+            first_name=f"User-ta{curr_d_time}",
+            last_name=f"Test{curr_d_time}",
+            password=password,
+            email=f"user-ta{curr_d_time}@example.com",
+            github_username=f"githubuser-ta{curr_d_time}",
+            discord_username=f"discorduser-ta{curr_d_time}",
+            user_type="TA",
+            approval_status=approval_status
+        )
+    db.session.add(user)
+    db.session.commit()
+    return user, password
+
+def get_user_token_header(user_id): 
+    access_token = create_access_token(identity=user_id)  # Replace with appropriate user ID
+    return {
+        'Authorization': f'Bearer {access_token}'
+    }

@@ -2,6 +2,7 @@ import json
 import pytest
 from main import app, db, User, Team, Project
 from flask_jwt_extended import create_access_token
+from db_test_helpers import get_user_token_header
 
 pytest.team_apis_team_id = 1
 @pytest.fixture
@@ -81,7 +82,7 @@ def test_create_team(client, auth_headers, create_users):
 def test_create_team_with_insufficient_users(client, auth_headers, create_users):
     """Test creating a team with fewer than 5 users should fail."""
     # Create only 4 users instead of 5
-    #"emails": [user.email for user in create_users]
+
     users_list = [user.email for user in create_users]
     users = users_list[:3]
 
@@ -106,9 +107,7 @@ def test_create_team_with_insufficient_users(client, auth_headers, create_users)
 
 
 def test_create_team_with_invalid_users(client, auth_headers, create_users):
-    """Test creating a team with fewer than 5 users should fail."""
-    # Create only 4 users instead of 5
-    #"emails": [user.email for user in create_users]
+    """Test creating a team with invalid users should fail."""
     users_list = [user.email for user in create_users]
     users = users_list[:5]
 
@@ -133,7 +132,7 @@ def test_create_team_with_invalid_users(client, auth_headers, create_users):
     assert data['errorCode'] == "create_team_and_members_user_not_found"
 
 def test_get_team(client, auth_headers, create_team, create_users):
-    """Test retrieving a team."""
+    """Test retrieving a team with team_id"""
     team = create_team
     response = client.get(
         "/api/teams/" + str(team.team_id),
@@ -149,8 +148,24 @@ def test_get_team(client, auth_headers, create_team, create_users):
     assert len(data['team']['members']) >= 5  # Ensure all members are listed
 
 
+def test_curr_users_team(client, auth_headers, create_team, create_users):
+    """Test retrieving the current users team."""
+    response = client.get(
+        "/api/teams",
+        headers=auth_headers
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'team' in data
+    assert data['team']['team_name'] == "Beta Team"
+    assert data['team']['github_repo_url'] == "https://github.com/example/beta"
+    #print("data", data['team']['members'])
+    assert len(data['team']['members']) >= 5  # Ensure all members are listed
+
+
 def test_get_team_no_team_exists(client, auth_headers):
-    """Test retrieving a team."""
+    """Test retrieving a team which does not exist."""
     response = client.get(
         "/api/teams/" + str(199),
         headers=auth_headers
@@ -193,7 +208,7 @@ def test_get_team_no_team(client, auth_headers, db):
 
 
 def test_put_team(client, create_team, auth_headers, db):
-    """Test retrieving a team when the user is not part of any team."""
+    """Test adding users to a team after it has been created."""
     # Create a user without a team
     user = User(
             first_name=f"putl",

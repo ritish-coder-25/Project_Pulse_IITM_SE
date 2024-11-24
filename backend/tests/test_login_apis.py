@@ -36,7 +36,7 @@ def test_login_ta_success(mock_bcrypt,client, create_ta_user):
 
 
 @patch('apis.user_apis.userAuthentication.bcrypt', autospec=True)
-def test_login_wrong_password_success(mock_bcrypt,client, create_ta_user):
+def test_login_wrong_password(mock_bcrypt,client, create_ta_user):
     mock_bcrypt.check_password_hash.return_value = False
     user, password = create_ta_user
     response = client.post('/api/auth/login', data=json.dumps({

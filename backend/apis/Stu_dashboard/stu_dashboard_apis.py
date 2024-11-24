@@ -1,10 +1,11 @@
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, User, Team, MilestoneStatus, Commit, File, Milestone, Milestone
+from models import db, User, Team, MilestoneStatus, Commit, File, Milestone, Milestone, Project
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import NotFound
+from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import os
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
@@ -17,7 +18,8 @@ api_bp_stu = Blueprint("Student Dashboard APIs", "Student Dashboard",
                        description="Display of Student dashboard")
 
 # Constants
-UPLOAD_FOLDER = 'uploads'  # Adjust this path as per your application's upload directory
+#UPLOAD_FOLDER = 'uploads'  # Adjust this path as per your application's upload directory
+#UPLOAD_FOLDER = current_app.config.get('UPLOAD_FOLDER', 'uploads')  # Adjust this path as per your application's upload directory
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'zip'}
 
 
@@ -96,36 +98,56 @@ class SubmitProject(Resource):
         """Handle project file submissions, save file details and optionally mark the milestone as complete for a student. """
         try:
             # Ensure required data is present
-            if 'file' not in request.files or 'student_id' not in request.form or 'project_id' not in request.form:
+            if 'file' not in request.files or 'milestone_id' not in request.form or 'project_id' not in request.form:
                 return createError("submit_project_missing_data", "Missing required data", 400)
 
+            current_user_id = get_jwt_identity()
+            current_user = User.query.get(current_user_id)
+            if current_user.team_id is None:
+                return createError("submit_project_no_team", "User is not in a team", 400)
+            
             file = request.files['file']
-            student_id = request.form['student_id']
             project_id = request.form['project_id']
+            milestone_id = request.form['milestone_id']
+            team_id = current_user.team_id #request.form['team_id']
+            submission_id = request.form.get('submission_id', None) 
             mark_as_complete = request.form.get(
                 'mark_as_complete', 'false').lower() == 'true'
+            project = Project.query.get(project_id)
+            if(project is None):
+                return createError("project_not_found", "Project not found", 400)
 
+            milestone = Milestone.query.get(milestone_id)
+            if(milestone is None):
+                return createError("milestone_not_found", "Milestone not found", 400)
+            
+
+            UPLOAD_FOLDER = current_app.config.get('UPLOAD_FOLDER', 'uploads')
             # Check file validity
             if file and allowed_file(file.filename):
                 # Save the file
                 filename = secure_filename(
-                    f"{student_id}_{project_id}_{datetime.now().isoformat()}_{file.filename}")
+                    f"{current_user_id}_{team_id}_{project_id}_{milestone_id}_{datetime.now().isoformat()}_{file.filename}")
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
 
                 # Save file details in the database
                 new_file = File(file_name=filepath,
-                                student_id=student_id, project_id=project_id)
+                                team_id=team_id, 
+                                milestone_id=milestone_id,
+                                user_id=current_user_id, 
+                                project_id=project_id,
+                                submission_id=submission_id)
                 db.session.add(new_file)
 
                 # Update MilestoneStatus if marked as complete
                 milestone_status = MilestoneStatus.query.filter_by(
-                    student_id=student_id, project_id=project_id).first()
+                    team_id=team_id, milestone_id=milestone_id).first()
                 if milestone_status:
                     if mark_as_complete:
                         milestone_status.submission_status = 'completed'
-                else:
-                    return createError("milestone_status_not_found", "Milestone status not found", 404)
+                # else:
+                #     return createError("milestone_status_not_found", "Milestone status not found", 404)
 
                 db.session.commit()
                 return jsonify({'message': 'Project submitted successfully', 'file_path': filepath}), 201
@@ -145,21 +167,28 @@ class MilestoneDeadlines(Resource):
     def get(self):
         """Retrieve and return a list of all milestones with their names, descriptions, and deadlines."""
         try:
-            # Query all milestones and get their name, description, and end date
+            # Query all milestones
             milestones = Milestone.query.all()
+            print( milestones)
+
+            if not milestones:
+                return jsonify([]), 200 #if no milestone is available, an empty list is returned
 
             # Format the response data
             response_data = [
                 {
                     "milestone_name": milestone.milestone_name,
-                    "milestone_description": milestone.description,
-                    "end_date": milestone.end_date.strftime('%d %B')
+                    "milestone_description": milestone.milestone_description,
+                    "end_date": milestone.end_date.strftime('%d %B') if milestone.end_date else None
                 }
                 for milestone in milestones
             ]
 
             return jsonify(response_data), 200
 
+        except SQLAlchemyError as e:
+            print(f"Database error: {e}")
+            return createFatalError("database_error", "Database query failed", str(e)), 500
         except Exception as e:
-            print(f"Error fetching milestones: {e}")
-            return createFatalError("milestone_fetch_error", "Unable to fetch milestone deadlines", str(e))
+            print(f"Unexpected error: {e}")
+            return createFatalError("unexpected_error", "An unexpected error occurred", str(e)), 500

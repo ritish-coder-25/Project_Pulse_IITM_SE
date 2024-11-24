@@ -2,7 +2,9 @@ import json
 import pytest
 from main import app, db, User, Team, Project
 from flask_jwt_extended import create_access_token
+from db_test_helpers import get_user_token_header
 
+pytest.team_apis_team_id = 1
 @pytest.fixture
 def create_users(db):
     """Create multiple sample users for testing."""
@@ -30,8 +32,8 @@ def create_users(db):
 @pytest.fixture
 def create_team(db, create_users):
     """Create a sample team for testing."""
-    team = Team.query.get_or_404(1)
-    print("got team ", team)
+    team_id = pytest.team_apis_team_id
+    team = Team.query.get(team_id)
     return team
 
 # @pytest.fixture
@@ -63,6 +65,7 @@ def test_create_team(client, auth_headers, create_users):
     data = response.get_json()
     assert data['message'] == 'Team created and members added successfully'
     assert 'team_id' in data
+    pytest.team_apis_team_id = data['team_id']
 
     # Verify the team was created in the database
     team = Team.query.get(data['team_id'])
@@ -79,7 +82,7 @@ def test_create_team(client, auth_headers, create_users):
 def test_create_team_with_insufficient_users(client, auth_headers, create_users):
     """Test creating a team with fewer than 5 users should fail."""
     # Create only 4 users instead of 5
-    #"emails": [user.email for user in create_users]
+
     users_list = [user.email for user in create_users]
     users = users_list[:3]
 
@@ -104,9 +107,7 @@ def test_create_team_with_insufficient_users(client, auth_headers, create_users)
 
 
 def test_create_team_with_invalid_users(client, auth_headers, create_users):
-    """Test creating a team with fewer than 5 users should fail."""
-    # Create only 4 users instead of 5
-    #"emails": [user.email for user in create_users]
+    """Test creating a team with invalid users should fail."""
     users_list = [user.email for user in create_users]
     users = users_list[:5]
 
@@ -131,9 +132,10 @@ def test_create_team_with_invalid_users(client, auth_headers, create_users):
     assert data['errorCode'] == "create_team_and_members_user_not_found"
 
 def test_get_team(client, auth_headers, create_team, create_users):
-    """Test retrieving a team."""
+    """Test retrieving a team with team_id"""
+    team = create_team
     response = client.get(
-        "/api/teams/" + str(create_team.team_id),
+        "/api/teams/" + str(team.team_id),
         headers=auth_headers
     )
 
@@ -146,8 +148,24 @@ def test_get_team(client, auth_headers, create_team, create_users):
     assert len(data['team']['members']) >= 5  # Ensure all members are listed
 
 
-def test_get_team_no_team_exists(client, auth_headers, create_team, create_users):
-    """Test retrieving a team."""
+def test_curr_users_team(client, auth_headers, create_team, create_users):
+    """Test retrieving the current users team."""
+    response = client.get(
+        "/api/teams",
+        headers=auth_headers
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'team' in data
+    assert data['team']['team_name'] == "Beta Team"
+    assert data['team']['github_repo_url'] == "https://github.com/example/beta"
+    #print("data", data['team']['members'])
+    assert len(data['team']['members']) >= 5  # Ensure all members are listed
+
+
+def test_get_team_no_team_exists(client, auth_headers):
+    """Test retrieving a team which does not exist."""
     response = client.get(
         "/api/teams/" + str(199),
         headers=auth_headers
@@ -189,8 +207,8 @@ def test_get_team_no_team(client, auth_headers, db):
     assert data['errorCode'] == "team_get_curr_no_team"
 
 
-def test_put_team(client, auth_headers, db, create_team):
-    """Test retrieving a team when the user is not part of any team."""
+def test_put_team(client, create_team, auth_headers, db):
+    """Test adding users to a team after it has been created."""
     # Create a user without a team
     user = User(
             first_name=f"putl",
@@ -204,14 +222,14 @@ def test_put_team(client, auth_headers, db, create_team):
     )
     db.session.add(user)
     db.session.commit()
-
+    team = create_team
     payload = {
-        "team_id": create_team.team_id,
+        "team_id": team.team_id,
         "emails": [user.email]
     }
 
     response = client.put(
-        "/api/teams/" + str(create_team.team_id),
+        "/api/teams/" + str(team.team_id),
         data=json.dumps(payload),
         headers={**auth_headers, "Content-Type": "application/json"}
     )
@@ -224,7 +242,7 @@ def test_put_team(client, auth_headers, db, create_team):
             foundEmail = True
             break
     assert foundEmail
-    assert data['team']['team_name'] == create_team.team_name
+    assert data['team']['team_name'] == team.team_name
 
 def test_put_team_not_found(client, auth_headers, db, create_team):
     payload = {

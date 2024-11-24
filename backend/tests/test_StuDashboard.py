@@ -146,10 +146,6 @@ def create_commits(db, create_team, create_users):
     db.session.commit()
     return commits
 
-
-import pytest
-from models import User, Team, Project, MilestoneStatus, Commit
-
 def test_stu_dashboard_success(client, auth_headers, create_users, create_team):
     """Test fetching student dashboard with valid data."""
     user = create_users[0]

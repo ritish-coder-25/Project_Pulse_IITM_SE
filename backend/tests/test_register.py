@@ -6,10 +6,6 @@ from unittest.mock import patch
 from github_mock import mock_github_user_exists
 
 
-
-
-
-#@patch('main.github_user_exists', return_value=True)
 def test_register_success(client, mock_github_user_exists):
     mock_github_user_exists.return_value = True
     response = client.post('/api/auth/register', data=json.dumps({
@@ -22,7 +18,6 @@ def test_register_success(client, mock_github_user_exists):
     }), content_type='application/json')
     assert response.status_code == 201
     assert response.json['message'] == 'User registered successfully'
-
 
 def test_register_missing_field(client):
         response = client.post('/api/auth/register', data=json.dumps({
@@ -65,6 +60,8 @@ def test_register_github_username_already_registered(client):
     }), content_type='application/json')
     assert response.status_code == 400
     assert response.json['message'] == 'GitHub username already registered'
+
+
 def test_register_discord_username_already_registered(client):
     user = User(first_name='Jane', last_name='Doe', password='password123', email='jane.doe5@example.com', github_username='janedoe3', discord_username='janedoe#1234')
     db.session.add(user)
@@ -79,6 +76,8 @@ def test_register_discord_username_already_registered(client):
     }), content_type='application/json')
     assert response.status_code == 400
     assert response.json['message'] == 'Discord username already registered'
+
+
 def test_register_password_too_short(client):
     response = client.post('/api/auth/register', data=json.dumps({
         'first_name': 'John',
@@ -90,7 +89,8 @@ def test_register_password_too_short(client):
     }), content_type='application/json')
     assert response.status_code == 400
     assert response.json['message'] == 'Password must be at least 8 characters long'
-#@patch('main.github_user_exists', return_value=False)
+
+
 def test_register_github_user_does_not_exist(client, mock_github_user_exists):
     mock_github_user_exists.return_value = True
     response = client.post('/api/auth/register', data=json.dumps({

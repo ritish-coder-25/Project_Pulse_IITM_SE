@@ -29,9 +29,10 @@ from flask_smorest import Api, Blueprint, abort
 app = Flask(__name__)
 # CORS(app)
 # CORS(app)
-app.config["API_TITLE"] = "Project Pulse API" 
-app.config["API_VERSION"] = "v1" 
-app.config["OPENAPI_VERSION"] = "3.1.0" 
+app.config["API_TITLE"] = "Project Pulse API"
+app.config["API_VERSION"] = "v1"
+app.config["OPENAPI_VERSION"] = "3.1.0"
+app.config["UPLOAD_FOLDER"] = "uploads"
 api = Api(app)
 CORS(app)
 app.config.from_object(Config)

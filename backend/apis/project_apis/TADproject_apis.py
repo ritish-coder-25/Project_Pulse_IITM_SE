@@ -39,7 +39,7 @@ class CreateProjectResource(Resource):
             current_user = User.query.get_or_404(current_user_id)
 
             # Check if the user has permission to create a project
-            allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+            allowed_roles = ["TA", "Admin", "Instructor", "Developer"]
             if current_user.user_type not in allowed_roles:
                 return {"message": "You do not have permission to create a project"}, 403
 

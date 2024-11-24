@@ -517,6 +517,8 @@ def test_get_pendusers_2pending_users(client, auth_headersTA):
     assert data[0]['id'] == 2 
     assert len(data) == 2
 
+## TESTS FOR TAHOMEPAGE API: /api/users/approve_users
+
 def test_post_approve_users_no_login(client, db):
     """Test approving a user without loggin in."""
     userSt = User(
@@ -669,7 +671,7 @@ def test_post_approve_users_1TA1Stu(client, db, auth_headersTA):
     assert updated_user2.user_type == "TA"
 
 def test_post_approve_users_invalid_JSON(client, db, auth_headersTA):
-    """Test approving a user with a TA login."""
+    """Test approving a user with an invalid JSON format."""
     userSt = User(
         first_name=f"Studentx1",
         last_name=f"Testx1",

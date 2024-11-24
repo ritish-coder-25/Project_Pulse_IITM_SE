@@ -56,8 +56,7 @@ class MilestonesResource(Resource):
             db.session.commit()
 
             return {
-                "message": "Milestone created successfully",
-                "milestone_id": new_milestone.milestone_id,
+                "message": "Milestone created successfully"
             }, 201
         
         except ValidationError as e:

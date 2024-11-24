@@ -689,7 +689,7 @@ def test_post_approve_users_invalid_JSON(client, db, auth_headersTA):
                 "user_id": 2,
                 "approval_status": "Approved",
                 "user_type": "Student"
-            }
+            } 
         ]
     response = client.post(
         "/api/users/approve_users",

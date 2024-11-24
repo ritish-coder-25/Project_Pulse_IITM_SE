@@ -15,6 +15,7 @@ from api_outputs.ta_dashboard_api.ta_dashboard_api_output import TADashboardTeam
 from helpers.ErrorCommonHelpers import createError, createFatalError
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
 from constants import TA_ALLOWED_ROLES, ACTIVE
+import traceback
 
 api_bp_ta_dashboard = Blueprint("Fetch TADashboard APIs", "Fetch TADashboard", description="Operations to fetch TA Dashboard")
 
@@ -56,7 +57,8 @@ class TATeamDashboard(MethodView):
             dashboard_teams = {}
 
             for team in teams:
-                dashboard_teams[team.team_id] = { "team_id": team.team_id, "team_name": team.team_name, "commits": commit_counts[team.team_id],
+                comm_counts = commit_counts.get(team.team_id, 0)
+                dashboard_teams[team.team_id] = { "team_id": team.team_id, "team_name": team.team_name, "commits": comm_counts,
                             "score": 0, "total_score": 0, "milestones_completed": 0, "milestones_missed": 0 }
 
             for status in milestone_statuses:
@@ -73,6 +75,7 @@ class TATeamDashboard(MethodView):
             return jsonify({"teams": [dashboard_teams[team] for team in dashboard_teams], "milestones": [milestone.to_dict() for milestone in milestones]})
         
         except Exception as e:
+            print(traceback.format_exc())
             return createError("ta_dashbaord_teams_server_error", "Error while fetching dashboard data", 500)
 
 

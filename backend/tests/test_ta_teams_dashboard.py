@@ -100,12 +100,12 @@ def create_users(db):
             users.append(existing_user)
             continue
         user = User(
-            first_name=f"User{i}",
-            last_name=f"Test{i}",
+            first_name=f"User-tdb-{i}",
+            last_name=f"Test-tdb-{i}",
             password="password123",
-            email=f"user{i}@example.com",
-            github_username=f"githubuser{i}",
-            discord_username=f"discorduser{i}",
+            email=f"user-tdb-{i}@example.com",
+            github_username=f"githubuser-tdb-{i}",
+            discord_username=f"discorduser-tdb-{i}",
             user_type="Student",
             approval_status="Active"
         )
@@ -114,10 +114,13 @@ def create_users(db):
     db.session.commit()
     return users
 
+
+pytest.ta_teams_db_team_id = 4
+
 @pytest.fixture
 def create_team(db, create_users):
     """Create a sample team for testing."""
-    team = Team.query.get(1)
+    team = Team.query.get(pytest.ta_teams_db_team_id)
     if not team:
         team = Team(
             team_name="Sample Team",
@@ -125,6 +128,7 @@ def create_team(db, create_users):
         )
         db.session.add(team)
         db.session.commit()
+        pytest.ta_teams_db_team_id = team.team_id
     for user in create_users:
         if user.team_id is None:  
             user.team_id = team.team_id
@@ -230,15 +234,14 @@ def create_commits(db, create_team, create_users):
         db.session.add(commit)
         commits.append(commit)
     db.session.commit()
-    return commits
+    return commits, team
     
 
 # Define test cases for teams
 
 def test_ta_teams_dashboard_ta_role(client, ta_auth_headers, create_commits):
-
+    commits, team = create_commits
     response = client.get(f"/api/ta-teams", headers=ta_auth_headers)
-
     assert response.status_code == 200
 
     data = response.get_json()
@@ -274,8 +277,8 @@ def test_ta_teams_dashboard_unauthorized_access(client):
 
 def test_ta_team_dashboard_ta_role(client, ta_auth_headers, create_commits):
 
-    team = Team.query.first()
-
+    #team = Team.query.first()
+    commits, team = create_commits
     response = client.get(f"/api/ta-teams/{team.team_id}", headers=ta_auth_headers)
 
     assert response.status_code == 200

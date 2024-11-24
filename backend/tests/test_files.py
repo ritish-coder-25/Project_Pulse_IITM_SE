@@ -164,6 +164,45 @@ def test_update_milestone_review(client, auth_headers, setup_test_data):
     data = json.loads(response.data)
     assert data["message"] == "Milestone review updated successfully."
 
+def test_delete_milestone_review(client, auth_headers, setup_test_data):
+    """Test deleting an existing milestone review"""
+    team = setup_test_data["team"]
+    milestone = setup_test_data["milestone"]
+    
+    # Create a milestone status to delete
+    milestone_status = MilestoneStatus(
+        team_id=team.team_id,
+        milestone_id=milestone.milestone_id,
+        milestone_status="Evaluated",
+        eval_score=80,
+        eval_feedback="Initial feedback"
+    )
+    session = setup_test_data["team"].query.session
+    session.add(milestone_status)
+    session.commit()
+
+    response = client.delete(f"/api/milestone-review/{milestone_status.milestonestatus_id}", headers=auth_headers)
+    
+    assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data["message"] == "Milestone review deleted successfully."
+
+def test_delete_nonexistent_milestone_review(client, auth_headers):
+    """Test deleting a non-existent milestone review"""
+    response = client.delete("/api/milestone-review/99999", headers=auth_headers)
+    assert response.status_code == 404
+    data = json.loads(response.data)
+    assert data["errorCode"] == "not_found"
+    assert data["message"] == "Milestone review not found."
+
+def test_delete_milestone_review_invalid_id(client, auth_headers):
+    """Test deleting a milestone review with an invalid ID"""
+    response = client.delete("/api/milestone-review/invalid_id", headers=auth_headers)
+    assert response.status_code == 404
+    data = json.loads(response.data)
+    assert data["errorCode"] == "not_found"
+    assert data["message"] == "Milestone review not found."
+
 def teardown_module(module):
     """Clean up test files after tests"""
     if os.path.exists("file_submissions/test_file.txt"):

@@ -32,26 +32,34 @@ api_bp_GenAI = Blueprint(
 )
 
 
-@api_bp_GenAI.route("/api/commits-fetch/<int:team_id>", methods=["GET"])
+@api_bp_GenAI.route("/api/commits-fetch", methods=["POST"])
 class GetAllCommitsResource(Resource):
     @jwt_required()
     @api_bp_GenAI.response(
         200, CommitsResponseSchema
     )  # Assuming you define a schema for response
     @api_bp_GenAI.response(404, CommonErrorSchema)
-    @api_bp_GenAI.response(500, CommonErrorSchema)
-    def get(self, query: CommitQueryParamsSchema):
+    @api_bp_GenAI.response(500, CommonErrorErrorSchemaFatal)
+    def post(self, ):
         """
         Get all commits with file changes in a specified time frame from Github(to be used Internally using Celery).
 
         Args:
-            - since (str): Start datetime in ISO format.
-            - until (str): End datetime in ISO format.
-            - repo_owner (str): GitHub repository owner.
-            - repo_name (str): GitHub repository name.
+            - team_id (int): The ID of the team.
+            - query (CommitQueryParamsSchema): The query parameters.
 
         Returns:
             JSON response containing commit details grouped by user.
+
+        Example Request Body:
+            {
+                "since": "2022-01-01T00:00:00",
+                "until": "2022-01-31T23:59:59",
+                "repo_owner": "ritish-coder-25",
+                "repo_name": "Project_Pulse_IITM_SE",
+                "team_id": 1
+            }
+
 
         Example Response:
             {
@@ -65,12 +73,15 @@ class GetAllCommitsResource(Resource):
             }
         """
         try:
+            query = CommitQueryParamsSchema().load(request.json)
+
             # Call the utility function to fetch commits
             output = get_commits_with_changes_files(
-                since=query.since,
-                until=query.until,
-                repo_owner=query.repo_owner,
-                repo_name=query.repo_name,
+                since=query["since"],
+                until=query["until"],
+                repo_owner=query["repo_owner"],
+                repo_name=query["repo_name"],
+                # team_id=query["team_id"],
             )
 
             # Assuming `output` is already structured as per the given example
@@ -88,6 +99,52 @@ class GetAllCommitsResource(Resource):
                 "message": "An error occurred while fetching commits.",
                 "error": str(e),
             }, 500
+        # Get all commits with file changes in a specified time frame from Github(to be used Internally using Celery).
+
+        # Args:
+        #     - since (str): Start datetime in ISO format.
+        #     - until (str): End datetime in ISO format.
+        #     - repo_owner (str): GitHub repository owner.
+        #     - repo_name (str): GitHub repository name.
+
+        # Returns:
+        #     JSON response containing commit details grouped by user.
+
+        # Example Response:
+        #     {
+        #         "users": {
+        #             "ishdeep": {
+        #                 "total_commits": 6,
+        #                 "commit_details": [...]
+        #             },
+        #             "Ritish Kumar Das": {...}
+        #         }
+        #     }
+        # """
+        # try:
+        #     # Call the utility function to fetch commits
+        #     output = get_commits_with_changes_files(
+        #         since=query.since,
+        #         until=query.until,
+        #         repo_owner=query.repo_owner,
+        #         repo_name=query.repo_name,
+        #     )
+
+        #     # Assuming `output` is already structured as per the given example
+        #     if not output:
+        #         return {
+        #             "errorCode": "no_commits_found",
+        #             "message": "No commits found for the specified criteria.",
+        #         }, 404
+
+        #     return jsonify({"users": output}), 200
+
+        # except Exception as e:
+        #     return {
+        #         "errorCode": "error",
+        #         "message": "An error occurred while fetching commits.",
+        #         "error": str(e),
+        #     }, 500
 
 
 @api_bp_GenAI.route("/api/genai-commits-analysis/<int:team_id>", methods=["POST"])

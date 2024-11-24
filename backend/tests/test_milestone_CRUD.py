@@ -74,8 +74,19 @@ def auth_headers(create_users):
     }
 
 
-def test_create_milestone(client, auth_headers, create_milestone):
+def test_create_milestone(client, create_milestone, create_users):
     """Test creating a new milestone."""
+
+    user = create_users[0]
+    user.user_type = "TA"
+    db.session.commit()
+
+    token = create_access_token(identity=user.user_id)
+
+    newHeaders = {
+        'Authorization': f'Bearer {token}'
+    }
+
     payload = {
         "milestone_name": "New Test Milestone",
         "milestone_description": "This is the description for the new test milestone.",
@@ -88,13 +99,12 @@ def test_create_milestone(client, auth_headers, create_milestone):
     response = client.post(
         "/api/milestones",
         data=json.dumps(payload),
-        headers={**auth_headers, "Content-Type": "application/json"}
+        headers={**newHeaders, "Content-Type": "application/json"}
     )
 
     assert response.status_code == 201
     data = response.get_json()
     assert data['message'] == 'Milestone created successfully'
-    assert data['milestone_id'] == 2
 
 
 def test_create_milestone_missing_field(client, auth_headers):

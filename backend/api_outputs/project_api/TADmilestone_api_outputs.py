@@ -33,7 +33,6 @@ class MilestoneOutput(Schema):
 
 class MilestoneCreationResponse(Schema):
     message = fields.Str()  # Response message
-    milestone_id = fields.Int(dump_only=True)  # Created milestone ID
 
 
 class MilestoneUpdateResponse(Schema):

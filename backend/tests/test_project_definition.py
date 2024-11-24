@@ -47,8 +47,20 @@ def create_project(db):
     return project
 
 
-def test_create_project(client, auth_headers, create_users):
+def test_create_project(client, create_users):
     """Test creating a new project."""
+    user = create_users[0]
+    user.user_type = "TA"
+    db.session.commit()
+
+    token = create_access_token(identity=user.user_id)
+
+    newHeaders = {
+        'Authorization': f'Bearer {token}'
+    }
+
+    print(f"User: {user.first_name} {user.last_name}, User Type: {user.user_type}")
+
     payload = {
         "name": "New Test Project",
         "statement": "This is the project statement for the new test project.",
@@ -58,7 +70,7 @@ def test_create_project(client, auth_headers, create_users):
     response = client.post(
         "/api/projects",
         data=json.dumps(payload),
-        headers={**auth_headers, "Content-Type": "application/json"}
+        headers={**newHeaders, "Content-Type": "application/json"}
     )
 
     assert response.status_code == 201

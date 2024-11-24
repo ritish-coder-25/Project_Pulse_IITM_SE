@@ -5,6 +5,7 @@ from flask_restx import Resource
 from flask_smorest import Blueprint
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import NotFound
+from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import os
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
@@ -145,21 +146,28 @@ class MilestoneDeadlines(Resource):
     def get(self):
         """Retrieve and return a list of all milestones with their names, descriptions, and deadlines."""
         try:
-            # Query all milestones and get their name, description, and end date
+            # Query all milestones
             milestones = Milestone.query.all()
+            print( milestones)
+
+            if not milestones:
+                return jsonify([]), 200 #if no milestone is available, an empty list is returned
 
             # Format the response data
             response_data = [
                 {
                     "milestone_name": milestone.milestone_name,
-                    "milestone_description": milestone.description,
-                    "end_date": milestone.end_date.strftime('%d %B')
+                    "milestone_description": milestone.milestone_description,
+                    "end_date": milestone.end_date.strftime('%d %B') if milestone.end_date else None
                 }
                 for milestone in milestones
             ]
 
             return jsonify(response_data), 200
 
+        except SQLAlchemyError as e:
+            print(f"Database error: {e}")
+            return createFatalError("database_error", "Database query failed", str(e)), 500
         except Exception as e:
-            print(f"Error fetching milestones: {e}")
-            return createFatalError("milestone_fetch_error", "Unable to fetch milestone deadlines", str(e))
+            print(f"Unexpected error: {e}")
+            return createFatalError("unexpected_error", "An unexpected error occurred", str(e)), 500

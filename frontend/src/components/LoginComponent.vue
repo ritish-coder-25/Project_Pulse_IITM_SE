@@ -66,6 +66,14 @@ export default {
       },
     }
   },
+  computed:{
+    isApproved() {
+      const authStore = useAuthStore()
+      const user = authStore.user || {} // Get user from store
+      // console.log("User --->",user)
+      return user.approval_status === 'Inactive'
+    },
+  },
   methods: {
     async handleSubmit() {
       const authStore = useAuthStore()
@@ -79,9 +87,15 @@ export default {
         //authStore.
         authStore.updateAccessToken(auth.accessToken)
         authStore.updateuser(auth.user)
-        alert('Login successful!')
-        router.push(`/dashboard/student/home/${u_id}`)
-      } else {
+
+        if (this.isApproved) {
+          alert('Your account is currently inactive. Kindly wait for approval from an Admin or TA.')
+        } else {
+          alert('Login successful!')
+          router.push('/dashboard/student/home')
+        }
+        
+       else {
         alert(
           `Login failed! -  ${
             auth.error ? auth.error.message : auth.errorMessage

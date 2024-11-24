@@ -49,6 +49,10 @@ The conftest.py contains all the configuration for tests which should be more th
 The file should start with "test_". ex. test_users_api.py
 to run all the tests you can use the command 
 > pytest -v
+To exclude warnings use: 
+> pytest .\backend\tests\ -v -p no:warnings
 -v can be removed, it is used for more or less information
 For running a specific file use
 > pytest tests/test_register.py -v
+
+

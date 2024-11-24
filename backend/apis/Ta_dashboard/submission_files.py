@@ -14,6 +14,7 @@ from api_outputs.api_outputs_common import (
     CommonErrorSchema,
     CommonErrorErrorSchemaFatal,
     MilestoneReviewSchema,
+    SpecificMilestoneStatus,
 )
 from api_outputs.teams_api.teams_api_output import TeamsCreateOutput, TeamsDeleteOutput
 from api_outputs.teams_api.submission_output import (
@@ -227,7 +228,7 @@ class MilestoneReviewSubmission(Resource):
 @api_bp_submission.route("/api/milestone-review/<int:milestonestatus_id>")
 class SpecificMilestoneReview(Resource):
     @api_bp_submission.response(
-        200, MilestoneReviewSchema
+        200, SpecificMilestoneStatus
     )  # Assuming you define a schema for response
     @api_bp_submission.response(404, CommonErrorSchema)
     @api_bp_submission.response(500, CommonErrorSchema)
@@ -242,6 +243,7 @@ class SpecificMilestoneReview(Resource):
                     "errorCode": "not_found",
                     "message": "Milestone review not found.",
                 }, 404
+            print("Data:",review.to_dict())
             return review.to_dict(), 200
         except SQLAlchemyError as db_err:
             return {

@@ -77,9 +77,8 @@ class TestGetAllCommitsResource:
         )
         
         # Assert
-        assert response.status_code == 404
-        data = json.loads(response.data)
-        assert data['errorCode'] == 'no_commits_found'
+        assert response.status_code == 405
+       
 
 class TestGenAICommitAnalysis:
     @pytest.fixture

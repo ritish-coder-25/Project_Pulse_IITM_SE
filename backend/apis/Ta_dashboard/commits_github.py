@@ -75,14 +75,35 @@ class GetAllCommitsResource(Resource):
         try:
             query = CommitQueryParamsSchema().load(request.json)
 
-            # Call the utility function to fetch commits
-            output = get_commits_with_changes_files(
+            if not query:
+                return createError("Invalid query parameters.", 400)
+            
+            if query["team_id"]:
+                team = Team.query.get(query["team_id"])
+                if not team:
+                    return createError("Team not found.", 404)
+            
+            if query["since"] > query["until"]:
+                return createError("Invalid date range.", 400)
+            
+            if query["repo_owner"] is None or query["repo_name"] is None:
+                output = get_commits_with_changes_files(
+                    since=query["since"],
+                    until=query["until"],
+                    repo_name=None,
+                    repo_owner=None,
+                    repo_url = team.to_dict()['github_repo_url']
+                )
+            
+
+            else:
+                output = get_commits_with_changes_files(
                 since=query["since"],
                 until=query["until"],
                 repo_owner=query["repo_owner"],
                 repo_name=query["repo_name"],
-                # team_id=query["team_id"],
-            )
+                
+                )
 
             # Assuming `output` is already structured as per the given example
             if not output:

@@ -129,7 +129,7 @@ def get_commits_with_changes(since, until, repo_owner, repo_name):
 
 import requests
 
-def get_commits_with_changes_files(since, until, repo_owner, repo_name):
+def get_commits_with_changes_files(since, until, repo_owner, repo_name, repo_url=None):
     """
     Fetches commits within a specific date range and stores details of file changes in a dictionary for each author.
     :param since: The start date (ISO 8601 format, e.g., "2023-01-01T00:00:00Z")
@@ -143,8 +143,11 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json"
     }
-
-    BASE_URL = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
+    if repo_url is not None:
+        repo_owner, repo_name = repo_url.split("/")[-2:]
+        BASE_URL = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
+    else:
+        BASE_URL = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
 
     # Dictionary to store changes by user
     user_changes = {}
@@ -153,6 +156,7 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
     commits_url = f"{BASE_URL}/commits"
     params = {"since": since, "until": until}
     commits_response = requests.get(commits_url, headers=HEADERS, params=params)
+    print(commits_response.json())
 
     if commits_response.status_code == 200:
         commits = commits_response.json()
@@ -226,13 +230,14 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name):
 
 # Run the check and create an issue if not already a collaborator
 if __name__ == "__main__":
-    #if not check_collaborator_status(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE', username='ishdeepsidhu'):
-        #create_invite_request_issue(repo_owner='pranjalkar99', repo_name='california-agents')
-        #print("You are not a collaborator on this repository.")
+    if not check_collaborator_status(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE', username='pranjalkar99'):
+        # create_invite_request_issue(repo_owner='pranjalkar99', repo_name='california-agents')
+        print("You are not a collaborator on this repository.")
     #create_invite_request_issue(repo_owner='ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
 
     # get_commits_with_changes(since="2023-01-01T00:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= 'ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
-    output = get_commits_with_changes_files(since="2024-11-08T22:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= 'ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
+    # output = get_commits_with_changes_files(since="2024-11-08T22:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= 'ritish-coder-25', repo_name='Project_Pulse_IITM_SE')
+    output = get_commits_with_changes_files(since="2024-11-08T22:00:00Z", until="2024-11-10T22:00:00Z",repo_owner= None, repo_name=None, repo_url="https://github.com/ritish-coder-25/Project_Pulse_IITM_SE")
 
     team_id = "Project_Pulse_IITM_SE"
 

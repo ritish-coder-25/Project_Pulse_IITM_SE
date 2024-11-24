@@ -179,10 +179,18 @@ class File(db.Model):
     __tablename__ = "file"
     file_id = db.Column(db.Integer, primary_key=True)
     file_name = db.Column(db.String(100), nullable=False)
-    submission_id = db.Column(db.Integer, db.ForeignKey('submission.submission_id'), nullable=False)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
+    milestone_id = db.Column(db.Integer, db.ForeignKey('milestone.milestone_id'), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.project_id'), nullable=False)
+    submission_id = db.Column(db.Integer, db.ForeignKey('submission.submission_id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+
     def to_dict(self):
         return {
             'file_id': self.file_id,
             'file_name': self.file_name,
+            'team_id': self.team_id,
+            'milestone_id': self.milestone_id,
+            'project_id': self.project_id,
             'submission_id': self.submission_id
         }

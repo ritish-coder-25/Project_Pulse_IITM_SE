@@ -6,7 +6,7 @@ from models import db, User, Project, Milestone, MilestoneStatus, Member, Commit
 from config import Config, create_default_objects
 
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
@@ -29,9 +29,10 @@ from flask_smorest import Api, Blueprint, abort
 app = Flask(__name__)
 # CORS(app)
 # CORS(app)
-app.config["API_TITLE"] = "Project Pulse API" 
-app.config["API_VERSION"] = "v1" 
-app.config["OPENAPI_VERSION"] = "3.1.0" 
+app.config["API_TITLE"] = "Project Pulse API"
+app.config["API_VERSION"] = "v1"
+app.config["OPENAPI_VERSION"] = "3.1.0"
+app.config["UPLOAD_FOLDER"] = "uploads"
 api = Api(app)
 CORS(app)
 app.config.from_object(Config)

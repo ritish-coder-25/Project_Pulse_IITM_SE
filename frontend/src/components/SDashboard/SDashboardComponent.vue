@@ -41,7 +41,6 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           </div>
         </template>
         <div class="tab-content-wrapper">
-          <h1>Student Home</h1>
           <StudentTeamsDashboard />
         </div>
       </BTab>

@@ -4,6 +4,7 @@ from models import db, User, Team, MilestoneStatus, Commit, File, Milestone, Mil
 from flask_restx import Resource
 from flask_smorest import Blueprint
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import NotFound
 from datetime import datetime
 import os
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
@@ -29,29 +30,30 @@ def allowed_file(filename):
 class StuDashboard(Resource):
     @api_bp_stu.response(201, StuDashTeamSchema)
     @api_bp_stu.response(404, CommonErrorSchema)
+    @api_bp_stu.response(500, CommonErrorSchema)
     @jwt_required()
     def get(self, stu_id):
         """Retrieve information about a student's team, providing an overview of the student's team activities and progress."""
         try:
             current_user = User.query.get_or_404(stu_id)
+            print (current_user)
             if not current_user.team_id:
                 return createError("team_get_curr_no_team", "User is not in a team", 404)
+            
             team = Team.query.get_or_404(current_user.team_id)
+            print (team)
             
             team_data = {
+                'user_name': f"{current_user.first_name} {current_user.last_name}",
                 'team_name': team.team_name,
-                'team_score': 0,
+                'team_score': 0.0,
                 'members': [],
-                'milestones': []
+                'milestones': [],
+                'total_max_marks':0.0
             }
             # Retrieve and add the team's score from milestones
-            statuses = MilestoneStatus.query.filter_by(
-                team_id=current_user.team.team_id).all()
-            team_data['team_score'] = sum(
-                status.eval_score for status in statuses)
-
             statuses = MilestoneStatus.query.filter_by(team_id=team.team_id).all()
-            team_data['team_score'] = sum(status.eval_score or 0 for status in statuses)
+            team_data['team_score'] = float(sum(status.eval_score or 0 for status in statuses))
             
             # Retrieve member data for the team, including commit counts
             for member in team.members:
@@ -60,25 +62,30 @@ class StuDashboard(Resource):
                     'email': member.email,
                     'commit_count': Commit.query.filter_by(user_id=member.user_id).count()
                 }
+                print(member_data)
                 team_data['members'].append(member_data)
 
             # Fetch milestone details
+            max_marks=0
             for status in statuses:
                 milestone = Milestone.query.get(status.milestone_id)
                 if milestone:
+                    max_marks += milestone.max_marks
                     milestone_data = {
                         'milestone_name': milestone.milestone_name,
                         'milestone_status': status.milestone_status,
-                        'end_date': milestone.end_date
+                        'end_date': milestone.end_date,
                     }
                     team_data['milestones'].append(milestone_data)
+                    team_data['total_max_marks'] = float(max_marks)
 
             return jsonify(team_data), 200
-
-        except Exception as e:
-            db.session.rollback()
-            return createFatalError("error", "An error occurred", str(e))
-
+        except NotFound as e:
+            return createError("user_not_found", "User not found", 404)
+        except Exception as e: 
+            db.session.rollback() 
+            return createError("unknown_error", "An error occurred", 500)
+        
 
 @api_bp_stu.route('/api/submit_project')
 class SubmitProject(Resource):

@@ -78,8 +78,10 @@ export default {
     async handleSubmit() {
       const authStore = useAuthStore()
       const auth = await AuthApiHelper.login(this.formData)
+      
       console.log(auth)
       if (auth.isSuccess) {
+        const u_id = auth.user.user_id
         localStorage.setItem(LocalStorageEnums.accessToken, auth.accessToken)
         localStorage.setItem(LocalStorageEnums.user, JSON.stringify(auth.user))
         //authStore.
@@ -93,7 +95,7 @@ export default {
           router.push('/dashboard/student/home')
         }
         
-      } else {
+       else {
         alert(
           `Login failed! -  ${
             auth.error ? auth.error.message : auth.errorMessage

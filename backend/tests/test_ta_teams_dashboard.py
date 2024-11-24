@@ -248,7 +248,7 @@ def test_ta_teams_dashboard_ta_role(client, ta_auth_headers, create_commits):
     assert "teams" in data
 
 
-def test_ta_teams_dashboard_unauthorized_role(client, student_auth_headers):
+def test_ta_teams_dashboard_non_ta_role(client, student_auth_headers):
 
     response = client.get(f"/api/ta-teams", headers=student_auth_headers)
 
@@ -289,7 +289,7 @@ def test_ta_team_dashboard_ta_role(client, ta_auth_headers, create_commits):
     assert "members" in data
 
 
-def test_ta_team_dashboard_unauthorized_role(client, student_auth_headers, create_commits):
+def test_ta_team_dashboard_non_ta_role(client, student_auth_headers, create_commits):
 
     team = Team.query.first()
 

@@ -44,10 +44,11 @@ or
 > https://redocly.github.io/redoc/#tag/Tickets/operation/getTicketCode
 
 9. Testing
-Write your tests under the tests folder. 
-The conftest.py contains all the configuration for tests which should be more than enough. If required you can edit it. 
-The file should start with "test_". ex. test_users_api.py
-to run all the tests you can use the command 
+Warning: 
+A. Please execute the pytest command under virtual environment. 
+B. Ensure requirements are installed.
+
+To run all the tests you can use the command 
 > pytest -v
 To exclude warnings use: 
 > pytest .\backend\tests\ -v -p no:warnings

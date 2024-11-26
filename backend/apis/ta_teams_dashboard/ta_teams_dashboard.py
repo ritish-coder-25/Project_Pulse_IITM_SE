@@ -65,7 +65,8 @@ class TATeamDashboard(MethodView):
 
                 if status.milestone_status == "Evaluated":
                     dashboard_teams[status.team_id]['score'] += status.eval_score
-                    dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
+                    if milestone_data and status.milestone_id and milestone_data.get(status.milestone_id):
+                        dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
                     dashboard_teams[status.team_id]['milestones_completed'] += 1
                 elif status.milestone_status == "Missed":
                     dashboard_teams[status.team_id]['score'] += 0

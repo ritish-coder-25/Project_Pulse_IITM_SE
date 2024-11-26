@@ -73,18 +73,22 @@ class GetAllCommitsResource(Resource):
             }
         """
         try:
+            print("Received data", request.json)
             query = CommitQueryParamsSchema().load(request.json)
+            print("Query: ", query)
 
-            if not query:
-                return createError("Invalid query parameters.", 400)
             
-            if query["team_id"]:
-                team = Team.query.get(query["team_id"])
-                if not team:
-                    return createError("Team not found.", 404)
             
-            if query["since"] > query["until"]:
-                return createError("Invalid date range.", 400)
+            # if query["team_id"]:
+            #     team = Team.query.get(query["team_id"])
+            #     if not team:
+            #         # return createError("Team not found.", 404)
+            #         # return createError("404", "Team not found.")
+            #         return createError(errorCode= "Since must be before after date.",message= "Team Not found", errorStatus= 400)
+            
+            # if query["since"] > query["until"]:
+            #     # return createError("Invalid date range.", 400)
+            #     return createError(errorCode= "Since must be before after date.",message= "Invalid Date Range", errorStatus= 400)
             
             if query["repo_owner"] is None or query["repo_name"] is None:
                 output = get_commits_with_changes_files(
@@ -92,7 +96,7 @@ class GetAllCommitsResource(Resource):
                     until=query["until"],
                     repo_name=None,
                     repo_owner=None,
-                    repo_url = team.to_dict()['github_repo_url']
+                    # repo_url = team.to_dict()['github_repo_url']
                 )
             
 
@@ -196,9 +200,9 @@ class GenAICommitAnalaysis(Resource):
             }
         """
         try:
-            # Extract file path from request body
+            # Extract file path from request body and convert to absolute path
             data = request.json
-            file_path = data.get("file_path")
+            file_path = os.path.abspath(data.get("file_path"))  # Updated to use absolute path
 
             if not file_path or not os.path.exists(file_path):
                 return {

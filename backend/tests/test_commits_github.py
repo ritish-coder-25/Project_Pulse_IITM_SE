@@ -37,7 +37,7 @@ class TestGetAllCommitsResource:
 
     def test_get_commits_success(self, client, auth_headers, mock_get_commits):
         # Arrange
-        params = {
+        request_data = {
             'since': (datetime.now() - timedelta(days=7)).isoformat(),
             'until': datetime.now().isoformat(),
             'repo_owner': 'ritish-coder-25',
@@ -46,15 +46,16 @@ class TestGetAllCommitsResource:
         }
         
         # Act
-        response = client.get(
+        response = client.post(
             '/api/commits-fetch',
-            query_string=params,
+            json=request_data,
             headers=auth_headers
         )
         
         # Assert
         assert response.status_code == 200
         data = json.loads(response.data)
+        print("Data: ", data)
         assert 'users' in data
         assert data['users'] == MOCK_COMMITS_RESPONSE
 
@@ -84,31 +85,31 @@ class TestGenAICommitAnalysis:
     @pytest.fixture
     def mock_summarizer(self):
         with patch('apis.Ta_dashboard.commits_github.summarize_code_changes') as mock:
-            mock.return_value = {"summary": "Test summary"}
+            mock.return_value = {"summary": {"Marmik Thaker": {"commit_details": [{"file_changes": [{"code_changes": "def test(): pass"}]}]}}}
             yield mock
 
     def test_genai_analysis_success(self, client, auth_headers, mock_summarizer, tmp_path):
         # Arrange
-        test_file = tmp_path / "test_changes.json"
-        test_file.write_text(json.dumps(MOCK_FILE_CONTENT))
+        test_file = os.path.abspath("reports/Project_Pulse_IITM_SE_2024-11-13_15_output.json")
         
+        print("Test file: ", test_file)
         request_data = {
-            "file_path": str(test_file),
-            "team_id": 1
+            "file_path": str(test_file)
         }
         
-        # Act
+        
         response = client.post(
-            '/api/genai-commits-analysis',
+            '/api/genai-commits-analysis/1',
             json=request_data,
             headers=auth_headers
         )
-        
+        print("Response: ", response.json)
         # Assert
         assert response.status_code == 200
         data = json.loads(response.data)
         assert 'summary' in data
         assert 'saved_to' in data
+        assert data['summary'] == mock_summarizer.return_value
 
     def test_genai_analysis_file_not_found(self, client, auth_headers):
         # Arrange

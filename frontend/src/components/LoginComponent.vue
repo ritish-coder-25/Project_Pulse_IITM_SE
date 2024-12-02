@@ -94,8 +94,9 @@ export default {
           alert('Login successful!')
           router.push('/dashboard/student/home')
         }
+      }
         
-       else {
+      else {
         alert(
           `Login failed! -  ${
             auth.error ? auth.error.message : auth.errorMessage

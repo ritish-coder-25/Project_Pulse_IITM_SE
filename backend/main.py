@@ -6,7 +6,7 @@ from models import db, User, Project, Milestone, MilestoneStatus, Member, Commit
 from config import Config, create_default_objects
 
 from apis.team_apis.team_apis import api_bp_ta
-from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones

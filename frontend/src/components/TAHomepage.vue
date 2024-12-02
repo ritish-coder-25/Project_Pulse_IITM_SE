@@ -145,37 +145,42 @@ export default {
       }
     },
     async submitForm() {
-      const allChecked = this.pendusers.every(
-        user => user.approved || user.rejected,
-      )
-      if (!allChecked) {
-        alert('Please select either Approve or Decline for all users.')
-        return 
+      // Ensure all users have been approved or rejected
+      if (!this.pendusers.every(user => user.approved || user.rejected)) {
+        alert('Please select either Approve or Decline for all users.');
+        return;
       }
-      const confirmed = confirm(`Are you sure you want to submit?`)
-      if (confirmed) {
-        try {
-          const payload = {
+      // Confirm submission
+      if (!confirm('Are you sure you want to submit?')) {
+        alert('Submission canceled.');
+        return;
+      }
+      // Prepare and submit the payload
+      try {
+        const payload = {
           users: this.pendusers.map(user => ({
             user_id: user.id,
             approval_status: user.approved ? 'Approved' : 'Declined',
-            user_type: user.role, 
+            user_type: user.role,
           })),
-        };  
-        const response = await TaHomePageApiHelpers.approveUsers(JSON.stringify(payload))
+        };
+        const response = await TaHomePageApiHelpers.approveUsers(JSON.stringify(payload));
+        console.log('Server response:', response);
+        const parsedresponse = JSON.parse(response);
+        if (parsedresponse?.message === 'User approvals processed successfully') {
+          alert('Form submitted successfully!');
+          this.resetForm();
+        } else {
+          alert('Failed to submit the form. Please try again.');
+        }
       } catch (error) {
-        console.warn('Using local uploads data due to error:', error)
-      }
-      } else {
-        alert('Submission canceled.')
+        console.error('Error during form submission:', error);
+        alert('An error occurred. Please try again.');
       }
     },
+
     resetForm() {
-      this.pendusers.forEach(user => {
-        user.approved = false
-        user.rejected = false
-        user.role = ''
-      })
+      window.location.reload(); 
     },
   },
   mounted() {

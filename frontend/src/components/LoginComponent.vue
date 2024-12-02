@@ -92,7 +92,7 @@ export default {
           alert('Your account is currently inactive. Kindly wait for approval from an Admin or TA.')
         } else {
           alert('Login successful!')
-          router.push('/dashboard/student/home')
+          router.push(`/dashboard/student/home/${u_id}`)
         }
       }
         

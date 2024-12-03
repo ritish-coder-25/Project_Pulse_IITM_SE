@@ -20,6 +20,13 @@ class ProjectCreationResponse(Schema):
     message = fields.Str()  # Response message
     project = fields.Nested(ProjectOutput, dump_only=True)  # Project details
 
+class CommonErrorSchema(Schema):
+    errorCode = fields.Str(required=True)
+    message = fields.Str(required=True)
+
+class CommonErrorErrorSchemaFatal(CommonErrorSchema):
+    error = fields.Str(required=True)
+
 
 class MilestoneOutput(Schema):
     milestone_id = fields.Int(dump_only=True)  # Milestone ID

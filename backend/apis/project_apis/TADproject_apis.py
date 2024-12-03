@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Resource
 from flask_smorest import Blueprint
@@ -6,10 +6,13 @@ from marshmallow import ValidationError
 from models import User, Project, db
 from api_outputs.project_api.TADmilestone_api_outputs import (
     ProjectCreationResponse,
+    CommonErrorSchema,
+    CommonErrorErrorSchemaFatal,
 )
 from api_parsers.project_definition_parser import CreateProjectSchema
 from helpers.ErrorCommonHelpers import createFatalError
 import jwt
+
 
 api_bp_projects = Blueprint(
     "Manage Projects APIs",
@@ -20,14 +23,16 @@ api_bp_projects = Blueprint(
 
 @api_bp_projects.route("/api/projects")
 class CreateProjectResource(Resource):
-    @jwt_required()
+    @api_bp_projects.arguments(CreateProjectSchema)
+    @api_bp_projects.response(404, CommonErrorSchema)
     @api_bp_projects.response(201, ProjectCreationResponse)
-    def post(self):
+    @jwt_required()
+    def post(self, data):
         """ API to allow TAs and other allowed roles to create the project statement. """
         try:
             # Parse and validate incoming JSON data using the schema
-            schema = CreateProjectSchema()
-            data = schema.load(request.get_json())
+            #schema = CreateProjectSchema()
+            #data = schema.load(request.get_json())
 
             print('Received data:', data)
 
@@ -41,7 +46,37 @@ class CreateProjectResource(Resource):
             # Check if the user has permission to create a project
             allowed_roles = ["TA", "Admin", "Instructor", "Developer"]
             if current_user.user_type not in allowed_roles:
-                return {"message": "You do not have permission to create a project"}, 403
+                return (
+                    jsonify(
+                        {
+                            "errorCode": "not_allowed_to_create_project_wrong_role",
+                            "message": "You do not have permission to create a project",
+                        }
+                    ), 403,
+                )
+            
+            #Check for duplicate project name
+            existing_project = Project.query.filter_by(project_topic=data['name']).first()
+            if existing_project:
+                return (
+                    jsonify(
+                        {
+                            "errorCode": "project_name_exists",
+                            "message": "Project name already exists",
+                        }
+                    ), 400,
+                )
+            
+            #Check for duplicate document URL
+            if Project.query.filter_by(document_url=data['document_url']).first():
+                return (
+                    jsonify(
+                        {
+                            "errorCode": "document_url_exists",
+                            'message': 'Document URL already exists',
+                        }
+                    ), 400,
+                )
 
             # Create a new project
             new_project = Project(
@@ -53,7 +88,7 @@ class CreateProjectResource(Resource):
             db.session.commit()
 
             # Return response with the output schema
-            return {
+            return (jsonify({
                 "message": "Project created successfully",
                 "project": {
                     "project_id": new_project.project_id,
@@ -61,22 +96,51 @@ class CreateProjectResource(Resource):
                     "statement": new_project.statement,
                     "document_url": new_project.document_url,
                 },
-            }, 201
+            }), 201)
 
         except KeyError as e:
             # Handle missing required fields
-            return {"message": f"Missing required field: {str(e)}"}, 400
+            return (
+                jsonify(
+                    {
+                        "errorCode": "missing_required_field",
+                        "message": f"Missing required field: {str(e)}",
+                    }
+                ), 400,
+            )
 
-        except ValidationError as e:
-            # Handle validation errors from Marshmallow
-            return {"message": f"Validation error: {e.messages}"}, 400
+        # except ValidationError as e:
+        #     # Handle validation errors from Marshmallow
+        #     return (
+        #         jsonify(
+        #             {
+        #                 "errorCode": "validation_error",
+        #                 "message": f"Validation error: {e.messages}",
+        #             }
+        #         ), 400,
+        #     )
         
         except jwt.ExpiredSignatureError:
-            return jsonify({"message": "Token has expired"}), 401
+            return (
+                jsonify(
+                    {
+                        "errorCode": "expired_token",
+                        "message": "Token has expired",
+                    }
+                ), 401,
+            )
         except jwt.InvalidTokenError:
-            return jsonify({"message": "Invalid token"}), 401
+            return (
+                jsonify(
+                    {
+                        "errorCode": "invalid_token",
+                        "message": "Invalid token",
+                    }
+                ), 401,
+            )
 
         except Exception as e:
+            db.session.rollback()
             # Catch any other errors and return a generic error message
             return createFatalError(
                 "project_creation_error",

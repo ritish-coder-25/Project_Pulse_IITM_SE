@@ -126,7 +126,7 @@ export default {
         if (ms.milestone_status === "Completed") {
           if (ms.completed_date) {
             completion_status = "Completed on " + this.formatDate(ms.completed_date)
-            eval_link = "/dashboard/instructor/milestones"
+            eval_link = "/dashboard/instructor/milestones?milestonestatus=" + ms.milestonestatus_id
           }
           evaluation_status = "Pending Evaluation"
         } else if (ms.milestone_status === "Missed") {

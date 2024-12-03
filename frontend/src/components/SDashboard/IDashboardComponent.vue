@@ -10,6 +10,8 @@ import MilestoneScoring from '../MilestoneScoring.vue'
 import TAHomepage from '../TAHomepage.vue'
 import Teams from '../Teams.vue'
 import TeamDetails from '../TeamDetails.vue'
+import Project_Definition from '../Project_Definition.vue'
+import Milestone_Definition from '../Milestone_Definition.vue'
 import { useTabRouting } from '@/composables/useTabRouting'
 import { RoutesEnums } from '@/enums'
 
@@ -18,11 +20,12 @@ const TabNames = {
   MileStoneScoring: RoutesEnums.dashboard.instructor.milestones.name,
   Teams: RoutesEnums.dashboard.instructor.teams.name,
   TeamsDetails: RoutesEnums.dashboard.instructor.teamDetails.name,
+  Project_Definition: RoutesEnums.dashboard.instructor.projectDefinition.name,
+  Milestone_Definition: RoutesEnums.dashboard.instructor.milestoneDefinition.name,
 }
 
 const { activeTab, onTabChange } = useTabRouting(TabNames)
 </script>
-
 <template>
   <div class="dashboard-container p-4">
     <BTabs
@@ -74,6 +77,28 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
         </template>
         <div class="tab-content-wrapper">
           <TeamDetails />
+        </div>
+      </BTab>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <Milestone class="tab-icon me-2" />
+            <span>Define Project</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <Project_Definition />
+        </div>
+      </BTab>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <Milestone class="tab-icon me-2" />
+            <span>Define Milestone</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <Milestone_Definition />
         </div>
       </BTab>
     </BTabs>

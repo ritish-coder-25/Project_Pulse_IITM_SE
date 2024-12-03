@@ -63,6 +63,16 @@ export const RoutesEnums = {
         url: '/dashboard/instructor/team-details',
         relUrl: 'team-details',
       },
+      projectDefinition: {
+        name: 'instructor-project-definition',
+        url: '/project-definition',
+        reUrl: 'project-definition',
+      },
+      milestoneDefinition: {
+        name: 'instructor-milestone-definition',
+        url: '/milestone-definition',
+        reUrl: 'milestone-definition'
+      },
     }
   },
 }

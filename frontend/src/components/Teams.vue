@@ -12,7 +12,7 @@
 
                 <!-- team name -->
                 <template #item-team_name="{ team_name, team_url }">
-                    <a :href="team_url">{{ team_name }}</a>
+                    <a :href="team_url" target="_blank">{{ team_name }}</a>
                 </template>
 
                 <!-- team score -->

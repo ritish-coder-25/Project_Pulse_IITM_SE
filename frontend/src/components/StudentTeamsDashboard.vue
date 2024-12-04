@@ -7,12 +7,12 @@
     <div v-else>
       <!-- Team Dashboard Header -->
       <div class="dashboard-header">
-        <h3>Welcome, {{ user_name }}</h3>
+        <h4>Welcome, {{ user_name }}</h4>
         <div class="team-info">
-          <p>You belong to {{ team_name }}</p>
-          <p>Team's Score: {{ team_score }}/{{ total_max_marks }}</p>
+          <h6>You belong to {{ team_name }}</h6>
+          <h6>Team's Score: {{ team_score }}/{{ total_max_marks }}</h6>
         </div>
-        <h5>Team Details</h5>
+        <h6>Team Details</h6>
       </div>
 
       <!-- Error Message -->
@@ -35,7 +35,7 @@
 
       <!-- Milestone Data Table -->
       <div v-if="!error" class="table-spacing">
-        <h4 class="mb-3">Milestone Status</h4>
+        <h6 class="mb-3 milestone-status">Milestone Status</h6>
         <table class="milestone-table table text-center table-bordered table-striped">
           <thead>
             <tr>
@@ -171,6 +171,10 @@ export default {
   width: 100%;
   margin-bottom: 20px;
 }
+.milestone-status {
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   h3 {
     font-size: 16px;

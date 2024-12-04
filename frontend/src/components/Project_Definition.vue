@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <!-- Header with App Logo and User Info -->
-    <div class="header">
+    <!-- <div class="header">
       <div class="app-logo">App Logo</div>
       <div class="user-info">
         <span>Welcome XXX! You are signed in as TA/Instructor.</span>
         <a href="#" class="logout">Logout</a>
       </div>
-    </div>
+    </div> -->
 
     <!-- Navigation Bar using BTabs -->
-    <BTabs 
+    <!-- <BTabs 
       class="custom-tabs" 
       nav-class="border-0 mb-3" 
       card
@@ -52,7 +52,7 @@
           </div>
         </template>
       </BTab>
-    </BTabs>
+    </BTabs> -->
 
     <!-- Project Definition Form -->
     <div class="form-container">

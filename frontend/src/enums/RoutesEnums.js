@@ -75,8 +75,9 @@ export const RoutesEnums = {
       },
       projectScoring: {
         name: 'instructor-project-scoring',
-        url: '/'
-      }
+        url: '/scoring',
+        reUrl: 'project-scoring'
+      },
     }
   },
 }

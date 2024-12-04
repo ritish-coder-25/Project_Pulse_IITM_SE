@@ -73,6 +73,10 @@ export const RoutesEnums = {
         url: '/milestone-definition',
         reUrl: 'milestone-definition'
       },
+      projectScoring: {
+        name: 'instructor-project-scoring',
+        url: '/'
+      }
     }
   },
 }

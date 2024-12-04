@@ -49,6 +49,14 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
       <BTab>
         <template #title>
           <div class="tab-title">
+            <LayoutDashboard class="tab-icon me-2" />
+            <span>Dashboard</span>
+          </div>
+        </template>
+      </BTab>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
             <UserGroupIcon class="tab-icon me-2" />
             <span>MileStone Scoring</span>
           </div>
@@ -100,6 +108,14 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
         <div class="tab-content-wrapper">
           <Milestone_Definition />
         </div>
+      </BTab>
+      <BTab>
+        <template #title>
+          <div class="tab-title">
+            <ClipboardCheck class="tab-icon me-2" />
+            <span>Project Scoring</span>
+          </div>
+        </template>
       </BTab>
     </BTabs>
   </div>

@@ -1,16 +1,16 @@
 <template>
   <div class="define-milestones">
-    <!-- Header Section -->
+    <!-- Header Section
     <header class="header">
       <div class="logo">App Logo</div>
       <div class="user-info">
         <span>Welcome XXX! You are signed in as TA/Instructor.</span>
         <a href="#" class="logout">Logout</a>
       </div>
-    </header>
+    </header> -->
 
     <!-- Updated Navigation Section using BTabs with routing -->
-    <BTabs 
+    <!-- <BTabs 
       class="custom-tabs" 
       nav-class="border-0 mb-3" 
       card
@@ -52,7 +52,7 @@
           </div>
         </template>
       </BTab>
-    </BTabs>
+    </BTabs> -->
 
     <!-- Rest of the template remains exactly the same -->
     <main class="content" v-if="activeTab === 2">

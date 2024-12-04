@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <!-- Header with App Logo and User Info -->
-    <div class="header">
+    <!-- <div class="header">
       <div class="app-logo">App Logo</div>
       <div class="user-info">
         <span>Welcome XXX! You are signed in as TA/Instructor.</span>
         <a href="#" class="logout">Logout</a>
       </div>
-    </div>
+    </div> -->
 
     <!-- Navigation Bar using BTabs -->
-    <BTabs 
+    <!-- <BTabs 
       class="custom-tabs" 
       nav-class="border-0 mb-3" 
       card
@@ -52,7 +52,7 @@
           </div>
         </template>
       </BTab>
-    </BTabs>
+    </BTabs> -->
 
     <!-- Project Definition Form -->
     <div class="form-container">
@@ -157,26 +157,35 @@ export default {
       try {
         const response = await createProject(projectData);
         console.log('Project created successfully:', response);
+
         // Reset the form
         this.name = '';
         this.statement = '';
         this.document_url = '';
         alert('Project created successfully');
+
       } catch (error) {
-        console.error('Failed to create project:', error);
+
         if (error.response) {
+          console.log('Error Data: ', error.response.data);
           // The request was made and the server responded with a status code
-          console.error('Error data:', error.response.data);
-          console.error('Error status:', error.response.status);
-          console.error('Error headers:', error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.error('Error request:', error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('Error message:', error.message);
+          const errorDataString = error.response.data;
+          const errorData = JSON.parse(errorDataString);
+
+          if (errorData.errorCode && errorData.errorCode === 'project_name_exists') {
+            alert(errorData.message);
+          }
+          if (errorData.errors?.json?.document_url) {
+            const urlError = errorData.errors.json.document_url[0];
+            alert (urlError);
+          }
+          else {
+            alert('Unknown Error occurred. Please try again.');
+          }
         }
-        alert('Failed to create project. Please try again');
+        else {
+          alert('Failed to connect to the server. Please try again.');
+        }
       }
     },
     handleCancel() {

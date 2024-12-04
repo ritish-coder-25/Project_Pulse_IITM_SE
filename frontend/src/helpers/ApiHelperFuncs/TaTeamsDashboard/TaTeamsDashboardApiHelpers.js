@@ -7,8 +7,8 @@ export class TaTeamsDashboardApiHelpers{
 
     static async fetchTeamsData(){
         try {
-            const response = await mainAxios.get('/ta-teams');
-            console.log("Teams:", response.data)
+            const response = await mainAxios.get('/ta-teams', {timeout: 2000});
+            // console.log("Teams:", response.data)
 
             const data = typeof response.data === 'string' 
             ? JSON.parse(response.data) 
@@ -16,38 +16,36 @@ export class TaTeamsDashboardApiHelpers{
 
         if (!data || !data.teams || !data.milestones) {
             console.warn('Invalid API response format');
-            return { teams: TaTeamsDashboardData.teams, milestones: TaTeamsDashboardData.milestones };
+            return null
         }
-
-            console.log("Teams data:", data)
-            return { data: data };
-            // return response.data
+        
+        // console.log("Teams data:", data)
+        return { data: data };
         } catch (error) {
-            console.warn('Using local team data due to error:', error)
-            return { teams: TaTeamsDashboardData.teams, milestones: TaTeamsDashboardData.milestones };
+            console.warn('Error while fetching teams data:', error)
+            return null
         }
     }
 
     static async fetchTeamData(team_id){
         try {
-            const response = await mainAxios.get('/ta-teams'+team_id);
-            console.log("Teams:", response.data)
+            const response = await mainAxios.get('/ta-teams/'+team_id, {timeout: 2000});
+            // console.log("Teams:", response.data)
 
             const data = typeof response.data === 'string' 
             ? JSON.parse(response.data) 
             : response.data;
 
-        if (!data || !data.team || data.members || !data.milestones) {
+        if (!data || !data.team || !data.members || !data.milestones) {
             console.warn('Invalid API response format');
-            return { data: TaTeamDashboardData };
+            return null
         }
 
-            console.log("Teams data:", data)
+            // console.log("Teams data:", data)
             return { data: data };
-            // return response.data
         } catch (error) {
-            console.warn('Using local team data due to error:', error)
-            return { data: TaTeamDashboardData };
+            console.error('Error while fetching team data:', error)
+            return null
         }
     }
 }

@@ -65,17 +65,6 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           <Teams />
         </div>
       </BTab>
-      <!-- <BTab>
-        <template #title>
-          <div class="tab-title">
-            <UserGroupIcon class="tab-icon me-2" />
-            <span>Team Details</span>
-          </div>
-        </template>
-        <div class="tab-content-wrapper">
-          <TeamDetails />
-        </div>
-      </BTab> -->
     </BTabs>
   </div>
 </template>

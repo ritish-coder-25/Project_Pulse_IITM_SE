@@ -64,16 +64,16 @@ class TATeamDashboard(MethodView):
             for status in milestone_statuses:
 
                 if status.milestone_status == "Evaluated":
-                    dashboard_teams[status.team_id]['score'] += status.eval_score
+                    dashboard_teams.get(status.team_id)['score'] += status.eval_score
                     if milestone_data and status.milestone_id and milestone_data.get(status.milestone_id):
-                        dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
-                    dashboard_teams[status.team_id]['milestones_completed'] += 1
+                        dashboard_teams.get(status.team_id)['total_score'] += milestone_data.get(status.milestone_id).max_marks
+                    dashboard_teams.get(status.team_id)['milestones_completed'] += 1
                 elif status.milestone_status == "Missed":
-                    dashboard_teams[status.team_id]['score'] += 0
-                    dashboard_teams[status.team_id]['total_score'] += milestone_data[status.milestone_id].max_marks
-                    dashboard_teams[status.team_id]['milestones_missed'] += 1
+                    dashboard_teams.get(status.team_id)['score'] += 0
+                    dashboard_teams.get(status.team_id)['total_score'] += milestone_data.get(status.milestone_id).max_marks
+                    dashboard_teams.get(status.team_id)['milestones_missed'] += 1
 
-            return jsonify({"teams": [dashboard_teams[team] for team in dashboard_teams], "milestones": [milestone.to_dict() for milestone in milestones]})
+            return jsonify({"teams": [dashboard_teams.get(team) for team in dashboard_teams], "milestones": [milestone.to_dict() for milestone in milestones]})
         
         except Exception as e:
             print(traceback.format_exc())
@@ -113,16 +113,17 @@ class TATeamDashboard(MethodView):
             commit_counts = {i[0]: i[1] for i in commit_counts}
 
             members = User.query.filter(User.team_id==team.team_id).all()
-            members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "email": member.email, "commits": commit_counts[member.user_id]} for member in members }
+            members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "email": member.email, "commits": commit_counts.get(member.user_id, 0)} for member in members }
 
             milestones = Milestone.query.all()
 
-            return jsonify({"members": [members_data[member] for member in members_data], 
+            return jsonify({"members": [members_data.get(member) for member in members_data], 
                             "team": team.to_dict(), 
                             "milestones": [milestone.to_dict() for milestone in milestones]
                             })
         
         except Exception as e:
+            # print(e)
             return createError("ta_dashbaord_team_server_error", "Error while fetching dashboard data", 500)
 
  

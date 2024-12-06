@@ -91,7 +91,7 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           <Milestone_Definition />
         </div>
       </BTab>
-      <BTab>
+      <!-- <BTab>
         <template #title>
           <div class="tab-title">
             <Milestone class="tab-icon me-2" />
@@ -101,7 +101,7 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
         <div class="tab-content-wrapper">
           <Project_Scoring />
         </div>
-      </BTab>
+      </BTab> -->
     </BTabs>
   </div>
 </template>

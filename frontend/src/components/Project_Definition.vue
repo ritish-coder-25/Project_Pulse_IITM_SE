@@ -80,16 +80,13 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { BButton, BModal, BTabs, BTab } from 'bootstrap-vue-next';
-import {
-  Home,
-  LayoutDashboard,
-  ClipboardCheck,
-  Milestone
-} from 'lucide-vue-next';
+import { Home, LayoutDashboard, ClipboardCheck, Milestone } from 'lucide-vue-next';
+import axios from 'axios';
 import { createProject } from '@/helpers/ApiHelperFuncs/ProjectDefinition';
+import { fetchProject } from '@/helpers/ApiHelperFuncs/ProjectDefinition';
 
 export default {
   name: 'DefineProject',
@@ -145,6 +142,25 @@ export default {
     };
   },
   methods: {
+    async fetchProjectDetails() {
+      this.loading = true;
+      this.error = '';
+
+      try {
+        const project = await fetchProject()
+        const parsedProject = JSON.parse(project)
+        console.log(project, typeof project, parsedProject.name,parsedProject.statement,parsedProject.document_url);
+        this.name = parsedProject.name;
+        this.statement = parsedProject.statement;
+        this.document_url = parsedProject.document_url;
+      } catch (error) {
+        console.error('Error fetching project details:', error);
+        this.error = 'Failed to fetch project details. Please try again later.';
+      } finally {
+        this.loading = false;
+      }
+    },
+
     async handleSubmit() {
       let projectData = {
         name: this.name,
@@ -152,17 +168,9 @@ export default {
         document_url: this.document_url
       };
 
-      console.log('Project Data:', JSON.stringify(projectData));
-
       try {
         const response = await createProject(projectData);
-        console.log('Project created successfully:', response);
-
-        // Reset the form
-        this.name = '';
-        this.statement = '';
-        this.document_url = '';
-        alert('Project created successfully');
+        alert('Project edited successfully');
 
       } catch (error) {
 
@@ -172,9 +180,6 @@ export default {
           const errorDataString = error.response.data;
           const errorData = JSON.parse(errorDataString);
 
-          if (errorData.errorCode && errorData.errorCode === 'project_name_exists') {
-            alert(errorData.message);
-          }
           if (errorData.errors?.json?.document_url) {
             const urlError = errorData.errors.json.document_url[0];
             alert (urlError);
@@ -194,7 +199,9 @@ export default {
       this.statement = '';
       this.document_url = '';
     },
-  }
+  },
+  mounted() {
+    this.fetchProjectDetails()},
 };
 </script>
 

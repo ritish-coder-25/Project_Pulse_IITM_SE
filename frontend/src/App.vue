@@ -141,7 +141,7 @@ export default {
       localStorage.removeItem(LocalStorageEnums.refreshToken)
       localStorage.removeItem(LocalStorageEnums.user)
       //authStore.updateAccessRefreshUser(data.tokens.access_token,data.tokens.refresh_token,data.user)
-      router.push(RoutesEnums.home)
+      router.push(RoutesEnums.home).then(() => {window.location.reload(); });
     },
   },
 }

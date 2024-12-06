@@ -132,7 +132,7 @@ class CreateProjectResource(Resource):
 class SubmitProject(Resource):
     @api_bp_projects.response(201, CreateProjectSchema)
     @api_bp_projects.response(400, CommonErrorSchema)
-    # @jwt_required()
+    @jwt_required()
     def get(self):
         """Retrieve details for Project 1 in the database."""
         try:

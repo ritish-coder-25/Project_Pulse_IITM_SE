@@ -156,4 +156,3 @@ class SubmitProject(Resource):
                 "message": "An unexpected error occurred while fetching the project",
                 "details": str(e),
             }, 500
-

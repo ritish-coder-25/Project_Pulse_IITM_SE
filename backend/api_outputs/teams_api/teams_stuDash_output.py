@@ -19,6 +19,13 @@ class StuDashTeamSchema(Schema):
     milestones = fields.List(fields.Nested(MilestoneSchema), required=True, description="List of milestones with details")
 
 
+class StuDashProjectSchema(Schema):
+    project_id = fields.Integer(required=True, description="Project ID")
+    project_topic = fields.String(required=True, description="Title or the topic of the project")
+    statement = fields.String(required=True, description="Project statement")
+    document_url = fields.String(required=True, description="Project document url")
+
+
 class MilestoneDeadlineSchema(Schema):
     milestone_name = fields.String(
         required=True, description="Name of the milestone")

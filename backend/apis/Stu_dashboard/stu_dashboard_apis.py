@@ -9,7 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import os
 from api_outputs.api_outputs_common import CommonErrorSchema, CommonErrorErrorSchemaFatal
-from api_outputs.teams_api.teams_stuDash_output import StuDashTeamSchema, MilestoneDeadlineSchema, SubmitProjectResponseSchema
+from api_outputs.teams_api.teams_stuDash_output import StuDashTeamSchema, MilestoneDeadlineSchema, SubmitProjectResponseSchema, StuDashProjectSchema
 from helpers.ErrorCommonHelpers import createError, createFatalError
 from flask_restx import fields
 
@@ -192,3 +192,33 @@ class MilestoneDeadlines(Resource):
         except Exception as e:
             print(f"Unexpected error: {e}")
             return createFatalError("unexpected_error", "An unexpected error occurred", str(e)), 500
+
+
+
+# ( Ankush ) Api endpoint to get assigned project details for user
+
+@api_bp_stu.route('/api/stu_home/project')
+class ProjectDetails(Resource):
+    @api_bp_stu.response(200, StuDashProjectSchema)
+    @jwt_required()
+    def get(self):
+        try:
+            current_user_id = get_jwt_identity()
+            current_user = User.query.get_or_404(current_user_id)
+            
+            if not current_user.team_id:
+                return createError("team_get_curr_no_team", "User is not in a team", 404)
+            
+            team = Team.query.get_or_404(current_user.team_id)
+
+            if not team.project_id:
+                return createError("team_get_curr_no_project", "Team is not in the project", 404)
+            
+            project = Project.query.get_or_404(team.project_id)
+
+            return jsonify(project.to_dict()), 200
+        except NotFound as e:
+            return createError("user_not_found", "User not found", 404)
+        except Exception as e: 
+            return createError("unknown_error", "An error occurred", 500)
+

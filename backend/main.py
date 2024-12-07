@@ -6,7 +6,7 @@ from models import db, User, Project, Milestone, MilestoneStatus, Member, Commit
 from config import Config, create_default_objects
 
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
@@ -53,6 +53,16 @@ db.init_app(app)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
+
+CORS(api_bp_ta)
+CORS(api_bp_projects)
+CORS(api_bp_milestones)
+CORS(api_bp_tahome)
+CORS(api_bp_ta_dashboard)
+CORS(api_bp_auth)
+CORS(api_bp_stu)
+CORS(api_bp_submission)
+CORS(api_bp_GenAI)
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_projects)

@@ -1,12 +1,15 @@
-import { MileStoneStatusEnums } from '@/enums'
+import { MileStoneStatusEnums, MileStoneStatusWebEnums } from '@/enums'
 import { mainAxios } from '@/helpers'
 
 export class MileStoneService {
   static async getMilestones() {
     try {
       const response = await mainAxios.get('/milestones')
-      const milestones = JSON.parse(response.data).milestones
-      //console.log("milestones", response.data.milestones)
+      const milestones = JSON.parse(response.data)
+      const statuses = await this.getUserMilestoneStatuses()
+      const files = await this.getUserFiles()
+      console.log("main files", files);
+      //console.log("milestones", milestones, "statuses", statuses, "resp", response.data);
       const convertedMilestones = milestones.map(milestone => {
         const id = milestone.milestone_id
         const name = milestone.milestone_name
@@ -15,12 +18,19 @@ export class MileStoneService {
         const endDate = new Date(milestone.end_date)
         const maxMarks = milestone.max_marks
         const projectId = milestone.project_id
-        const statusObj = this.getMileStoneStatus(startDate, endDate)
+        const milestoneStatus = this.searchMilestoneStatuses(statuses, id)
+        const uploadedFiles = this.searchFiles(files, id)
+        console.log('found', uploadedFiles)
+        const statusObj = this.getMileStoneStatus(
+          startDate,
+          endDate,
+          milestoneStatus,
+        )
         const status = statusObj.message
         const completed = false
         const compStatus = statusObj.status
         const inputDisabled = this.getInputDisabled(compStatus)
-        console.log('inputDisabled', inputDisabled, compStatus)
+        //console.log('inputDisabled', inputDisabled, compStatus)
         return {
           id,
           name,
@@ -33,16 +43,47 @@ export class MileStoneService {
           completed,
           compStatus,
           inputDisabled,
+          uploadedFiles,
         }
       })
       return convertedMilestones
-    } catch (err) {}
+    } catch (err) {
+      console.error('Error getting milestones', err)
+      return
+    }
   }
 
-  static getMileStoneStatus(startDate, endDate) {
+  static getMileStoneStatus(startDate, endDate, milestoneStatus) {
     const today = new Date()
     let message = ''
     let status = ''
+
+    if (milestoneStatus) {
+      if (
+        milestoneStatus.milestone_status === MileStoneStatusWebEnums.completed
+      ) {
+        message = `Completed on ${new Date(
+          milestoneStatus.completed_date,
+        ).toDateString()}`
+        status = MileStoneStatusEnums.completed
+        return {
+          message,
+          status,
+        }
+      } else if (
+        milestoneStatus.milestone_status === MileStoneStatusWebEnums.evaluated
+      ) {
+        message = `Evaluated on ${new Date(
+          milestoneStatus.eval_date,
+        ).toDateString()}`
+        status = MileStoneStatusEnums.completed
+        return {
+          message,
+          status,
+        }
+      }
+    }
+
     if (today < startDate) {
       message = 'Not started'
       status = MileStoneStatusEnums.notStarted
@@ -85,39 +126,62 @@ export class MileStoneService {
       return { message, filePath }
     } catch (err) {
       console.error('Error uploading file', err)
-      return null;
+      return null
     }
   }
-}
 
-// {
-//     "milestones": [
-//         {
-//             "end_date": "Sun, 01 Dec 2024 00:00:00 GMT",
-//             "max_marks": 10.0,
-//             "milestone_description": "The first milestone",
-//             "milestone_id": 1,
-//             "milestone_name": "Milestone 1",
-//             "project_id": 1,
-//             "start_date": "Sun, 01 Dec 2024 00:00:00 GMT"
-//         },
-//         {
-//             "end_date": "Thu, 05 Dec 2024 00:00:00 GMT",
-//             "max_marks": 10.0,
-//             "milestone_description": "The second milestone",
-//             "milestone_id": 2,
-//             "milestone_name": "Milestone 2",
-//             "project_id": 1,
-//             "start_date": "Tue, 03 Dec 2024 00:00:00 GMT"
-//         },
-//         {
-//             "end_date": "Sun, 08 Dec 2024 00:00:00 GMT",
-//             "max_marks": 10.0,
-//             "milestone_description": "The third milestone",
-//             "milestone_id": 3,
-//             "milestone_name": "Milestone 3",
-//             "project_id": 1,
-//             "start_date": "Fri, 06 Dec 2024 00:00:00 GMT"
-//         }
-//     ]
-// }
+  static async createMilestoneStatus(milestoneId, projectId = 1) {
+    const data = JSON.stringify({
+      milestone_id: milestoneId,
+      project_id: projectId,
+    })
+    const response = await mainAxios.post('/milestone-status', data)
+    const result = JSON.parse(response.data)
+    const message = result.message
+    const milestoneStatus = result.milestone_status
+    return { message, milestoneStatus }
+  }
+
+  static async getUserMilestoneStatuses() {
+    try {
+      const response = await mainAxios.get(`/milestone-status`)
+      const result = JSON.parse(response.data)
+      const statuses = result.statuses
+      return statuses
+    } catch (err) {
+      console.error('Error getting user milestone statuses', err)
+      return null
+    }
+  }
+
+  static async getUserFiles() {
+    try {
+      const response = await mainAxios.get('/uploaded-files')
+      const result = JSON.parse(response.data)
+      return result.documents
+    } catch (err) {
+      console.error('Error getting user files', err)
+      return null
+    }
+  }
+
+  static searchMilestoneStatuses(milestoneStatuses, id) {
+    const filtered = milestoneStatuses.filter(status => {
+      return status.milestone_id === id
+    })
+    if (filtered.length > 0) {
+      return filtered[0]
+    }
+    return null
+  }
+
+  static searchFiles(files, id) {
+    const filtered = files.filter(file => {
+      return file.milestoneId === id
+    })
+    if (filtered.length > 0) {
+      return filtered
+    }
+    return null
+  }
+}

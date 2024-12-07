@@ -1,3 +1,7 @@
+<script setup>
+import { BListGroup, BListGroupItem, BLink } from 'bootstrap-vue-next'
+</script>
+
 <template>
   <div class="manage-milestone">
     <table class="milestone-table">
@@ -21,6 +25,23 @@
               :disabled="milestone.inputDisabled"
               @change="handleFileUpload($event, milestone)"
             />
+            <div class="mt-3">
+              <h5 v-if="milestone?.uploadedFiles?.length > 0">Already uploaded files</h5>
+              <BListGroup>
+                <BListGroupItem
+                  v-for="file in milestone.uploadedFiles"
+                  :key="file.name"
+                >
+                  <BLink :href="file.url" target="_blank">
+                    {{
+                      file.name.length > 30
+                        ? file.name.slice(0, 15) + '...' + file.name.slice(-15)
+                        : file.name
+                    }}
+                  </BLink>
+                </BListGroupItem>
+              </BListGroup>
+            </div>
           </td>
           <td>
             <input
@@ -106,12 +127,27 @@ export default {
         }
       }
     },
-    markAsComplete(milestone) {
-      if (milestone.completed) {
-        alert(
-          `Marking ${milestone.name} as complete. No further changes allowed.`,
-        )
-        milestone.status = `Completed on ${new Date().toLocaleDateString()}`
+    async markAsComplete(milestone) {
+      // if (milestone.completed) {
+      //   alert(
+      //     `Marking ${milestone.name} as complete. No further changes allowed.`,
+      //   )
+      //   milestone.status = `Completed on ${new Date().toLocaleDateString()}`
+      // }
+      try {
+        const data = await MileStoneService.createMilestoneStatus(milestone.id)
+        Emitter.emit(Events.showToast, {
+          title: 'Milestone Completed',
+          message: `Milestone ${milestone.name} has been marked as completed`,
+          variant: 'success',
+        })
+        this.fetchMilestones()
+      } catch (err) {
+        Emitter.emit(Events.showToast, {
+          title: 'Milestone not marked as completed',
+          message: `Milestone ${milestone.name} has not been marked as completed`,
+          variant: 'danger',
+        })
       }
     },
     submit() {
@@ -130,7 +166,7 @@ export default {
       // Fetch milestones from API
       // this.milestones = await fetchMilestones();
       const conveMilestones = await MileStoneService.getMilestones()
-      console.log('converted return milestones', conveMilestones)
+      //console.log('converted return milestones', conveMilestones)
       this.milestones = conveMilestones
     },
   },

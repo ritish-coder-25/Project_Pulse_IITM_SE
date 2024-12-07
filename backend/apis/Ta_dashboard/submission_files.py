@@ -96,8 +96,61 @@ class SubmissionFileResource(Resource):
                         "milestone": milestone.milestone_name,
                     }
                     documents.append(document)
-            print("Documents:",documents)
-            return jsonify({"documents": documents}), 200 
+            print("Documents:", documents)
+            return jsonify({"documents": documents}), 200
+        except Exception as e:
+            return {
+                "errorCode": "error",
+                "message": "An error occurred.",
+                "error": str(e),
+            }, 500
+        
+
+@api_bp_submission.route("/api/uploaded-files", methods=["GET"])
+class UploadedFiles(Resource):
+
+    @jwt_required()
+    @api_bp_submission.response(
+        200, DocumentListSchema
+    )  # Assuming you define a schema for response
+    @api_bp_submission.response(404, CommonErrorSchema)
+    def get(self):
+        """
+        Get all files submitted by a specific team.
+
+        Query Parameters:
+            - team_id (int): The ID of the team whose submissions are being queried.
+
+        Returns:
+            List of documents with their metadata.
+        """
+        try:
+            current_user_id = get_jwt_identity()
+            current_user = User.query.get_or_404(current_user_id)
+            team_id = current_user.team_id
+            print("Team Id REceived: ", team_id)
+            files = File.query.filter_by(team_id=team_id).all()
+            if not files:
+                return {
+                    "errorCode": "submissions_not_found",
+                    "message": "No submissions found for the specified team.",
+                }, 404
+
+            print(files)
+            documents = []
+            for file in files:
+                url_name = file.file_name.split("\\")[-1]
+                document = {
+                    "id": file.file_id,
+                    "name": file.file_name,
+                    #"url": f"{request.url_root}uploads/{url_name}",
+                    "url": f"http://localhost:5000/uploads/{url_name}",
+                    "team": file.team_id,
+                    "milestoneId": file.milestone_id,
+                }
+                documents.append(document)
+            print("Documents:", documents)
+            return jsonify({"documents": documents}), 200
         except Exception as e:
             return {
                 "errorCode": "error",
@@ -148,6 +201,7 @@ class FileDownloadResource(Resource):
                 "message": "An error occurred.",
                 "error": str(e),
             }, 500
+
 
 @api_bp_submission.route("/api/milestone-review")
 class MilestoneReviewSubmission(Resource):
@@ -204,7 +258,6 @@ class MilestoneReviewSubmission(Resource):
                     eval_feedback=data["feedback"],
                     eval_date=datetime.now(),
                     completed_date=datetime.now(),
-
                 )
                 db.session.add(milestone_status)
 
@@ -267,7 +320,7 @@ class SpecificMilestoneReview(Resource):
                     "errorCode": "not_found",
                     "message": "Milestone review not found.",
                 }, 404
-            print("Data:",review.to_dict())
+            print("Data:", review.to_dict())
             return review.to_dict(), 200
         except SQLAlchemyError as db_err:
             return {
@@ -342,6 +395,120 @@ class SpecificMilestoneReview(Resource):
                 "error": str(db_err),
             }, 500
         except Exception as e:
+            return {
+                "errorCode": "unknown_error",
+                "message": "An unexpected error occurred.",
+                "error": str(e),
+            }, 500
+
+
+@api_bp_submission.route("/api/milestone-status")
+class MilestoneStatusCreate(Resource):
+
+    # @api_bp_submission.response(
+    #     200, MilestoneReviewSchema
+    # )  # Assuming you define a schema for response
+    @api_bp_submission.response(404, CommonErrorSchema)
+    @api_bp_submission.response(500, CommonErrorSchema)
+    @jwt_required()
+    def post(self):
+        """
+        Create or update milestone review data.
+        """
+        logger.debug("Received request to create or update milestone review.")
+        try:
+            data = request.json
+            logger.debug(f"Request data: {data}")
+            required_fields = [
+                "milestone_id",
+                "project_id"
+            ]
+
+            # Validate required fields
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                logger.warning(f"Missing required fields: {', '.join(missing_fields)}")
+                return {
+                    "errorCode": "missing_fields",
+                    "message": f"Missing required fields: {', '.join(missing_fields)}",
+                }, 400
+
+            current_user_id = get_jwt_identity()
+            user = User.query.get(current_user_id)
+            team_id = user.team_id
+
+            # Create new milestone review
+            logger.info("Creating new milestone review.")
+            milestone_status = MilestoneStatus(
+                team_id=team_id,
+                milestone_id=data["milestone_id"],
+                milestone_status="Completed",
+                completed_date=datetime.now(),
+            )
+            db.session.add(milestone_status)
+
+            db.session.commit()
+            logger.debug("Milestone review saved successfully.")
+            return jsonify({
+                "message": "Milestone status saved successfully.",
+                "milestone_status": milestone_status.to_dict(),
+            }), 201
+
+        except SQLAlchemyError as db_err:
+            db.session.rollback()
+            logger.error(f"Database error occurred: {str(db_err)}")
+            return {
+                "errorCode": "database_error",
+                "message": "A database error occurred.",
+                "error": str(db_err),
+            }, 500
+        except Exception as e:
+            logger.error(f"Unexpected error occurred: {str(e)}")
+            return {
+                "errorCode": "unknown_error",
+                "message": "An unexpected error occurred.",
+                "error": str(e),
+            }, 500
+
+    # @api_bp_submission.response(
+    #     200, MilestoneReviewSchema
+    # )  # Assuming you define a schema for response
+    @api_bp_submission.response(404, CommonErrorSchema)
+    @api_bp_submission.response(500, CommonErrorSchema)
+    @jwt_required()
+    def get(self):
+        """
+        Create or update milestone review data.
+        """
+        logger.debug("Received request to create or update milestone review.")
+        try:
+            current_user_id = get_jwt_identity()
+            user = User.query.get(current_user_id)
+            team_id = user.team_id
+
+            # Create new milestone review
+            logger.info("Creating new milestone review.")
+            milestone_status = MilestoneStatus.query.filter_by(team_id=team_id).all()
+            #db.session.add(milestone_status)
+
+            #db.session.commit()
+            logger.debug("Milestone review saved successfully.")
+            statuses = [status.to_dict() for status in milestone_status]
+            print(statuses)
+            return jsonify({
+                "statuses": [review.to_dict() for review in milestone_status],
+            }), 201
+
+        except SQLAlchemyError as db_err:
+            db.session.rollback()
+            logger.error(f"Database error occurred: {str(db_err)}")
+            return {
+                "errorCode": "database_error",
+                "message": "A database error occurred.",
+                "error": str(db_err),
+            }, 500
+        except Exception as e:
+            logger.error(f"Unexpected error occurred: {str(e)}")
             return {
                 "errorCode": "unknown_error",
                 "message": "An unexpected error occurred.",

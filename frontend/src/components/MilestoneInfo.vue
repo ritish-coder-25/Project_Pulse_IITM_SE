@@ -16,12 +16,45 @@
       it can be challenging for instructors to effectively track the progress of student projects,
       particularly in larger classes where multiple teams are working on different tasks...
     </p>
+
+    <h2>Project Docuemnt</h2>
+    <p>Project Document Link: <a :href="project_document_url" target="_blank">{{ project_document_url }}</a></p>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
+import { getProjectDetails } from '@/helpers/ApiHelperFuncs/ProjectDetails';
+
 export default {
   name: "MilestoneInfo",
+
+  data(){
+    return {
+      project_id: null,
+      project_topic: "",
+      project_statement: "",
+      project_document_url: "",
+      fetchDataError:false
+    }
+  },
+  methods:{
+    async fetchProjectDetails(){
+      const data = await getProjectDetails();
+      if(data){
+            this.project_id = data.project_id,
+            this.project_topic = data.project_topic,
+            this.project_statement = data.statement,
+            this.project_document_url = data.document_url
+        }else{
+            console.error("Error while fetching teams dashboard data!!")
+            this.fetchDataError = true
+        }
+    }
+  },
+  mounted(){
+    this.fetchProjectDetails()
+  },
 };
 </script>
 
@@ -87,5 +120,9 @@ ul li strong {
   border-left: 4px solid #3498db;
   border-radius: 4px;
   box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+a{
+  text-decoration: none;
 }
 </style>

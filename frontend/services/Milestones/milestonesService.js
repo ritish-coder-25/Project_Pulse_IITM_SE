@@ -8,7 +8,7 @@ export class MileStoneService {
       const milestones = JSON.parse(response.data)
       const statuses = await this.getUserMilestoneStatuses()
       const files = await this.getUserFiles()
-      console.log("main files", files);
+      console.log('main files', files)
       //console.log("milestones", milestones, "statuses", statuses, "resp", response.data);
       const convertedMilestones = milestones.map(milestone => {
         const id = milestone.milestone_id
@@ -183,5 +183,42 @@ export class MileStoneService {
       return filtered
     }
     return null
+  }
+
+  static async getOnlyMilestones() {
+    try {
+      const response = await mainAxios.get('/milestones')
+      const milestones = JSON.parse(response.data)
+
+      const convertedMilestones = milestones.map(milestone => {
+        const id = milestone.milestone_id
+        const name = milestone.milestone_name
+        const description = milestone.milestone_description
+        const startDate = new Date(milestone.start_date)
+        const endDate = new Date(milestone.end_date)
+        const maxMarks = milestone.max_marks
+        const projectId = milestone.project_id
+        const statusObj = this.getMileStoneStatus(startDate, endDate)
+        const status = statusObj.message
+        const compStatus = statusObj.status
+        const inputDisabled = this.getInputDisabled(compStatus)
+        return {
+          id,
+          name,
+          description,
+          startDate,
+          endDate,
+          maxMarks,
+          projectId,
+          status,
+          compStatus,
+          inputDisabled
+        }
+      })
+      return convertedMilestones
+    } catch (err) {
+      console.error('Error getting milestones', err)
+      return
+    }
   }
 }

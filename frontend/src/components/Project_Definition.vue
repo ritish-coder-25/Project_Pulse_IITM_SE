@@ -1,59 +1,5 @@
 <template>
   <div class="container">
-    <!-- Header with App Logo and User Info -->
-    <!-- <div class="header">
-      <div class="app-logo">App Logo</div>
-      <div class="user-info">
-        <span>Welcome XXX! You are signed in as TA/Instructor.</span>
-        <a href="#" class="logout">Logout</a>
-      </div>
-    </div> -->
-
-    <!-- Navigation Bar using BTabs -->
-    <!-- <BTabs 
-      class="custom-tabs" 
-      nav-class="border-0 mb-3" 
-      card
-      v-model="activeTab"
-      @update:modelValue="handleTabChange"
-    >
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <Home class="tab-icon me-2" />
-            <span>Home</span>
-          </div>
-        </template>
-      </BTab>
-      
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <LayoutDashboard class="tab-icon me-2" />
-            <span>Dashboard</span>
-          </div>
-        </template>
-      </BTab>
-      
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <Milestone class="tab-icon me-2" />
-            <span>Define Project</span>
-          </div>
-        </template>
-      </BTab>
-      
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <ClipboardCheck class="tab-icon me-2" />
-            <span>Project Scoring</span>
-          </div>
-        </template>
-      </BTab>
-    </BTabs> -->
-
     <!-- Project Definition Form -->
     <div class="form-container">
       <form @submit.prevent="handleSubmit">

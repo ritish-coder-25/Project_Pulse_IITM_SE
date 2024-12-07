@@ -91,6 +91,12 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           </div>
         </div>
 
+        <div v-if="reviewData" class="mt-4">
+          <h3>Code Review Scores and Comments</h3>
+          <pre>{{ reviewData }}</pre>
+        </div>
+
+
         <div class="d-flex mt-4">
           <button type="button" @click="submitForm" class="btn btn-primary">Submit</button>
           <button type="button" @click="resetForm" class="btn btn-secondary ms-2">
@@ -125,7 +131,8 @@ export default {
       filteredDocuments: [], // To hold documents filtered by team and milestone
       feedback: '',
       teamScore: 18,
-      maxMilestoneScore: 20
+      maxMilestoneScore: 20,
+      reviewData: null,
     }
   },
   methods: {
@@ -157,6 +164,8 @@ export default {
         this.documents = Array.isArray(response.data) ? response.data : []
         console.log("Documents ye rha:", this.documents)
         this.filterDocuments()
+        this.reviewData = `Here's the JSON object with the requested code review scores and comments:\n\n\`\`\`json\n{\n  "code_clarity": 5,\n  "functionality": 5,\n  "efficiency": 5,\n  "maintainability": 5,\n  "documentation": 1,\n  "overall_review": {\n    "strengths": "The code changes are very clear and functional, with good efficiency and maintainability. However, there is a lack of documentation that could hinder understanding the purpose and implementation of the changes.",\n    "weaknesses": "The code lacks documentation, which can make it difficult for other developers to understand the purpose and implementation of the changes. Adding comments and explanations to the code will greatly improve its maintainability and readability.",\n    "suggested_improvements": [\n      "Add comments and explanations to the code to improve documentation.",\n      "Consider breaking down large functions into smaller, more manageable ones for better maintainability."\n    ]\n  }\n}\n\`\`\`\n\nThe code changes are well-implemented, clear, and functional, with good efficiency. However, there is a significant lack of documentation, which can make it difficult for other developers to understand the purpose and implementation of the changes. Adding comments and explanations to the code will greatly improve its maintainability and readability.`;
+
       } catch (error) {
         console.warn('Using local documents data due to error:', error)
         this.documents = TaScoringApiHelpersJson.documents

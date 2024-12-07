@@ -176,10 +176,10 @@ export class MileStoneService {
   }
 
   static searchFiles(files, id) {
-    const filtered = files.filter(file => {
+    const filtered = files?.filter(file => {
       return file.milestoneId === id
     })
-    if (filtered.length > 0) {
+    if (filtered?.length > 0) {
       return filtered
     }
     return null

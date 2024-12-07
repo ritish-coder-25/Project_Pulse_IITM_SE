@@ -123,6 +123,10 @@ class TATeamDashboard(MethodView):
                             })
         
         except Exception as e:
-            return createError("ta_dashbaord_team_server_error", "Error while fetching dashboard data", 500)
+            return {
+                "errorCode": "unknown_error",
+                "message": "An unexpected error occurred.",
+                "error": str(e),
+  },500
 
  

@@ -1,59 +1,5 @@
 <template>
   <div class="define-milestones">
-    <!-- Header Section
-    <header class="header">
-      <div class="logo">App Logo</div>
-      <div class="user-info">
-        <span>Welcome XXX! You are signed in as TA/Instructor.</span>
-        <a href="#" class="logout">Logout</a>
-      </div>
-    </header> -->
-
-    <!-- Updated Navigation Section using BTabs with routing -->
-    <!-- <BTabs 
-      class="custom-tabs" 
-      nav-class="border-0 mb-3" 
-      card
-      v-model="activeTab"
-      @update:modelValue="handleTabChange"
-    >
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <Home class="tab-icon me-2" />
-            <span>Home</span>
-          </div>
-        </template>
-      </BTab>
-      
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <LayoutDashboard class="tab-icon me-2" />
-            <span>Dashboard</span>
-          </div>
-        </template>
-      </BTab>
-      
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <Milestone class="tab-icon me-2" />
-            <span>Define Milestones</span>
-          </div>
-        </template>
-      </BTab>
-      
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <ClipboardCheck class="tab-icon me-2" />
-            <span>Project Scoring</span>
-          </div>
-        </template>
-      </BTab>
-    </BTabs> -->
-
     <!-- Rest of the template remains exactly the same -->
     <main class="content" v-if="activeTab === 2">
       <b-button @click="modal = true" class="create-btn">Create Milestone</b-button>
@@ -133,6 +79,8 @@ import {
   Flag as Milestone 
 } from 'lucide-vue-next';
 
+import { createMilestone, updateMilestone, deleteMilestone, fetchMilestones } from '@/helpers/ApiHelperFuncs/MilestoneDefinition/MilestoneDefinitionApiHelpers';
+
 export default {
   name: 'DefineMilestones',
   components: {
@@ -197,26 +145,58 @@ export default {
         this.router.push(targetRoute);
       }
     },
-    handleSubmit() {
-      if (this.editingIndex !== null) {
-        this.milestones[this.editingIndex] = { ...this.newMilestone };
-        this.editingIndex = null;
-      } else {
-        this.milestones.push({ ...this.newMilestone });
+    async handleSubmit() {
+      try {
+        const milestoneData = {
+          milestone_name: this.newMilestone.name,
+          milestone_description: this.newMilestone.description,
+          start_date: this.newMilestone.startDate,
+          end_date: this.newMilestone.deadline,
+          max_marks: this.newMilestone.maxMarks,
+          project_id: 1,
+        };
+
+        if (this.editingIndex !== null) {
+          const updatedMilestone = await updateMilestone(this.milestones[this.editingIndex].id, milestoneData);
+          this.milestones[this.editingIndex] = updatedMilestone;
+          this.editingIndex = null;
+        } else {
+          const createdMilestone = await createMilestone(milestoneData);
+          this.milestones.push(createdMilestone);
+        }
+
+        this.resetForm();
+        this.modal = false;
+      } catch (error) {
+        console.error("Error handling milestone:", error);
       }
-      this.resetForm();
-      this.modal = false;
     },
+
     editMilestone(index) {
       this.newMilestone = { ...this.milestones[index] };
       this.editingIndex = index;
       this.modal = true;
     },
-    deleteMilestone(index) {
-      if (confirm('Are you sure you want to delete this milestone?')) {
+
+    async deleteMilestone(index) {
+      try {
+        const milestoneId = this.milestones[index].id;
+        await deleteMilestone(milestoneId);
         this.milestones.splice(index, 1);
+      } catch (error) {
+        console.error("Error deleting milestone:", error);
       }
     },
+
+    async mounted() {
+      try {
+        const fetchedMilestones = await fetchMilestones();
+        this.milestones = fetchedMilestones;
+      } catch (error) {
+        console.error("Error fetching milestones:", error);
+      }
+    },
+
     resetForm() {
       this.newMilestone = {
         name: '',
@@ -227,6 +207,11 @@ export default {
       };
     },
   },
+
+  mounted() {
+    this.mounted();
+  },
+
   watch: {
     // Update active tab when route changes externally
     '$route'(to) {

@@ -14,6 +14,7 @@ import Project_Definition from '../Project_Definition.vue'
 import Milestone_Definition from '../Milestone_Definition.vue'
 import { useTabRouting } from '@/composables/useTabRouting'
 import { RoutesEnums } from '@/enums'
+import { ClipboardCheck } from 'lucide-vue-next'
 
 const TabNames = {
   Home: RoutesEnums.dashboard.instructor.home.name,
@@ -22,7 +23,6 @@ const TabNames = {
   TeamsDetails: RoutesEnums.dashboard.instructor.teamDetails.name,
   Project_Definition: RoutesEnums.dashboard.instructor.projectDefinition.name,
   Milestone_Definition: RoutesEnums.dashboard.instructor.milestoneDefinition.name,
-  Project_Scoring: RoutesEnums.dashboard.instructor.projectScoring.name,
 }
 
 const { activeTab, onTabChange } = useTabRouting(TabNames)
@@ -94,23 +94,12 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
       <BTab>
         <template #title>
           <div class="tab-title">
-            <Milestone class="tab-icon me-2" />
+            <ClipboardCheck class="tab-icon me-2" />
             <span>Define Milestone</span>
           </div>
         </template>
         <div class="tab-content-wrapper">
           <Milestone_Definition />
-        </div>
-      </BTab>
-      <BTab>
-        <template #title>
-          <div class="tab-title">
-            <Milestone class="tab-icon me-2" />
-            <span>Project Scoring</span>
-          </div>
-        </template>
-        <div class="tab-content-wrapper">
-          <Project_Scoring />
         </div>
       </BTab>
     </BTabs>

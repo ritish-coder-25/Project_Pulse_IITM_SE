@@ -34,10 +34,10 @@ app.config["API_VERSION"] = "v1"
 app.config["OPENAPI_VERSION"] = "3.1.0"
 app.config["UPLOAD_FOLDER"] = "uploads"
 api = Api(app)
-CORS(app)
 app.config.from_object(Config)
+CORS(app)
 
-# CORS(api)
+#CORS(api)
 # CORS(api)
 # Enable CORS for all routes
 

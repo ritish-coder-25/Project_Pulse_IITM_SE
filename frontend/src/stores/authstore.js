@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('authStore', () => {
         },
   )
   const userRole = computed(() =>
-    user.value?.role ? user.value?.role : user.value?.user_type,
+    user.value?.user_type ? user.value?.user_type : user.value?.role,
   )
   function updateAccessToken(newAccessToken) {
     accessToken.value = newAccessToken

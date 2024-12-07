@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-
+import { BToast, BToastOrchestrator } from 'bootstrap-vue-next'
 </script>
 
 <template>
@@ -99,10 +99,33 @@ import { RouterLink, RouterView } from 'vue-router'
   </header>
   <body class="container-fluid">
     <div class="container mt-3">
-    <!-- Warning for inactive approval status -->
-    <div v-if="isApproved" class="alert alert-warning" role="alert">
-      Your account is currently inactive.Kindly wait for approval from an Admin or TA. For assistance, contact support at <a href="mailto:support@projectpulse.com" class="alert-link">support@projectpulse.com</a>.
-    </div>
+      <!-- Toast container -->
+      <div class="toast-container position-fixed top-0 end-0 p-3">
+        <!-- {{ cToasts }}
+        <BToast
+          v-for="toast in cToasts"
+          :key="toast.id"
+          :variant="toast.variant"
+          @hidden="removeToast(toast.id)"
+          v-model="isActive"
+        >
+          {{ toast.message }}
+        </BToast> -->
+        <!-- <BToast v-model="isActive" variant="info">
+          <template #title> Title </template>
+          Body
+        </BToast> -->
+        <BToastOrchestrator />
+      </div>
+
+      <!-- Warning for inactive approval status -->
+      <div v-if="isApproved" class="alert alert-warning" role="alert">
+        Your account is currently inactive.Kindly wait for approval from an
+        Admin or TA. For assistance, contact support at
+        <a href="mailto:support@projectpulse.com" class="alert-link"
+          >support@projectpulse.com</a
+        >.
+      </div>
     </div>
     <RouterView />
   </body>
@@ -115,7 +138,12 @@ import { LocalStorageEnums, RoutesEnums } from './enums'
 import router from './router'
 import { validateField, validate } from './helpers'
 import { useAuthStore } from './stores/authstore'
+import { useToast } from '@/composables/useToast'
+import { ref } from 'vue'
+import { Emitter, Events } from '@/Events'
 
+//const { toasts, removeToast } = useToast()
+const isActive = ref(true)
 export default {
   data() {
     return {}
@@ -123,15 +151,18 @@ export default {
   computed: {
     isLoggedIn() {
       const authStore = useAuthStore()
-      console.log("AuthStore",authStore)
+      console.log('AuthStore', authStore)
       return !!authStore.accessToken
     },
     isApproved() {
       const authStore = useAuthStore()
       const user = authStore.user || {} // Get user from store
-      console.log("User --->",user)
+      console.log('User --->', user)
       return user.approval_status === 'Inactive'
     },
+    // cToasts() {
+    //   return toasts.value
+    // },
   },
   watch: {},
   methods: {
@@ -141,8 +172,23 @@ export default {
       localStorage.removeItem(LocalStorageEnums.refreshToken)
       localStorage.removeItem(LocalStorageEnums.user)
       //authStore.updateAccessRefreshUser(data.tokens.access_token,data.tokens.refresh_token,data.user)
-      router.push(RoutesEnums.home).then(() => {window.location.reload(); });
+      router.push(RoutesEnums.home).then(() => {
+        window.location.reload()
+      })
     },
+    
+  },
+  mounted() {
+    const {showToast} = useToast();
+    // Listen for 'show-toast' events
+    Emitter.on(Events.showToast, (ev)=> {
+      console.log('Event', ev)
+      showToast(ev)
+    })
+  },
+  beforeUnmount() {
+    // Clean up the event listener when the component is unmounted
+    Emitter.off(Events.showToast, this.showToast)
   },
 }
 </script>

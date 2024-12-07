@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { ProtectedRoutesEnums, RoutesEnums } from '../enums/RoutesEnums'
 import { LocalStorageEnums, UserRoleEnums } from '@/enums'
@@ -11,6 +11,7 @@ import DefineTeamComponent from '@/components/DefineTeam/DefineTeamComponent.vue
 import { useAuthStore } from '@/stores/authstore' // Add this import
 import ManageMilestone from '@/components/ManageMilestone.vue'
 import MilestoneInfo from '@/components/MilestoneInfo.vue'
+import { useToast } from '@/composables/useToast'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +19,11 @@ const router = createRouter({
     {
       path: RoutesEnums.home,
       name: 'home',
+      component: HomeView,
+    },
+    {
+      path: RoutesEnums.homeH,
+      name: 'homeH',
       component: HomeView,
     },
     {
@@ -36,81 +42,141 @@ const router = createRouter({
       component: () => import('../views/AuthViews/SignupView.vue'),
     },
     {
-      path: RoutesEnums.dashboard.root.url,  // This is '/dashboard'
+      path: RoutesEnums.dashboard.root.url, // This is '/dashboard'
       name: RoutesEnums.dashboard.root.name,
       component: () => import('../views/Dashboards/DashboardView.vue'),
+      beforeEnter: async (to, from) => {
+        // Initialize store outside the navigation guard
+        const { showToast } = useToast()
+        const authStore = useAuthStore()
+
+        try {
+          console.log('Navigation guard triggered:', to.fullPath)
+
+          // Get query parameters
+          const query = to.query
+          const queryString = Object.keys(query).length
+            ? `?${new URLSearchParams(query).toString()}`
+            : ''
+          console.log(
+            'Query string:',
+            queryString,
+            'authStore:',
+            authStore.userRole,
+            from.query,
+          )
+
+          // Get URL parameters
+          const params = to.params
+          const urlParams = Object.entries(params)
+            .map(([key, value]) => `${value}`)
+            .join('')
+
+          console.log('URL params:', urlParams, 'Query params:', queryString)
+
+          // Check user role and redirect
+          if (
+            to.path.includes('/dashboard') &&
+            !to.path.includes('/dashboard/student') &&
+            !to.path.includes('/dashboard/instructor')
+          ) {
+            if (authStore.userRole === UserRoleEnums.student) {
+              return `/dashboard/student/home/${urlParams}${queryString}`
+            } else if (authStore.userRole === UserRoleEnums.instructor) {
+              return `/dashboard/instructor/home/${urlParams}${queryString}`
+            }
+            showToast({
+              title: 'No role assigned.',
+              message: 'Please contact a TA to assign you a role.',
+            })
+            return `/`
+          }
+        } catch (error) {
+          console.error('Navigation guard error:', error)
+          return '/'
+        }
+      },
       children: [
         {
-          path: 'student',  // This is '/dashboard/student'
-          redirect: () => {
-            const authStore = useAuthStore()
-            const u_id = authStore.user.id
-            return `/dashboard/student/home/${u_id}`  // Redirect to the home path with user ID
-          },
-        },
-        {
-          path: 'student/home/:u_id',  // This is '/dashboard/student/home/:u_id'
-          name: RoutesEnums.dashboard.student.home.name,
-          component: StudentTeamsDashboard,
-          props: true,
-        },
-        {
-          path: 'student/team',
-          name: RoutesEnums.dashboard.student.team.name,
-          //component: DefineTeamComponent,
-        },
-        {
-          path: 'student/milestones',
-          name: RoutesEnums.dashboard.student.milestones.name,
-          //component: MilestoneScoring,
-        },
-        {
-          path: 'student/milestoneinfo',
-          name: RoutesEnums.dashboard.student.milestoneinfo.name,
-          component: MilestoneInfo,
-        },
-        {
-          path: 'student/managemilestone',
-          name: RoutesEnums.dashboard.student.managemilestone.name,
-          component: ManageMilestone,
-        },
-        {
-          path: 'instructor',  // This is '/dashboard/instructor'
+          path: 'student', // This is '/dashboard/student'
           children: [
             {
               path: '',
-              redirect: '/dashboard/instructor/home',  // Redirect to home path of instructor
+              redirect: () => {
+                const authStore = useAuthStore()
+                const u_id = authStore.user.id
+                return `/dashboard/student/home/${u_id ? u_id : ''}` // Redirect to the home path with user ID
+              },
             },
             {
-              path: 'home',
+              //path: 'home/:u_id?', // This is '/dashboard/student/home/:u_id'
+              path: RoutesEnums.dashboard.student.home.url, // This is '/dashboard/student/home/:u_id'
+              name: RoutesEnums.dashboard.student.home.name,
+              //component: StudentTeamsDashboard,
+              props: true,
+            },
+            {
+              //path: 'team/:u_id?',
+              path: RoutesEnums.dashboard.student.team.url,
+              name: RoutesEnums.dashboard.student.team.name,
+              //component: DefineTeamComponent,
+            },
+            {
+              //path: 'milestones/:u_id?',
+              path: RoutesEnums.dashboard.student.milestones.url,
+              name: RoutesEnums.dashboard.student.milestones.name,
+              //component: MilestoneScoring,
+            },
+            {
+              //path: 'milestoneinfo/:u_id?',
+              path: RoutesEnums.dashboard.student.milestoneinfo.url,
+              name: RoutesEnums.dashboard.student.milestoneinfo.name,
+              //component: MilestoneInfo,
+            },
+            {
+              //path: 'managemilestone/:u_id?',
+              path: RoutesEnums.dashboard.student.managemilestone.url,
+              name: RoutesEnums.dashboard.student.managemilestone.name,
+              //component: ManageMilestone,
+            },
+          ],
+        },
+
+        {
+          path: 'instructor', // This is '/dashboard/instructor'
+          children: [
+            {
+              path: '',
+              redirect: '/dashboard/instructor/home', // Redirect to home path of instructor
+            },
+            {
+              //path: 'home/:u_id?',
+              path: RoutesEnums.dashboard.instructor.home.url,
               name: RoutesEnums.dashboard.instructor.home.name,
               //component: TAHomepage,
             },
             {
-              path: 'milestones',
+              //path: 'milestones/:u_id?',
+              path: RoutesEnums.dashboard.instructor.milestones.url,
               name: RoutesEnums.dashboard.instructor.milestones.name,
               //component: MilestoneScoring,
             },
             {
-              path: 'teams',
+              path: RoutesEnums.dashboard.instructor.teams.path,
               name: RoutesEnums.dashboard.instructor.teams.name,
               //component: Teams,
             },
             {
-              path: 'team-details',
-              name: RoutesEnums.dashboard.instructor.teamDetails.name,
+              path: RoutesEnums.dashboard.instructor.projectDefinition.path,
+              name: RoutesEnums.dashboard.instructor.projectDefinition.name,
+              //component: TeamDetails,
+            },
+            {
+              path: RoutesEnums.dashboard.instructor.milestoneDefinition.path,
+              name: RoutesEnums.dashboard.instructor.milestoneDefinition.name,
               //component: TeamDetails,
             },
           ],
-        },
-        {
-          path: '',
-          redirect() {
-            const authStore = useAuthStore()
-            return authStore.userRole === UserRoleEnums.student
-              ? '/dashboard/student'  // If user is student, go to the student dashboard
-              : '/dashboard/instructor'  // Else go to the instructor dashboard
-          },
         },
       ],
     },
@@ -147,7 +213,7 @@ router.beforeEach((to, from, next) => {
   const refreshToken = localStorage.getItem(LocalStorageEnums.refreshToken)
 
   try {
-    if (ProtectedRoutesEnums.some((val) => to.fullPath === val)) {
+    if (ProtectedRoutesEnums.some(val => to.fullPath === val)) {
       if (!accessToken || isJwtTokenExpired(refreshToken)) {
         return next(RoutesEnums.login)
       }

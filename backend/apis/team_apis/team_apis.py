@@ -16,7 +16,7 @@ from helpers.ErrorCommonHelpers import createError, createFatalError
 api_bp_ta = Blueprint("Teams APIs", "Teams APIs", description="Operations for creating and editing Teams and fetching a team")
 
 
-@api_bp_ta.route("/api/teams")
+@api_bp_ta.route("/api/teams", methods=["POST", "GET"])
 class TeamListResource(Resource):
     @api_bp_ta.arguments(team_parsers.CreateTeamSchema)
     @api_bp_ta.response(201, TeamsCreateOutput)
@@ -121,7 +121,7 @@ class TeamListResource(Resource):
             # return jsonify({"errorCode": "error",'message': 'An error occurred', 'error': str(e)}), 500
 
 
-@api_bp_ta.route("/api/teams/<int:team_id>")
+@api_bp_ta.route("/api/teams/<int:team_id>", methods=["PUT", "GET"])
 class TeamResource(Resource):
     @api_bp_ta.arguments(team_parsers.PutTeamSchema)
     @api_bp_ta.response(201, TeamSchema)
@@ -212,7 +212,7 @@ class TeamResource(Resource):
             # return jsonify({"errorCode": "error",'message': 'An error occurred', 'error': str(e)}), 500
 
 
-@api_bp_ta.route("/api/teams/<int:team_id>/users/<int:user_id>")
+@api_bp_ta.route("/api/teams/<int:team_id>/users/<int:user_id>", methods=["DELETE"])
 class TeamResource(Resource):
     @api_bp_ta.response(200, TeamsDeleteOutput)
     @jwt_required()

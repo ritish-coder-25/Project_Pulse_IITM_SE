@@ -90,19 +90,25 @@ class RegisterResource(Resource):
 class LoginResource(Resource):
     def post(self):
         """API for user login"""
-        data = request.get_json()
-        user = User.query.filter_by(email=data["email"]).first()
-        
-        if user and bcrypt.check_password_hash(user.password, data["password"]):
-            expires = timedelta(days=90)
-            access_token = create_access_token(
-                identity=user.user_id, expires_delta=expires
+        try: 
+            data = request.get_json()
+            user = User.query.filter_by(email=data["email"]).first()
+
+            if user and bcrypt.check_password_hash(user.password, data["password"]):
+                expires = timedelta(days=90)
+                access_token = create_access_token(
+                    identity=user.user_id, expires_delta=expires
+                )
+                jsonified = jsonify({"access_token": access_token, "user": user.to_dict()})
+                return jsonified, 200
+
+            return jsonify({"errorCode": "invalid_login","message": "Invalid credentials"}), 401
+        except Exception as e:
+            return createFatalError(
+                "user_login_error",
+                "Error login in user",
+                str(e),
             )
-            jsonified = jsonify({"access_token": access_token, "user": user.to_dict()})
-            return jsonified, 200
-
-        return jsonify({"errorCode": "invalid_login","message": "Invalid credentials"}), 401
-
 
 @api_bp_auth.route("/api/users/pendusers")
 class PendingUserListResource(Resource):
@@ -190,3 +196,38 @@ class ApproveUsersResource(Resource):
                 "Error processing user approvals",
                 str(e),
             )
+        
+@api_bp_auth.route('/api/users', methods=['GET'])
+class UserResource(Resource):
+    @jwt_required()
+    def get(self):
+        query_params = request.args  # Get all query parameters from the URL
+
+        # If 'id' is present, fetch the exact user by id
+        user_id = query_params.get('id')
+        if user_id:
+            user = User.query.get(user_id)
+            if user:
+                return jsonify(user.to_dict()), 200
+            else:
+                return jsonify({"error": "User not found"}), 404
+
+
+        query = User.query
+
+
+        for field, value in query_params.items():
+            if field != 'id' and hasattr(User, field):
+
+                column_type = str(getattr(User, field).type)
+                print(column_type)
+                if 'VARCHAR' in column_type:
+                    query = query.filter(getattr(User, field).like(f'%{value}%'))
+                else:
+
+                    query = query.filter(getattr(User, field) == value)
+
+
+        users = query.all()
+        jsonUsers = jsonify([user.to_dict() for user in users])
+        return jsonUsers, 200

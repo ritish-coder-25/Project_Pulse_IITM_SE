@@ -55,17 +55,6 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           <DefineTeamComponent />
         </div>
       </BTab>
-      <BTab title="Manage Milestone">
-        <template #title>
-          <div class="tab-title">
-            <UserGroupIcon class="tab-icon me-2" />
-            <span>Manage Milestone</span>
-          </div>
-        </template>
-        <div class="tab-content-wrapper">
-          <ManageMilestone />
-        </div>
-      </BTab>
       <BTab title="MilestoneInfo">
         <template #title>
           <div class="tab-title">
@@ -75,6 +64,17 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
         </template>
         <div class="tab-content-wrapper">
           <MilestoneInfo />
+        </div>
+      </BTab>
+      <BTab title="Manage Milestone">
+        <template #title>
+          <div class="tab-title">
+            <UserGroupIcon class="tab-icon me-2" />
+            <span>Manage Milestone</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <ManageMilestone />
         </div>
       </BTab>
     </BTabs>

@@ -93,27 +93,26 @@ class TATeamDashboard(MethodView):
         """
         API to get data for rendering Individual Team's Dashboard for TA
         """
-        
-        current_user_id = get_jwt_identity()
-        current_user = User.query.get_or_404(current_user_id)
-
-        allowed_roles = TA_ALLOWED_ROLES
-        if current_user.user_type not in allowed_roles:
-            return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
-        
-        if current_user.approval_status != 'Active':
-            return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
-        
-        team = Team.query.get_or_404(team_id)
-
         try:
+            current_user_id = get_jwt_identity()
+            current_user = User.query.get_or_404(current_user_id)
 
+            allowed_roles = TA_ALLOWED_ROLES
+            if current_user.user_type not in allowed_roles:
+                return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
+
+            if current_user.approval_status != 'Active':
+                return createError("user_does_not_have_permission_to_access_dashboard", "User does not have permission to access dashboard", 403)
+
+            team = Team.query.get_or_404(team_id)
+
+        
             commit_counts = Commit.query.filter(Commit.team_id==team_id).with_entities(Commit.user_id, func.count(Commit.commit_id)).group_by(Commit.user_id).all()
             # output format for above query is [ ("user_id", "commit_count"), ("user_id", "commit_count") , ... ]
             commit_counts = {i[0]: i[1] for i in commit_counts}
 
             members = User.query.filter(User.team_id==team.team_id).all()
-            members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "email": member.email, "commits": commit_counts[member.user_id]} for member in members }
+            members_data = {member.user_id: {"name": f"{member.first_name} {member.last_name}", "email": member.email, "commits": commit_counts.get(member.user_id, 0)} for member in members }
 
             milestones = Milestone.query.all()
 
@@ -123,6 +122,11 @@ class TATeamDashboard(MethodView):
                             })
         
         except Exception as e:
-            return createError("ta_dashbaord_team_server_error", "Error while fetching dashboard data", 500)
+            print(f"Unexpected error occurred: {str(e)}")
+            return {
+                "errorCode": "unknown_error",
+                "message": "An unexpected error occurred.",
+                "error": str(e),
+          }, 500
 
  

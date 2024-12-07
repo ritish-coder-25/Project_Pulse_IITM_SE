@@ -11,15 +11,8 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
         <!-- Team Selection -->
         <div class="form-group mb-3">
           <label for="teamSelect" class="form-label">Select Team</label>
-          <input
-            type="text"
-            v-model="selectedTeam.name"
-            list="teams"
-            class="form-control"
-            placeholder="Start typing team name..."
-            id="teamSelect"
-            @change="handleTeamChange"
-          />
+          <input type="text" v-model="selectedTeam.name" list="teams" class="form-control"
+            placeholder="Start typing team name..." id="teamSelect" @change="handleTeamChange" />
           <datalist id="teams">
             <option v-for="team in teams" :key="team.id" :value="team.name">
               {{ team.name }}
@@ -29,26 +22,13 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
 
         <!-- Milestone Selection -->
         <div class="form-group mb-3">
-          <label for="milestoneSelect" class="form-label"
-            >Select Milestone</label
-          >
-          <input
-            type="text"
-            v-model="selectedMilestone.milestone_name"
-            list="milestones"
-            class="form-control"
-            placeholder="Start typing milestone name..."
-            id="milestoneSelect"
-            @change="handleMilestoneChange"
-          />
+          <label for="milestoneSelect" class="form-label">Select Milestone</label>
+          <input type="text" v-model="selectedMilestone.milestone_name" list="milestones" class="form-control"
+            placeholder="Start typing milestone name..." id="milestoneSelect" @change="handleMilestoneChange" />
 
-          
+
           <datalist id="milestones">
-            <option
-              v-for="milestone in milestones"
-              :key="milestone.milestone_id"
-              :value="milestone.milestone_name"
-            > 
+            <option v-for="milestone in milestones" :key="milestone.milestone_id" :value="milestone.milestone_name">
               {{ milestone_name }}
             </option>
           </datalist>
@@ -63,15 +43,10 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
                 Documents Uploaded
               </div>
               <div class="card-body">
-       
+
                 <div v-if="filteredDocuments.length">
-                  <a
-                    v-for="document in filteredDocuments"
-                    :key="document.id"
-                    @click="downloadDocument(document.id)"
-                    class="d-block text-primary"
-                    style="cursor: pointer;"
-                  >
+                  <a v-for="document in filteredDocuments" :key="document.id" @click="downloadDocument(document.id)"
+                    class="d-block text-primary" style="cursor: pointer;">
                     {{ document.name }}
                   </a>
                 </div>
@@ -92,12 +67,8 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
                 <p class="card-text">
                   {{ feedback || 'No feedback provided.' }}
                 </p>
-                <textarea
-                  v-model="feedback"
-                  class="form-control mt-2"
-                  rows="3"
-                  placeholder="Add additional feedback if needed"
-                ></textarea>
+                <textarea v-model="feedback" class="form-control mt-2" rows="3"
+                  placeholder="Add additional feedback if needed"></textarea>
               </div>
             </div>
           </div>
@@ -108,34 +79,21 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           <div class="col-md-6">
             <div class="form-group">
               <label for="teamScore" class="form-label">Team Score</label>
-              <input
-                type="number"
-                v-model.number="teamScore"
-                class="form-control"
-                placeholder="Enter score"
-                id="teamScore"
-              />
+              <input type="number" v-model.number="teamScore" class="form-control" placeholder="Enter score"
+                id="teamScore" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="maxMilestoneScore" class="form-label"
-                >Max Milestone Score</label
-              >
-              <input
-                type="number"
-                v-model="maxMilestoneScore"
-                class="form-control"
-                id="maxMilestoneScore"
-                readonly
-              />
+              <label for="maxMilestoneScore" class="form-label">Max Milestone Score</label>
+              <input type="number" v-model="maxMilestoneScore" class="form-control" id="maxMilestoneScore" readonly />
             </div>
           </div>
         </div>
 
         <div class="d-flex mt-4">
-          <button @click="submitForm" class="btn btn-primary">Submit</button>
-          <button @click="resetForm" class="btn btn-secondary ms-2">
+          <button type="button" @click="submitForm" class="btn btn-primary">Submit</button>
+          <button type="button" @click="resetForm" class="btn btn-secondary ms-2">
             Cancel
           </button>
         </div>
@@ -145,9 +103,9 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
 </template>
 
 <script>
-
+import { toRaw } from 'vue';
 import { TaScoringApiHelpers } from '@/helpers/ApiHelperFuncs/TaScoringPage'
-import TaScoringApiHelpersJson from '@/helpers/ApiHelperFuncs/TaScoringPage/TaScoringApiHelpers.json' 
+import TaScoringApiHelpersJson from '@/helpers/ApiHelperFuncs/TaScoringPage/TaScoringApiHelpers.json'
 export default {
   name: 'MilestoneReview',
   data() {
@@ -173,7 +131,7 @@ export default {
   methods: {
     async fetchTeams() {
       try {
-        const response =  await TaScoringApiHelpers.fetchTeams()
+        const response = await TaScoringApiHelpers.fetchTeams()
         console.log("Teams data received:", response.data)
         this.teams = response.data
       } catch (error) {
@@ -183,13 +141,13 @@ export default {
     },
     async fetchMilestones() {
       try {
-          const response = await TaScoringApiHelpers.fetchMilestones()
-          console.log("Milestones data received:", response.data)
+        const response = await TaScoringApiHelpers.fetchMilestones()
+        console.log("Milestones data received:", response.data)
         this.milestones = response.data.milestones;
-        
+
       } catch (error) {
         console.warn('Using local milestones data due to error:', error)
-          this.milestones = TaScoringApiHelpersJson.milestones
+        this.milestones = TaScoringApiHelpersJson.milestones
       }
     },
     async fetchDocuments() {
@@ -234,10 +192,47 @@ export default {
       }
     },
     async submitForm() {
-      alert(
-        `Form submitted with Team Score: ${this.teamScore} / ${this.maxMilestoneScore}`,
-      )
-      // Add form submission handling here
+      const rawSelectedTeam = toRaw(this.selectedTeam);
+
+      const rawSelectedMilestone = toRaw(this.selectedMilestone);
+      console.log(
+        "Submitting form with data:",
+        rawSelectedTeam,
+        rawSelectedMilestone,
+        this.teamScore,
+        this.feedback
+      );
+
+
+      if (!rawSelectedTeam.id || !rawSelectedMilestone.milestone_id) {
+        alert("Please select a valid team and milestone.");
+        return;
+      }
+
+      if (this.teamScore > this.maxMilestoneScore) {
+        alert("Team Score cannot exceed the Max Milestone Score.");
+        return;
+      }
+      const payload = {
+        team_id: rawSelectedTeam.id,
+        team_score: this.teamScore,
+        milestone_id: rawSelectedMilestone.milestone_id,
+        feedback: this.feedback,
+        max_milestone_score: this.maxMilestoneScore,
+      };
+
+      console.log("Payload: ", payload);
+      try {
+        const response = await TaScoringApiHelpers.submitMilestoneReview(payload);
+        alert(response.message || "Milestone review saved successfully.");
+        this.resetForm(); // Reset form on success
+      } catch (error) {
+        console.error("Error submitting milestone review:", error);
+        const message =
+          error?.message ||
+          "An unexpected error occurred while submitting the review.";
+        alert(message);
+      }
     },
     resetForm() {
       this.selectedTeam = {
@@ -277,7 +272,7 @@ export default {
   computed: {
     maxMilestoneScore() {
       return this.selectedMilestone.max_marks || 0
-      
+
     }
   },
 }

@@ -8,6 +8,17 @@ from flask_jwt_extended import get_jwt_identity
 from api_parsers import team_parsers
 from flask_restx import Resource
 from flask_smorest import Blueprint
+
+
+from datetime import datetime
+import logging
+
+
+logging.basicConfig(level=logging.DEBUG)
+
+logger = logging.getLogger(__name__)
+
+
 from models import Submission, File, Milestone, MilestoneStatus
 from api_outputs.api_outputs_common import (
     TeamSchema,
@@ -138,7 +149,6 @@ class FileDownloadResource(Resource):
                 "error": str(e),
             }, 500
 
-
 @api_bp_submission.route("/api/milestone-review")
 class MilestoneReviewSubmission(Resource):
 
@@ -151,8 +161,10 @@ class MilestoneReviewSubmission(Resource):
         """
         Create or update milestone review data.
         """
+        logger.debug("Received request to create or update milestone review.")
         try:
             data = request.json
+            logger.debug(f"Request data: {data}")
             required_fields = [
                 "team_id",
                 "team_score",
@@ -160,44 +172,56 @@ class MilestoneReviewSubmission(Resource):
                 "feedback",
                 "max_milestone_score",
             ]
+            # Validate required fields
             missing_fields = [field for field in required_fields if field not in data]
             if missing_fields:
+                logger.warning(f"Missing required fields: {', '.join(missing_fields)}")
                 return {
                     "errorCode": "missing_fields",
                     "message": f"Missing required fields: {', '.join(missing_fields)}",
                 }, 400
 
+            # Find or create milestone review
             milestone_status = MilestoneStatus.query.filter_by(
                 team_id=data["team_id"], milestone_id=data["milestone_id"]
             ).first()
+            logger.debug(f"Found milestone status: {milestone_status}")
 
             if milestone_status:
                 # Update existing milestone review
+                logger.info("Updating existing milestone review.")
                 milestone_status.eval_score = data["team_score"]
                 milestone_status.eval_feedback = data["feedback"]
                 milestone_status.milestone_status = "Evaluated"
             else:
                 # Create new milestone review
+                logger.info("Creating new milestone review.")
                 milestone_status = MilestoneStatus(
                     team_id=data["team_id"],
                     milestone_id=data["milestone_id"],
                     milestone_status="Evaluated",
                     eval_score=data["team_score"],
                     eval_feedback=data["feedback"],
+                    eval_date=datetime.now(),
+                    completed_date=datetime.now(),
+
                 )
                 db.session.add(milestone_status)
 
             db.session.commit()
+            logger.debug("Milestone review saved successfully.")
             return {"message": "Milestone review saved successfully."}, 201
 
         except SQLAlchemyError as db_err:
             db.session.rollback()
+            logger.error(f"Database error occurred: {str(db_err)}")
             return {
                 "errorCode": "database_error",
                 "message": "A database error occurred.",
                 "error": str(db_err),
             }, 500
         except Exception as e:
+            logger.error(f"Unexpected error occurred: {str(e)}")
             return {
                 "errorCode": "unknown_error",
                 "message": "An unexpected error occurred.",

@@ -295,3 +295,31 @@ class TeamResource(Resource):
                 ),
                 500,
             )
+
+
+@api_bp_ta.route("/api/teams/all")
+class AllTeamsResource(Resource):
+    @api_bp_ta.response(200, TeamSchema(many=True))  # Using `many=True` to handle a list of teams
+    @jwt_required()
+    def get(self):
+        """API to get all teams"""
+        try:
+            # Fetch all teams from the database
+            teams = Team.query.all()
+            
+            # Convert team objects to dictionaries
+            team_list = [team.to_dict() for team in teams]
+            
+            return jsonify({"teams": team_list}), 200
+        except Exception as e:
+            db.session.rollback()
+            return (
+                jsonify(
+                    {
+                        "errorCode": "error",
+                        "message": "An error occurred while fetching all teams",
+                        "error": str(e),
+                    }
+                ),
+                500,
+            )

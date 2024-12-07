@@ -2,8 +2,12 @@
   <div class="container mt-4 p-4 border border rounded">
     <!-- Team Dashboard Header -->
     <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-      <h4>Team name: {{ team.team_name }}</h4>
+      <h4>Team name: {{ team_name }}</h4>
       <p style="margin-left: auto;">Team's Score: {{ team_score }}/{{ team_max_score }}</p>
+    </div>
+
+    <div v-if="fetchDataError" class="alert alert-danger" role="alert">
+        Something went wrong!!!
     </div>
 
     <!-- Student Data Table -->
@@ -12,20 +16,9 @@
         body-text-direction="center" header-text-direction="center" table-class-name="customize-table" />
     </div>
 
-    <!-- Milestone Data Table -->
-    <!-- <div class="table-spacing">
-        <EasyDataTable
-          :headers="milestone_headers"
-          :items="milestone_items"
-          :hide-footer="true"
-          :alternating="true"
-          body-text-direction="center"
-          header-text-direction="center"
-          table-class-name="customize-table"
-        />
-      </div> -->
-
-    <h4 class="mb-3">Milestones</h4>
+    <div v-if="milestones">
+      <h4 class="mb-3">Milestones</h4>
+    </div>
     <table class="milestone-table table text-center table-bordered table-striped">
       <thead>
         <tr>
@@ -54,10 +47,10 @@
 </template>
 
 <script>
-import axios from 'axios';
 import EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import moment from 'moment';
+import { TaTeamsDashboardApiHelpers } from '@/helpers/ApiHelperFuncs/TaTeamsDashboard'
 
 export default {
   name: 'StudentTeamsDashboard',
@@ -66,9 +59,11 @@ export default {
   },
   data() {
     return {
+      fetchDataError: false,
       milestones: [],
       milestone_data: [],
       team: {},
+      team_name: "",
       team_score: 0,
       team_max_score: 0,
       stu_headers: [
@@ -87,15 +82,18 @@ export default {
       }
     },
     async fetchDashboardData() {
-      try {
-        const response = await axios.get('http://localhost:5000/api/ta-teams/' + this.$route.params.id,
-          { "headers": { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("access_token") } }
-        );
-        this.stu_items = response.data.members;
-        this.milestones = response.data.milestones;
-        this.team = response.data.team;
-      } catch (error) {
-        console.warn("Error while fetching data:", error);
+
+      const response = await TaTeamsDashboardApiHelpers.fetchTeamData(this.$route.params.id)
+      if(response){
+          this.stu_items = response.data.members;
+          this.milestones = response.data.milestones;
+          this.team = response.data.team;
+          this.team_name = this.team.team_name
+      }else{
+          this.fetchDataError = true
+          this.stu_items = [];
+          this.milestones = null;
+          this.team = null;
       }
     },
 
@@ -105,16 +103,18 @@ export default {
       this.stu_headers = [
         { text: "STUDENT NAME", value: "name" },
         { text: "STUDENT EMAIL", value: "email" },
-        { text: "NUMBER of COMMITS", value: "commits" },
+        { text: "NUMBER OF COMMITS", value: "commits" },
       ];
 
-      let milestone_statuses = {}
-      let team_score = 0
-      let team_max_score = 0
+      if(this.team && this.milestones){
 
-      for (let status of this.team.milestone_statuses) {
-        milestone_statuses[status.milestone_id] = status;
-      }
+        let milestone_statuses = {}
+        let team_score = 0
+        let team_max_score = 0
+
+        for (let status of this.team.milestone_statuses) {
+          milestone_statuses[status.milestone_id] = status;
+        }
 
       for (let milestone of this.milestones) {
         let completion_status = "NA"
@@ -126,7 +126,7 @@ export default {
         if (ms.milestone_status === "Completed") {
           if (ms.completed_date) {
             completion_status = "Completed on " + this.formatDate(ms.completed_date)
-            eval_link = "/dashboard/instructor/milestones"
+            eval_link = "/dashboard/instructor/milestones?milestonestatus=" + ms.milestonestatus_id
           }
           evaluation_status = "Pending Evaluation"
         } else if (ms.milestone_status === "Missed") {
@@ -154,6 +154,8 @@ export default {
       }
       this.team_score = team_score
       this.team_max_score = team_max_score
+    }
+      
     }
 
   },

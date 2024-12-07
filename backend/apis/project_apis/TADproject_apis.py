@@ -54,49 +54,29 @@ class CreateProjectResource(Resource):
                         }
                     ), 403,
                 )
-            
-            #Check for duplicate project name
-            existing_project = Project.query.filter_by(project_topic=data['name']).first()
-            if existing_project:
-                return (
-                    jsonify(
-                        {
-                            "errorCode": "project_name_exists",
-                            "message": "Project name already exists",
-                        }
-                    ), 400,
-                )
-            
-            #Check for duplicate document URL
-            if Project.query.filter_by(document_url=data['document_url']).first():
-                return (
-                    jsonify(
-                        {
-                            "errorCode": "document_url_exists",
-                            'message': 'Document URL already exists',
-                        }
-                    ), 400,
-                )
 
-            # Create a new project
-            new_project = Project(
-                project_topic=data["name"],
-                statement=data["statement"],
-                document_url=data["document_url"],
-            )
-            db.session.add(new_project)
-            db.session.commit()
+            project_id = 1  
+            project = Project.query.get(project_id)
 
+            if project:
+                # Update the project's attributes with the new details
+                project.project_topic = data["name"]
+                project.statement = data["statement"]
+                project.document_url = data["document_url"]
+                db.session.commit()
+            else:
+                print(f"Project with ID {project_id} does not exist.")
             # Return response with the output schema
             return (jsonify({
                 "message": "Project created successfully",
                 "project": {
-                    "project_id": new_project.project_id,
-                    "name": new_project.project_topic,
-                    "statement": new_project.statement,
-                    "document_url": new_project.document_url,
+                    "project_id": project.project_id,
+                    "name": project.project_topic,
+                    "statement": project.statement,
+                    "document_url": project.document_url,
                 },
             }), 201)
+
 
         except KeyError as e:
             # Handle missing required fields
@@ -147,3 +127,33 @@ class CreateProjectResource(Resource):
                 "Error creating the project",
                 str(e),
             )
+
+@api_bp_projects.route('/api/projects')
+class SubmitProject(Resource):
+    @api_bp_projects.response(201, CreateProjectSchema)
+    @api_bp_projects.response(400, CommonErrorSchema)
+    @jwt_required()
+    def get(self):
+        """Retrieve details for Project 1 in the database."""
+        try:
+            proj_details = Project.query.filter_by(project_id=1).first()
+            if not proj_details:
+                return {
+                    "error": "proj_fetch_error",
+                    "message": "No project with project ID = 1 exists in the system"
+                }, 400
+
+            result = {
+                "name": proj_details.project_topic,
+                "statement": proj_details.statement,
+                "document_url": proj_details.document_url,
+            }
+            return jsonify(result), 200
+
+        except Exception as e:
+            return {
+                "error": "proj_fetch_error",
+                "message": "An unexpected error occurred while fetching the project",
+                "details": str(e),
+            }, 500
+

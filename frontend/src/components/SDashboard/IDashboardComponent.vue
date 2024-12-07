@@ -72,17 +72,6 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
       <BTab>
         <template #title>
           <div class="tab-title">
-            <UserGroupIcon class="tab-icon me-2" />
-            <span>Team Details</span>
-          </div>
-        </template>
-        <div class="tab-content-wrapper">
-          <TeamDetails />
-        </div>
-      </BTab>
-      <BTab>
-        <template #title>
-          <div class="tab-title">
             <Milestone class="tab-icon me-2" />
             <span>Define Project</span>
           </div>
@@ -102,6 +91,20 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           <Milestone_Definition />
         </div>
       </BTab>
+<<<<<<< HEAD
+=======
+      <!-- <BTab>
+        <template #title>
+          <div class="tab-title">
+            <Milestone class="tab-icon me-2" />
+            <span>Project Scoring</span>
+          </div>
+        </template>
+        <div class="tab-content-wrapper">
+          <Project_Scoring />
+        </div>
+      </BTab> -->
+>>>>>>> 194797720462e5854468f652dff254463c80c2f6
     </BTabs>
   </div>
 </template>

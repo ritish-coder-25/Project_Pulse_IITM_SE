@@ -5,15 +5,15 @@
       Loading team data, please wait...
     </div>
     <div v-else>
-  <!-- Team Dashboard Header -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 20px; text-align: center;">
-    <h3>Welcome, {{ user_name }}</h3>
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px;">
-    <p>You belong to {{ team_name }}</p>
-    <p style="margin: 0;">Team's Score: {{ team_score }}/{{ total_max_marks }}</p>
-  </div>
-  <h5>Team Details</h5>
-  </div>
+      <!-- Team Dashboard Header -->
+      <div class="dashboard-header">
+        <h4>Welcome, {{ user_name }}</h4>
+        <div class="team-info">
+          <h6>You belong to {{ team_name }}</h6>
+          <h6>Team's Score: {{ team_score }}/{{ total_max_marks }}</h6>
+        </div>
+        <h6>Team Details</h6>
+      </div>
 
       <!-- Error Message -->
       <div v-if="error" class="error-message">
@@ -35,15 +35,25 @@
 
       <!-- Milestone Data Table -->
       <div v-if="!error" class="table-spacing">
-        <EasyDataTable
-          :headers="milestone_headers"
-          :items="milestone_items"
-          :hide-footer="true"
-          :alternating="true"
-          body-text-direction="center"
-          header-text-direction="center"
-          table-class-name="customize-table"
-        />
+        <h6 class="mb-3 milestone-status">Milestone Status</h6>
+        <table class="milestone-table table text-center table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>MILESTONES</th>
+              <th v-for="milestone in milestone_items" :key="milestone.milestone_name">{{ milestone.milestone_name }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Deadline</td>
+              <td v-for="milestone in milestone_items" :key="milestone.end_date">{{ milestone.end_date }}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td v-for="milestone in milestone_items" :key="milestone.completion_status">{{ milestone.milestone_status }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -54,7 +64,6 @@ import axios from "axios";
 import EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 import { LocalStorageEnums } from '@/enums';
-import { User } from "lucide-vue-next";
 
 export default {
   name: "StudentTeamsDashboard",
@@ -65,8 +74,10 @@ export default {
     return {
       loading: true,
       error: null,
+      user_name: "",
       team_name: "",
       team_score: 0,
+      total_max_marks: 0,
       stu_headers: [
         { text: "STUDENT NAME", value: "stu_name" },
         { text: "STUDENT EMAIL", value: "stu_email" },
@@ -86,7 +97,6 @@ export default {
   },
   methods: {
     async fetchTeamData() {
-      // Get the user ID from the URL
       const u_id = this.$route.params.u_id;
 
       if (!u_id) {
@@ -96,7 +106,6 @@ export default {
       }
 
       try {
-        // Make API call using the user ID
         const response = await axios.get(`http://localhost:5000/api/stu_home/${u_id}`, {
           headers: {
             "Content-Type": "application/json",
@@ -106,20 +115,17 @@ export default {
 
         const { user_name, team_name, team_score, total_max_marks, members, milestones } = response.data;
 
-        // Populate team name and score
-        this.user_name=user_name
+        this.user_name = user_name;
         this.team_name = team_name;
         this.team_score = team_score;
-        this.total_max_marks=total_max_marks
+        this.total_max_marks = total_max_marks;
 
-        // Populate student data
         this.stu_items = members.map((member) => ({
           stu_name: member.name,
           stu_email: member.email,
           commit_count: member.commit_count,
         }));
 
-        // Populate milestone data
         this.milestone_items = milestones.map((milestone) => ({
           milestone_name: milestone.milestone_name,
           end_date: new Date(milestone.end_date).toLocaleDateString("en-US"),
@@ -129,7 +135,7 @@ export default {
         console.error("Failed to fetch data from the API:", error);
         this.error = "Unable to load team data. Please try again later.";
       } finally {
-        this.loading = false; // Stop loading state
+        this.loading = false;
       }
     },
   },
@@ -150,6 +156,25 @@ export default {
   text-align: center;
   margin: 20px 0;
 }
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.team-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.milestone-status {
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   h3 {
     font-size: 16px;

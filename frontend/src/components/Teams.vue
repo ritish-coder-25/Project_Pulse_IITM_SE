@@ -2,6 +2,10 @@
     <div class="container mt-4 p-4 border border rounded">
         <h2 class="mb-4">TA/Instructor Dashboard</h2>
 
+        <div v-if="fetchDataError" class="alert alert-danger" role="alert">
+            Something went wrong!!!
+        </div>
+
         <!-- Teams Table -->
         <h4 class="mb-3">Teams</h4>
 
@@ -12,7 +16,7 @@
 
                 <!-- team name -->
                 <template #item-team_name="{ team_name, team_url }">
-                    <a :href="team_url">{{ team_name }}</a>
+                    <a :href="team_url" target="_blank">{{ team_name }}</a>
                 </template>
 
                 <!-- team score -->
@@ -24,27 +28,27 @@
 
 
         <!-- Milestone's Table -->
-        <h4 class="mb-3">Deadlines</h4>
-        <table class="milestone-table table text-center table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th v-for="milestone in milestones">{{ milestone.milestone_name }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td v-for="milestone in milestones">{{ milestone.end_date }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div v-if="milestones">
+            <h4 class="mb-3">Deadlines</h4>
+            <table class="milestone-table table text-center table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th v-for="milestone in milestones">{{ milestone.milestone_name }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td v-for="milestone in milestones">{{ milestone.end_date }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
-
-import axios from 'axios';
 import moment from 'moment';
-import { LocalStorageEnums, RoutesEnums } from '@/enums'
+import { TaTeamsDashboardApiHelpers } from '@/helpers/ApiHelperFuncs/TaTeamsDashboard'
 
 export default {
     name: 'Teams',
@@ -59,6 +63,7 @@ export default {
             milestone_items: [],
             dashboard_data_headers: [],
             dashboard_data_items: [],
+            fetchDataError: false
         };
 
     },
@@ -70,13 +75,17 @@ export default {
           }
       },
         async fetchDashboardData() {
-            try {
-                const response = await axios.get('http://localhost:5000/api/ta-teams',
-                    { "headers": { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("access_token") } });
+
+            const response = await TaTeamsDashboardApiHelpers.fetchTeamsData()
+
+            if(response){
                 this.teams = response.data.teams;
                 this.milestones = response.data.milestones;
-            } catch (error) {
-                console.warn("Unable to fetch team details:", error);
+            }else{
+                console.error("Error while fetching teams dashboard data!!")
+                this.fetchDataError = true
+                this.teams = null
+                this.milestones = null
             }
         },
         async create_dashboard() {

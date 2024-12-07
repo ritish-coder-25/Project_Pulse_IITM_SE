@@ -18,19 +18,24 @@
           <td>
             <input
               type="file"
-              :disabled="milestone.status === 'Not open'"
+              :disabled="milestone.inputDisabled"
               @change="handleFileUpload($event, milestone)"
             />
           </td>
           <td>
             <input
               type="checkbox"
-              :disabled="milestone.status === 'Not open' || milestone.status.includes('Completed')"
+              :disabled="milestone.inputDisabled"
               v-model="milestone.completed"
               @change="markAsComplete(milestone)"
             />
           </td>
-          <td :class="{ 'missed': milestone.status === 'Deadline missed', 'due': milestone.status.startsWith('Due Date') }">
+          <td
+            :class="{
+              missed: milestone.status === 'Deadline missed',
+              due: milestone.status.startsWith('Due Date'),
+            }"
+          >
             {{ milestone.status }}
           </td>
         </tr>
@@ -39,9 +44,9 @@
 
     <div class="note">
       <p>
-        <strong>Note:</strong> Documents can be uploaded and the submit button can be clicked
-        without marking the milestone as complete. Once a milestone is marked as completed, no
-        further changes are allowed.
+        <strong>Note:</strong> Documents can be uploaded and the submit button
+        can be clicked without marking the milestone as complete. Once a
+        milestone is marked as completed, no further changes are allowed.
       </p>
     </div>
 
@@ -53,52 +58,86 @@
 </template>
 
 <script>
+import { onMounted } from 'vue'
+import { MileStoneService } from '../../services/Milestones/milestonesService'
+import { MileStoneStatusEnums } from '@/enums'
+import { Emitter, Events } from '@/Events'
+
 export default {
   name: 'ManageMilestone',
   data() {
     return {
       milestones: [
-        { id: 1, name: 'Milestone 1', status: 'Completed on xxxxx', completed: true },
-        { id: 2, name: 'Milestone 2', status: 'Deadline missed', completed: false },
-        { id: 3, name: 'Milestone 3', status: 'Due Date: 10 Nov', completed: false },
-        { id: 4, name: 'Milestone 4', status: 'Not open', completed: false },
-        { id: 5, name: 'Milestone 5', status: 'Not open', completed: false },
+        // { id: 1, name: 'Milestone 1', status: 'Completed on xxxxx', completed: true },
+        // { id: 2, name: 'Milestone 2', status: 'Deadline missed', completed: false },
+        // { id: 3, name: 'Milestone 3', status: 'Due Date: 10 Nov', completed: false },
+        // { id: 4, name: 'Milestone 4', status: 'Not open', completed: false },
+        // { id: 5, name: 'Milestone 5', status: 'Not open', completed: false },
       ],
-    };
+    }
   },
   computed: {
     isSubmitDisabled() {
-      return this.milestones.every(milestone => !milestone.completed);
+      return this?.milestones?.every(milestone => !milestone.completed)
     },
   },
   methods: {
-    handleFileUpload(event, milestone) {
-      const file = event.target.files[0];
+    async handleFileUpload(event, milestone) {
+      const file = event.target.files[0]
       if (file) {
-        alert(`File ${file.name} uploaded for ${milestone.name}`);
-        // Logic to handle file upload
+        Emitter.emit(Events.showToast, {
+          title: 'Starting upload',
+          message: `File ${file.name} uploaded for ${milestone.name}`,
+          variant: 'info',
+        })
+        const resu = await MileStoneService.uploadFile(file, milestone.id)
+        if (resu) {
+          Emitter.emit(Events.showToast, {
+            title: 'Upload completed',
+            message: `File ${file.name} uploaded for ${milestone.name}`,
+            variant: 'success',
+          })
+        } else {
+          Emitter.emit(Events.showToast, {
+            title: 'Upload failed',
+            message: `File ${file.name} upload failed for ${milestone.name}`,
+            variant: 'danger',
+          })
+        }
       }
     },
     markAsComplete(milestone) {
       if (milestone.completed) {
-        alert(`Marking ${milestone.name} as complete. No further changes allowed.`);
-        milestone.status = `Completed on ${new Date().toLocaleDateString()}`;
+        alert(
+          `Marking ${milestone.name} as complete. No further changes allowed.`,
+        )
+        milestone.status = `Completed on ${new Date().toLocaleDateString()}`
       }
     },
     submit() {
-      alert('Submitting changes...');
+      alert('Submitting changes...')
       // Logic for submit action
     },
     reset() {
       this.milestones.forEach(milestone => {
         if (!milestone.status.includes('Completed')) {
-          milestone.completed = false;
+          milestone.completed = false
         }
-      });
-      alert('All changes have been reset.');
+      })
+      alert('All changes have been reset.')
+    },
+    async fetchMilestones() {
+      // Fetch milestones from API
+      // this.milestones = await fetchMilestones();
+      const conveMilestones = await MileStoneService.getMilestones()
+      console.log('converted return milestones', conveMilestones)
+      this.milestones = conveMilestones
     },
   },
-};
+  async mounted() {
+    await this.fetchMilestones()
+  },
+}
 </script>
 
 <style scoped>
@@ -119,7 +158,8 @@ export default {
   overflow: hidden;
 }
 
-.milestone-table th, .milestone-table td {
+.milestone-table th,
+.milestone-table td {
   padding: 12px;
   border: 1px solid #ddd;
   text-align: center;

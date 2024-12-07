@@ -130,7 +130,7 @@ class SubmitProject(Resource):
                     f"{current_user_id}_{team_id}_{project_id}_{milestone_id}_{datetime.now().isoformat()}_{file.filename}")
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
-
+                #file_url = f"{request.url_root}uploads/{filename}"
                 # Save file details in the database
                 new_file = File(file_name=filepath,
                                 team_id=team_id, 

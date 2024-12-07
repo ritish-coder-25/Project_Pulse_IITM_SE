@@ -1,14 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, current_app, send_from_directory
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User, Project, Milestone, MilestoneStatus, Member, Commit, Team, Submission, File
 from config import Config, create_default_objects
-
-from apis.team_apis.team_apis import api_bp_ta
-from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
+import os
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
+from apis.team_apis.team_apis import api_bp_ta
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
 from apis.Ta_dashboard.submission_files import api_bp_submission
@@ -82,6 +82,12 @@ api.register_blueprint(api_bp_GenAI)
 @app.route("/api/test", methods=["GET"])
 def test_route():
     return jsonify({"message": "It is working"}), 200
+
+
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+    return send_from_directory(uploads, filename)
 
 
 if __name__ == "__main__":

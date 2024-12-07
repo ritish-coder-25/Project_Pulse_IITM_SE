@@ -4,24 +4,24 @@
     <main class="content" v-if="activeTab === 2">
       <b-button @click="modal = true" class="create-btn">Create Milestone</b-button>
 
-      <table class="milestone-table" v-if="milestones.length">
+      <table class="milestone-table" v-if="!loading && Array.isArray(milestones) && milestones.length">
         <thead>
           <tr>
             <th>Name</th>
             <th>Description</th>
             <th>Start Date</th>
-            <th>Deadline</th>
+            <th>End Date</th>
             <th>Max Marks</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(milestone, index) in milestones" :key="index">
-            <td>{{ milestone.name }}</td>
-            <td>{{ milestone.description }}</td>
-            <td>{{ milestone.startDate }}</td>
-            <td>{{ milestone.deadline }}</td>
-            <td>{{ milestone.maxMarks }}</td>
+          <tr v-for="(milestone, index) in milestones" :key="milestone.milestone_id">
+            <td>{{ milestone.milestone_name }}</td>
+            <td>{{ milestone.milestone_description }}</td>
+            <td>{{ milestone.start_date }}</td>
+            <td>{{ milestone.end_date }}</td>
+            <td>{{ milestone.max_marks }}</td>
             <td>
               <button @click="editMilestone(index)" class="edit-btn">Edit</button>
               <button @click="deleteMilestone(index)" class="delete-btn">Delete</button>
@@ -36,27 +36,27 @@
       <form class="milestone-form" @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="milestone-name">Milestone Name</label>
-          <input v-model="newMilestone.name" id="milestone-name" type="text" placeholder="Enter milestone name" required />
+          <input v-model="formData.milestone_name" id="milestone-name" type="text" placeholder="Enter milestone name" required />
         </div>
 
         <div class="form-group">
           <label for="milestone-description">Milestone Description (Max 50 characters)</label>
-          <textarea v-model="newMilestone.description" id="milestone-description" placeholder="Describe the tasks for this milestone" maxlength="50" required></textarea>
+          <textarea v-model="formData.milestone_description" id="milestone-description" placeholder="Describe the tasks for this milestone" maxlength="50" required></textarea>
         </div>
 
         <div class="form-group">
           <label for="start-date">Milestone Start Date</label>
-          <input v-model="newMilestone.startDate" id="start-date" type="date" required />
+          <input v-model="formData.start_date" id="start-date" type="date" required />
         </div>
 
         <div class="form-group">
           <label for="submission-deadline">Submission Deadline</label>
-          <input v-model="newMilestone.deadline" id="submission-deadline" type="date" required />
+          <input v-model="formData.end_date" id="submission-deadline" type="date" required />
         </div>
 
         <div class="form-group">
           <label for="max-marks">Max Marks</label>
-          <input v-model="newMilestone.maxMarks" id="max-marks" type="number" required />
+          <input v-model="formData.max_marks" id="max-marks" type="number" required />
         </div>
 
         <div class="form-actions">
@@ -128,103 +128,161 @@ export default {
       modal: ref(false),
       activeTab: this.initialTab,
       newMilestone: {
-        name: '',
-        description: '',
-        startDate: '',
-        deadline: '',
-        maxMarks: '',
+        milestone_name: '',
+        milestone_description: '',
+        start_date: '',
+        end_date: '',
+        max_marks: '',
+        project_id: 1,
+      },
+      updateMilestone: {
+        milestone_name: '',
+        milestone_description: '',
+        start_date: '',
+        end_date: '',
+        max_marks: '',
       },
       milestones: [],
       editingIndex: null,
     };
   },
+  computed: {
+    // Dynamically bind the correct form data based on whether we're editing or creating
+    formData() {
+      return this.editingIndex !== null ? this.updateMilestone : this.newMilestone;
+    }
+  },
   methods: {
-    handleTabChange(newIndex) {
-      const targetRoute = this.tabIndexToRoute[newIndex];
-      if (targetRoute && this.route.path !== targetRoute) {
-        this.router.push(targetRoute);
+    resetForm() {
+      this.newMilestone = {
+        milestone_name: '',
+        milestone_description: '',
+        start_date: '',
+        end_date: '',
+        max_marks: '',
+        project_id: 1,
+      };
+      this.updateMilestone = {
+        milestone_name: '',
+        milestone_description: '',
+        start_date: '',
+        end_date: '',
+        max_marks: '',
+      };
+      this.editingIndex = null;
+    },
+
+    async fetchMilestonesData() {
+      try {
+        this.loading = true;
+        const milestones = await fetchMilestones();
+        this.milestones = JSON.parse(milestones) || [];
+      } catch (error) {
+        console.error('Error fetching milestones:', error);
+        this.milestones = [];
+      } finally {
+        this.loading = false;
       }
     },
+
     async handleSubmit() {
       try {
-        const milestoneData = {
-          milestone_name: this.newMilestone.name,
-          milestone_description: this.newMilestone.description,
-          start_date: this.newMilestone.startDate,
-          end_date: this.newMilestone.deadline,
-          max_marks: this.newMilestone.maxMarks,
-          project_id: 1,
-        };
+        let milestoneData = this.editingIndex !== null ? { ...this.updateMilestone } : { ...this.newMilestone };
 
-        if (this.editingIndex !== null) {
-          const updatedMilestone = await updateMilestone(this.milestones[this.editingIndex].id, milestoneData);
-          this.milestones[this.editingIndex] = updatedMilestone;
-          this.editingIndex = null;
-        } else {
-          const createdMilestone = await createMilestone(milestoneData);
-          this.milestones.push(createdMilestone);
+        // Ensure dates are in the correct format (YYYY-MM-DD)
+        if (milestoneData.start_date && milestoneData.end_date) {
+          milestoneData.start_date = new Date(milestoneData.start_date).toISOString().split('T')[0]; // Format to YYYY-MM-DD
+          milestoneData.end_date = new Date(milestoneData.end_date).toISOString().split('T')[0]; // Format to YYYY-MM-DD
         }
 
+        // Log the final data to be sent to the API
+        console.log("Data to be sent to API:", milestoneData);
+        if (this.editingIndex !== null) {
+          const id = this.milestones[this.editingIndex].milestone_id;
+          if (!id) {
+            console.error("No valid milestone ID to update.");
+          }
+          // Remove unnecessary fields (like milestone_id and project_id)
+          delete milestoneData.milestone_id; // For update, avoid sending milestone_id
+          delete milestoneData.project_id; // For both new and update, avoid sending project_id
+          await updateMilestone(id, milestoneData);
+        } else {
+          await createMilestone(milestoneData);
+        }
+        //this.fetchMilestonesData();
         this.resetForm();
         this.modal = false;
       } catch (error) {
-        console.error("Error handling milestone:", error);
+        console.error("Error submitting milestone:", error);
       }
     },
 
     editMilestone(index) {
-      this.newMilestone = { ...this.milestones[index] };
       this.editingIndex = index;
+      this.updateMilestone = { ...this.milestones[index] };
       this.modal = true;
+      //this.fetchMilestonesData();
     },
 
     async deleteMilestone(index) {
       try {
-        const milestoneId = this.milestones[index].id;
-        await deleteMilestone(milestoneId);
+        const id = this.milestones[index].milestone_id;
+        await deleteMilestone(id);
         this.milestones.splice(index, 1);
+        //this.fetchMilestonesData();
       } catch (error) {
         console.error("Error deleting milestone:", error);
       }
     },
-
-    async mounted() {
-      try {
-        const fetchedMilestones = await fetchMilestones();
-        this.milestones = fetchedMilestones;
-      } catch (error) {
-        console.error("Error fetching milestones:", error);
-      }
-    },
-
-    resetForm() {
-      this.newMilestone = {
-        name: '',
-        description: '',
-        startDate: '',
-        deadline: '',
-        maxMarks: '',
-      };
-    },
   },
-
   mounted() {
-    this.mounted();
+    this.fetchMilestonesData(); // Fetch milestones when the component is mounted
+    console.log('Condition result in mounted:', !this.loading && Array.isArray(this.milestones) && this.milestones.length);
   },
-
   watch: {
-    // Update active tab when route changes externally
-    '$route'(to) {
-      const routeToTabIndex = {
-        '/home': 0,
-        '/dashboard': 1,
-        '/milestone-definition': 2,
-        '/scoring': 3
-      };
-      this.activeTab = routeToTabIndex[to.path] || 2;
+    milestones(newMilestones) {
+      console.log('Milestones updated:', newMilestones);
     }
-  }
+  },
 };
+
+//     async mounted() {
+//       try {
+//         const fetchedMilestones = await fetchMilestones();
+//         this.milestones = fetchedMilestones;
+//       } catch (error) {
+//         console.error("Error fetching milestones:", error);
+//       }
+//     },
+
+//     resetForm() {
+//       this.newMilestone = {
+//         name: '',
+//         description: '',
+//         startDate: '',
+//         deadline: '',
+//         maxMarks: '',
+//       };
+//     },
+//   },
+
+//   mounted() {
+//     this.mounted();
+//   },
+
+//   watch: {
+//     // Update active tab when route changes externally
+//     '$route'(to) {
+//       const routeToTabIndex = {
+//         '/home': 0,
+//         '/dashboard': 1,
+//         '/milestone-definition': 2,
+//         '/scoring': 3
+//       };
+//       this.activeTab = routeToTabIndex[to.path] || 2;
+//     }
+//   }
+// };
 </script>
 
 <style scoped>

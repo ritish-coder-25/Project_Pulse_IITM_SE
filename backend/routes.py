@@ -20,7 +20,7 @@ from flask import request
 from models import db, User, Commit
 from flask.views import MethodView
 
-'''
+
 # api_bp = Blueprint('api', __name__)
 api_bp_users = Blueprint("api_bp_users", "Users", description="Operations on users")
 
@@ -40,7 +40,7 @@ def record_commit():
     
     return jsonify({'message': 'Commit recorded successfully'}), 201
 
-@api_bp_users.route('/api/users', methods=['GET'])
+@api_bp_users.route('/api/users', methods=['GET','OPTIONS'])
 class UserResource(MethodView):
     @jwt_required()
     def get(self):
@@ -58,6 +58,7 @@ class UserResource(MethodView):
 
         query = User.query
 
+        print("Hre")
 
         for field, value in query_params.items():
             if field != 'id' and hasattr(User, field):
@@ -74,7 +75,7 @@ class UserResource(MethodView):
         users = query.all()
         jsonUsers = jsonify([user.to_dict() for user in users])
         return jsonUsers, 200
-'''
+
 
 
 # User routes

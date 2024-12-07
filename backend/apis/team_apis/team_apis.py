@@ -16,7 +16,7 @@ from helpers.ErrorCommonHelpers import createError, createFatalError
 api_bp_ta = Blueprint("Teams APIs", "Teams APIs", description="Operations for creating and editing Teams and fetching a team")
 
 
-@api_bp_ta.route("/api/teams")
+@api_bp_ta.route("/api/teams", methods=["POST", "GET"])
 class TeamListResource(Resource):
     @api_bp_ta.arguments(team_parsers.CreateTeamSchema)
     @api_bp_ta.response(201, TeamsCreateOutput)
@@ -121,7 +121,7 @@ class TeamListResource(Resource):
             # return jsonify({"errorCode": "error",'message': 'An error occurred', 'error': str(e)}), 500
 
 
-@api_bp_ta.route("/api/teams/<int:team_id>")
+@api_bp_ta.route("/api/teams/<int:team_id>", methods=["PUT", "GET"])
 class TeamResource(Resource):
     @api_bp_ta.arguments(team_parsers.PutTeamSchema)
     @api_bp_ta.response(201, TeamSchema)
@@ -212,7 +212,7 @@ class TeamResource(Resource):
             # return jsonify({"errorCode": "error",'message': 'An error occurred', 'error': str(e)}), 500
 
 
-@api_bp_ta.route("/api/teams/<int:team_id>/users/<int:user_id>")
+@api_bp_ta.route("/api/teams/<int:team_id>/users/<int:user_id>", methods=["DELETE"])
 class TeamResource(Resource):
     @api_bp_ta.response(200, TeamsDeleteOutput)
     @jwt_required()
@@ -290,6 +290,34 @@ class TeamResource(Resource):
                     {
                         "errorCode": "error",
                         "message": "An error occurred",
+                        "error": str(e),
+                    }
+                ),
+                500,
+            )
+
+
+@api_bp_ta.route("/api/teams/all")
+class AllTeamsResource(Resource):
+    @api_bp_ta.response(200, TeamSchema(many=True))  # Using `many=True` to handle a list of teams
+    @jwt_required()
+    def get(self):
+        """API to get all teams"""
+        try:
+            # Fetch all teams from the database
+            teams = Team.query.all()
+            
+            # Convert team objects to dictionaries
+            team_list = [team.to_dict() for team in teams]
+            
+            return jsonify({"teams": team_list}), 200
+        except Exception as e:
+            db.session.rollback()
+            return (
+                jsonify(
+                    {
+                        "errorCode": "error",
+                        "message": "An error occurred while fetching all teams",
                         "error": str(e),
                     }
                 ),

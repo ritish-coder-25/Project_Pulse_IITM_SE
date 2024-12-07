@@ -56,6 +56,8 @@ import { BButton } from 'bootstrap-vue-next'
 import { useAuthStore } from '../stores/authstore'
 import { LocalStorageEnums, RoutesEnums } from '@/enums'
 import { AuthApiHelper } from '@/helpers/ApiHelperFuncs/Auth'
+import { useToast } from '@/composables/useToast'
+import { Emitter, Events } from '@/Events'
 
 export default {
   data() {
@@ -66,7 +68,7 @@ export default {
       },
     }
   },
-  computed:{
+  computed: {
     isApproved() {
       const authStore = useAuthStore()
       const user = authStore.user || {} // Get user from store
@@ -77,8 +79,9 @@ export default {
   methods: {
     async handleSubmit() {
       const authStore = useAuthStore()
+      const { showToast } = useToast()
       const auth = await AuthApiHelper.login(this.formData)
-      
+
       console.log(auth)
       if (auth.isSuccess) {
         const u_id = auth.user.user_id
@@ -89,19 +92,35 @@ export default {
         authStore.updateuser(auth.user)
 
         if (this.isApproved) {
-          alert('Your account is currently inactive. Kindly wait for approval from an Admin or TA.')
+          // alert(
+          //   'Your account is currently inactive. Kindly wait for approval from an Admin or TA.',
+          // )
+          Emitter.emit(Events.showToast, {
+            title: 'Inactive account',
+            body:
+              'Your account is currently inactive. Kindly wait for approval from an Admin or TA.',
+            variant: 'info',
+          })
         } else {
-          alert('Login successful!')
-          router.push(`/dashboard/student/home/${u_id}`)
+          //alert('Login successful!')
+          Emitter.emit(Events.showToast, {
+            title: 'Login successful!',
+            variant: 'success',
+          })
+          //this.$toast({title: 'Login successful!', variant:'success'})
+          router.push(`/dashboard/${u_id}`)
         }
-      }
-        
-      else {
-        alert(
-          `Login failed! -  ${
-            auth.error ? auth.error.message : auth.errorMessage
-          }`,
-        )
+      } else {
+        Emitter.emit(Events.showToast, {
+          title: 'Login failed!',
+          body: auth?.error?.message || "Please Check your credentials",
+          variant: 'danger',
+        })
+        // alert(
+        //   `Login failed! -  ${
+        //     auth.error ? auth.error.message : auth.errorMessage
+        //   }`,
+        // )
       }
     },
     resetForm() {

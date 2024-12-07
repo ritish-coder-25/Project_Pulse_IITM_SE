@@ -20,7 +20,7 @@ const TabNames = {
   Home: RoutesEnums.dashboard.instructor.home.name,
   MileStoneScoring: RoutesEnums.dashboard.instructor.milestones.name,
   Teams: RoutesEnums.dashboard.instructor.teams.name,
-  TeamsDetails: RoutesEnums.dashboard.instructor.teamDetails.name,
+  //TeamsDetails: RoutesEnums.dashboard.instructor.teamDetails.name,
   Project_Definition: RoutesEnums.dashboard.instructor.projectDefinition.name,
   Milestone_Definition: RoutesEnums.dashboard.instructor.milestoneDefinition.name,
 }
@@ -91,17 +91,6 @@ const { activeTab, onTabChange } = useTabRouting(TabNames)
           <Milestone_Definition />
         </div>
       </BTab>
-      <!-- <BTab>
-        <template #title>
-          <div class="tab-title">
-            <Milestone class="tab-icon me-2" />
-            <span>Project Scoring</span>
-          </div>
-        </template>
-        <div class="tab-content-wrapper">
-          <Project_Scoring />
-        </div>
-      </BTab> -->
     </BTabs>
   </div>
 </template>

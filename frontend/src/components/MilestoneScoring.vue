@@ -45,9 +45,13 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
               <div class="card-body">
 
                 <div v-if="filteredDocuments.length">
-                  <a v-for="document in filteredDocuments" :key="document.id" @click="downloadDocument(document.id)"
+                  <a v-for="document in filteredDocuments" :key="document.id" :href="document.url" target="_blank"
                     class="d-block text-primary" style="cursor: pointer;">
-                    {{ document.name }}
+                    {{
+                      document.name.length > 30
+                        ? document.name.slice(0, 15) + '...' + document.name.slice(-15)
+                        : document.name
+                    }}
                   </a>
                 </div>
                 <p v-else class="text-muted mt-2">
@@ -180,11 +184,11 @@ export default {
           // doc.team === this.selectedTeam.name &&
           doc.milestone === this.selectedMilestone.milestone_id
         )
-        console.log("Filtered documents:", this.filteredDocuments)
-        console.log(this.documents, this.documents.filter(doc =>
-          // doc.team === this.selectedTeam.name &&
-          doc.milestone === this.selectedMilestone.milestone_id
-        ))
+        // console.log("Filtered documents:", this.filteredDocuments)
+        // console.log(this.documents, this.documents.filter(doc =>
+        //   // doc.team === this.selectedTeam.name &&
+        //   doc.milestone === this.selectedMilestone.milestone_id
+        // ))
       }
     },
     handleTeamChange(event) {

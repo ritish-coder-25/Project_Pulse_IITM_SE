@@ -77,7 +77,7 @@ export class TaScoringApiHelpers {
                 name: doc.name,
                 url: doc.url,
                 team: doc.team,
-                milestone: doc.milestoneID
+                milestone: doc.milestoneId
             }));
 
             console.log("Docs array:", docsArray)

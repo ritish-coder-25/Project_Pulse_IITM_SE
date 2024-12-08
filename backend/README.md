@@ -57,3 +57,10 @@ For running a specific file use
 > pytest tests/test_register.py -v
 
 
+
+
+FOr lijnux:
+install redis-server, start redis-server in a terminal
+
+then in a new terminal
+ celery -A tasks worker --loglevel=info

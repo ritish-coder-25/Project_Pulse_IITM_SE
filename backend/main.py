@@ -20,7 +20,7 @@ from apis.taHomeAPIs.taHome_apis import api_bp_tahome
 
 import logging
 from flask_cors import CORS
-from celery_config import make_celery
+import celery_config
 
 
 # from flask_restx import Api
@@ -43,27 +43,28 @@ app.config.update(
 )
 
 
-celery = make_celery(app)
+
 
 
 CORS(app)
 
-#CORS(api)
-# CORS(api)
-# Enable CORS for all routes
 
-# api = Api(
-#     app,
-#     version="1.0",
-#     title="API Documentation",
-#     description="A description of your API",
-# )
 
 
 db.init_app(app)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
+app.app_context().push()
+celery = celery_config.celery
+# celery = Celery(
+#         backend=app.config['CELERY_RESULT_BACKEND'],
+#         broker=app.config['CELERY_BROKER_URL']
+#     )
+# celery.conf.update('app',broker=app.config['CELERY_BROKER_URL'], backend=app.config['CELERY_RESULT_BACKEND'])
+# celery.Task = celery_config.ContextTask
+
+app.app_context().push()
 
 CORS(api_bp_ta)
 CORS(api_bp_projects)
@@ -74,6 +75,8 @@ CORS(api_bp_auth)
 CORS(api_bp_stu)
 CORS(api_bp_submission)
 CORS(api_bp_GenAI)
+
+
 
 api.register_blueprint(api_bp_ta)
 api.register_blueprint(api_bp_projects)

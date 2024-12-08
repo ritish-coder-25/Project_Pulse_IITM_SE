@@ -27,7 +27,7 @@
       </thead>
       <tbody>
         <tr>
-          <td v-for="milestone in milestone_data">{{ milestone.end_date }}</td>
+          <td v-for="milestone in milestone_data"> Deadline: {{ milestone.end_date }}</td>
         </tr>
         <tr>
           <td v-for="milestone in milestone_data">{{ milestone.completion_status }}</td>
@@ -122,19 +122,19 @@ export default {
         let eval_link = null
 
         let ms = milestone_statuses[milestone.milestone_id]
-
-        if (ms.milestone_status === "Completed") {
-          if (ms.completed_date) {
+        console.log(ms, typeof ms)
+        if (ms?.milestone_status === "Completed") {
+          if (ms?.completed_date) {
             completion_status = "Completed on " + this.formatDate(ms.completed_date)
             eval_link = "/dashboard/instructor/milestones?milestonestatus=" + ms.milestonestatus_id
           }
           evaluation_status = "Pending Evaluation"
-        } else if (ms.milestone_status === "Missed") {
+        } else if (ms?.milestone_status === "Missed") {
           completion_status = "Milestone Missed"
           team_score += 0
           team_max_score += milestone.max_marks
-        } else if (ms.milestone_status === "Evaluated") {
-          if (ms.completed_date) {
+        } else if (ms?.milestone_status === "Evaluated") {
+          if (ms?.completed_date) {
             completion_status = "Completed on " + this.formatDate(ms.completed_date)
           }
           evaluation_status = "Evaluated: " + ms.eval_score + " / " + milestone.max_marks
@@ -146,7 +146,7 @@ export default {
           "milestone_id": milestone.milestone_id,
           "milestone_name": milestone.milestone_name,
           "end_date": this.formatDate(milestone.end_date),
-          "milestone_status": ms.milestone_status,
+          "milestone_status": ms?.milestone_status,
           "completion_status": completion_status,
           "evaluation_status": evaluation_status,
           "eval_link": eval_link

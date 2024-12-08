@@ -34,6 +34,16 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           </datalist>
         </div>
 
+        <!-- Trigger Celery Task Button -->
+        <div class="form-group mb-3">
+          <button type="button" v-if="!hideButton" @click="startCeleryTask" class="btn btn-warning">Trigger Celery Task</button>
+        </div>
+
+        <div v-if="hideButton" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p> ⌛ Loading Commits and Generating Reports... Please wait.</p>
+    </div>
+
         <!-- Row containing Documents and Feedback side-by-side -->
         <div class="row">
           <!-- Documents Column -->
@@ -148,7 +158,7 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
         </div>
 
 
-
+      
         <!-- Score and Buttons -->
         <div class="row g-3">
           <div class="col-md-6">
@@ -165,11 +175,11 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
             </div>
           </div>
         </div>
-
+<!-- 
         <div v-if="reviewData" class="mt-4">
           <h3>Code Review Scores and Comments</h3>
           <pre>{{ reviewData }}</pre>
-        </div>
+        </div> -->
 
 
         <div class="d-flex mt-4">
@@ -208,7 +218,8 @@ export default {
       teamScore: 18,
       maxMilestoneScore: 20,
       reviewData: null,
-      commits: []
+      commits: [],
+      hidebutton: false,
     }
   },
   methods: {
@@ -242,6 +253,44 @@ export default {
         this.commits = TaScoringApiHelpersJson.commits
       }
     },
+    async startCeleryTask() {
+      try {
+        const startDate = this.selectedMilestone.start_date
+        const endDate = this.selectedMilestone.end_date
+        const team_id = this.selectedTeam.id
+        const response = await TaScoringApiHelpers.startCeleryTask({startTime: startDate, endTime: endDate,teamId: team_id })
+        console.log("Celery task started:", response)
+        this.hidebutton = true;
+        alert('Celery task started successfully!')
+        
+        const taskId = response.task_id;
+        console.log("Task ID:", taskId)
+        this.pollTaskStatus(taskId);
+      } catch (error) {
+        console.warn('Error starting Celery task:', error)
+      }
+    },
+    async pollTaskStatus(taskId) {
+      try {
+        const response = await TaScoringApiHelpers.getTaskStatus(taskId);
+
+        console.log("Polling Response:", response.data)
+        if (response.data.state === 'SUCCESS') {
+          alert('Celery task completed successfully!');
+          this.isTaskRunning = false; // Re-enable the button
+        } else if (response.data.state === 'FAILURE') {
+          alert('Celery task failed.');
+          this.isTaskRunning = false; // Re-enable the button
+        } else {
+          // Continue polling if the task is still running
+          setTimeout(() => this.pollTaskStatus(taskId), 2000);
+        }
+      } catch (error) {
+        console.warn('Error polling task status:', error);
+        this.isTaskRunning = false; // Re-enable the button in case of error
+      }
+    },
+
     async fetchMilestones() {
       try {
         const response = await TaScoringApiHelpers.fetchMilestones()

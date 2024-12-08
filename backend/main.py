@@ -107,15 +107,20 @@ def download(filename):
 # @jwt_required()
 # @check_access(roles=[MRoles.admin.value])
 def download_theatre_csv():
-    repo_url = request.json.get("repo_url")
+    team_id = request.json.get("team_id")
     start_time = request.json.get("start_time")
     end_time = request.json.get("end_time")
     #current_user_id = get_jwt_identity()
     #print("request got for ",current_user_id,theatreId)
     #tasks.create_theatre_csv_celery.delay(theatreId,current_user_id)
-
-    if not repo_url:
-        return jsonify({"error": "Please provide a valid repo_url"}), 400
+    # checkallTeams = Team.query.all()
+    # print("All teams", checkallTeams.to_dict())
+    repo_url = Team.query.filter_by(team_id=team_id).first()
+    repo_url = repo_url.to_dict()['github_repo_url']
+    print("Repo URL", repo_url)
+    print("Repo URL", repo_url)
+    if not team_id:
+        return jsonify({"error": "Please provide a valid Team Id"}), 400
     if not start_time:
         return jsonify({"error": "Please provide a valid start_time"}), 400
     if not end_time:
@@ -169,7 +174,7 @@ def get_commits():
 
         # Convert query result to a list of dictionaries
         commits_list = [commit.to_dict() for commit in commits]
-        print("Fetched Commits:", commits_list)
+        # print("Fetched Commits:", commits_list)
 
         return jsonify(commits_list), 200
 

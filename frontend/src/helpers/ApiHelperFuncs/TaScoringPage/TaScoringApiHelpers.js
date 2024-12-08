@@ -173,4 +173,40 @@ export class TaScoringApiHelpers {
         }
     }
 
+    static async startCeleryTask(teamId, startTime, endTime) {
+        try {
+            // Sending POST request to trigger the Celery task
+            const payload = {
+                team_id: teamId.teamId,
+                start_time: teamId.startTime,
+                end_time: teamId.endTime
+            }
+
+            console.log("Celery task payload:", payload);
+
+            const response = await mainAxios.post('/celery-test', JSON.stringify(payload));
+               
+
+            console.log("Celery task started:", response.data);
+            return JSON.parse(response.data); // Return the task ID and message
+        } catch (error) {
+            console.warn('Error triggering Celery task:', error);
+            throw error;
+        }
+    }
+
+    // Function to fetch the task status
+    static async getTaskStatus(taskId) {
+        try {
+            // Sending GET request to fetch the task status
+            const response = await mainAxios.get(`/task_status/${taskId}`);
+            
+            console.log("Task status:", response.data);
+            return response.data; // Return the task status info
+        } catch (error) {
+            console.warn('Error fetching task status:', error);
+            throw error;
+        }
+    }
+
 }

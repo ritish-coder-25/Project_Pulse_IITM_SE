@@ -20,6 +20,7 @@ from apis.taHomeAPIs.taHome_apis import api_bp_tahome
 
 import logging
 from flask_cors import CORS
+from celery_config import make_celery
 
 
 # from flask_restx import Api
@@ -35,6 +36,16 @@ app.config["OPENAPI_VERSION"] = "3.1.0"
 app.config["UPLOAD_FOLDER"] = "uploads"
 api = Api(app)
 app.config.from_object(Config)
+
+app.config.update(
+    CELERY_BROKER_URL='redis://localhost:6379/0',
+    CELERY_RESULT_BACKEND='redis://localhost:6379/0'
+)
+
+
+celery = make_celery(app)
+
+
 CORS(app)
 
 #CORS(api)

@@ -16,6 +16,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "test123")
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 
 def create_default_objects(db, app):

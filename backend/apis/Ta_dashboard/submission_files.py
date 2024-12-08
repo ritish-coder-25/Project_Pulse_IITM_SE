@@ -602,11 +602,19 @@ class GitHubDataTrigger(Resource):
         #     ) 
 
         team_id = data["team_id"]
+        start_time = data.get("start_time", None)
+        end_time = data.get("end_time", None)
+
+        if start_time is None or end_time is None:
+            return {
+                "errorCode": "missing_data",
+                "message": "start_time and end_time are required"
+            }, 400
         try:
             team = Team.query.get(team_id)
             if team:
                 repo_url = team.github_repo_url
-            get_github_data.delay(repo_url)  # Call the Celery task asynchronously
+            get_github_data.delay(repo_url, start_time, end_time)  # Call the Celery task asynchronously
             return {
                 "message": "GitHub data retrieval has been triggered successfully",
                 "team_id": team_id,

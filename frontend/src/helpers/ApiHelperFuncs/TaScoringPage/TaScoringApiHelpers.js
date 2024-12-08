@@ -33,6 +33,44 @@ export class TaScoringApiHelpers {
         }
     }
 
+    static async fetchCommits(startDate, endDate) {
+        try {
+            const response = await mainAxios.get('/commits', {
+                params: { 
+                    start_date: startDate, 
+                    end_date: endDate 
+                }
+            });
+    
+            console.log("Commits Response:", response.data);
+    
+            // Ensure the response is an array of commits
+            if (!Array.isArray(response.data)) {
+                console.warn('Invalid API response format: Expected an array of commits.');
+                return { data: TaScoringApiHelpersJson.localCommits }; // Fallback to local data
+            }
+    
+            // Map over the commits to structure data as required
+            const commitsArray = response.data.map(commit => ({
+                commit_id: commit.commit_id,
+                commit_hash: commit.commit_hash,
+                commit_message: commit.commit_message,
+                commit_score: commit.commit_score,
+                commit_clarity: commit.commit_clarity,
+                complexity_score: commit.complexity_score,
+                code_quality_score: commit.code_quality_score,
+                improvement_suggestions: commit.improvement_suggestions || [],
+                commit_date: commit.commit_timestamp
+            }));
+    
+            console.log("Processed Commits Array:", commitsArray);
+            return { data: commitsArray };
+        } catch (error) {
+            console.warn('Using local commits data due to error:', error);
+            return { data: TaScoringApiHelpersJson.localCommits }; // Fallback to local data
+        }
+    }
+    
 
     static async fetchMilestones() {
         try {

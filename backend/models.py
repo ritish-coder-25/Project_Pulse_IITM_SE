@@ -133,7 +133,7 @@ class Commit(db.Model):
     commit_message = db.Column(db.Text)
     commit_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     commit_score = db.Column(db.Float, default=0.0)
-    commit_url = db.Column(db.String(255))
+    commit_changes = db.Column(db.Text)
     commit_clarity = db.Column(db.Float, default=0.0)
     complexity_score = db.Column(db.Float)
     code_quality_score = db.Column(db.Float)

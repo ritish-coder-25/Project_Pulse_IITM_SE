@@ -8,7 +8,7 @@ import os
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
 from apis.Ta_dashboard.submission_files import api_bp_submission
@@ -107,10 +107,20 @@ def download(filename):
 # @check_access(roles=[MRoles.admin.value])
 def download_theatre_csv():
     repo_url = request.json.get("repo_url")
+    start_time = request.json.get("start_time")
+    end_time = request.json.get("end_time")
     #current_user_id = get_jwt_identity()
     #print("request got for ",current_user_id,theatreId)
     #tasks.create_theatre_csv_celery.delay(theatreId,current_user_id)
-    asyncTaskTheatre =  tasks.get_github_data.apply_async(args=[repo_url])
+
+    if not repo_url:
+        return jsonify({"error": "Please provide a valid repo_url"}), 400
+    if not start_time:
+        return jsonify({"error": "Please provide a valid start_time"}), 400
+    if not end_time:
+        return jsonify({"error": "Please provide a valid end_time"}), 400
+        
+    asyncTaskTheatre =  tasks.get_github_data.apply_async(args=[repo_url, start_time, end_time])
     print("returning from async task")
     return jsonify({
         "message": "File processing started. Do not close your browser as the file will be downloaded automatically.",
@@ -128,6 +138,11 @@ def get_task_status(task_id):
     return jsonify(response), 200
 
 
+@app.route("/api/commits", methods=["GET"])
+def get_commits(start_date, end_date):
+    commits = Commit.query.filter(Commit.commit_date >= start_date, Commit.commit_date <= end_date).all()
+    print("Commits", commits.to_dict())
+    return jsonify([commit.to_dict() for commit in commits]), 200
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)

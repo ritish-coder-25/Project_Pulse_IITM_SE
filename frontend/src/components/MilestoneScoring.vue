@@ -78,6 +78,32 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           </div>
         </div>
 
+                <!-- Commits Section -->
+                <div class="row mt-4">
+          <div class="col-md-12">
+            <div class="card mb-3">
+              <div class="card-header bg-info text-white">
+                Commits
+              </div>
+              <div class="card-body">
+                <ul v-if="commits.length">
+                  {{ commits }}
+                  <li v-for="commit in commits" :key="commit.commit_id">
+                    <p><strong>Commit Hash:</strong> {{ commit.commit_hash }}</p>
+                    <p><strong>Message:</strong> {{ commit.commit_message }}</p>
+                    <p><strong>Score:</strong> {{ commit.commit_score }}</p>
+                    <p><strong>Code Clarity:</strong> {{ commit.commit_clarity }}</p>
+                    <p><strong>Complexity Score:</strong> {{ commit.complexity_score }}</p>
+                    <p><strong>Quality Score:</strong> {{ commit.code_quality_score }}</p>
+                    <p><strong>Suggestions:</strong> {{ commit.improvement_suggestions }}</p>
+                  </li>
+                </ul>
+                <p v-else class="text-muted">No commits available for the selected team and milestone.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Score and Buttons -->
         <div class="row g-3">
           <div class="col-md-6">
@@ -137,6 +163,7 @@ export default {
       teamScore: 18,
       maxMilestoneScore: 20,
       reviewData: null,
+      commits: []
     }
   },
   methods: {
@@ -148,6 +175,18 @@ export default {
       } catch (error) {
         console.warn('Using local teams data due to error:', error)
         this.teams = TaScoringApiHelpersJson.teams
+      }
+    },
+    async fetchCommits() {
+      try {
+        const startDate = this.selectedMilestone.start_date
+        const endDate = this.selectedMilestone.end_date
+        const response = await TaScoringApiHelpers.fetchCommits({startDate: startDate, endDate: endDate})
+        console.log("Commits data received:", response.data)
+        this.commits = response.data
+      } catch (error) {
+        console.warn('Using local teams data due to error:', error)
+        this.commits = TaScoringApiHelpersJson.commits
       }
     },
     async fetchMilestones() {
@@ -170,7 +209,7 @@ export default {
         console.log("Documents ye rha:", this.documents)
         this.filterDocuments()
         this.reviewData = `Here's the JSON object with the requested code review scores and comments:\n\n\`\`\`json\n{\n  "code_clarity": 5,\n  "functionality": 5,\n  "efficiency": 5,\n  "maintainability": 5,\n  "documentation": 1,\n  "overall_review": {\n    "strengths": "The code changes are very clear and functional, with good efficiency and maintainability. However, there is a lack of documentation that could hinder understanding the purpose and implementation of the changes.",\n    "weaknesses": "The code lacks documentation, which can make it difficult for other developers to understand the purpose and implementation of the changes. Adding comments and explanations to the code will greatly improve its maintainability and readability.",\n    "suggested_improvements": [\n      "Add comments and explanations to the code to improve documentation.",\n      "Consider breaking down large functions into smaller, more manageable ones for better maintainability."\n    ]\n  }\n}\n\`\`\`\n\nThe code changes are well-implemented, clear, and functional, with good efficiency. However, there is a significant lack of documentation, which can make it difficult for other developers to understand the purpose and implementation of the changes. Adding comments and explanations to the code will greatly improve its maintainability and readability.`;
-
+        this.fetchCommits()
       } catch (error) {
         console.warn('Using local documents data due to error:', error)
         this.documents = TaScoringApiHelpersJson.documents

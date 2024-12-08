@@ -129,6 +129,105 @@ def get_commits_with_changes(since, until, repo_owner, repo_name):
 
 import requests
 
+# def get_commits_with_changes_files(since, until, repo_owner, repo_name, repo_url=None):
+#     """
+#     Fetches commits within a specific date range and stores details of file changes in a dictionary for each author.
+#     :param since: The start date (ISO 8601 format, e.g., "2023-01-01T00:00:00Z")
+#     :param until: The end date (ISO 8601 format, e.g., "2023-01-31T23:59:59Z")
+#     :param repo_owner: The GitHub username or organization name of the repository owner.
+#     :param repo_name: The name of the repository.
+#     :return: A dictionary with authors as keys, and their associated changes as values.
+#     """
+
+#     HEADERS = {
+#         "Authorization": f"token {GITHUB_TOKEN}",
+#         "Accept": "application/vnd.github.v3+json"
+#     }
+#     if repo_url is not None:
+#         repo_owner, repo_name = repo_url.split("/")[-2:]
+#         BASE_URL = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
+#     else:
+#         BASE_URL = f"https://api.github.com/repos/{repo_owner}/{repo_name}"
+
+#     # Dictionary to store changes by user
+#     user_changes = {}
+
+#     # Step 1: Fetch all commits within the date range
+#     commits_url = f"{BASE_URL}/commits"
+#     params = {"since": since, "until": until}
+#     commits_response = requests.get(commits_url, headers=HEADERS, params=params)
+#     print(commits_response.json())
+
+#     if commits_response.status_code == 200:
+#         commits = commits_response.json()
+
+#         # Step 2: For each commit, fetch the detailed changes
+#         for commit in commits:
+#             commit_sha = commit['sha']
+#             commit_detail_url = f"{BASE_URL}/commits/{commit_sha}"
+#             detail_response = requests.get(commit_detail_url, headers=HEADERS)
+
+#             if detail_response.status_code == 200:
+#                 commit_data = detail_response.json()
+#                 commit_message = commit_data['commit']['message']
+#                 author = commit_data['commit']['author']['name']
+#                 date = commit_data['commit']['author']['date']
+
+#                 # Prepare the commit metadata
+#                 commit_info = {
+#                     "commit_sha": commit_sha,
+#                     "message": commit_message,
+#                     "date": date,
+#                     "file_changes": []
+#                 }
+
+#                 # Step 3: Process each file in the commit and store the file changes
+#                 for file in commit_data['files']:
+#                     filename = file['filename']
+#                     status = file['status']  # added, modified, or removed
+#                     additions = file['additions']
+#                     deletions = file['deletions']
+#                     changes = file['changes']
+#                     patch = file.get('patch', '')  # Get the actual code changes (diff) as a string
+
+#                     # Generate a string summarizing the file changes
+#                     changes_str = (
+#                         f"File: {filename}, Status: {status}, "
+#                         f"Additions: {additions}, Deletions: {deletions}, Total Changes: {changes}"
+#                     )
+
+#                     file_change_info = {
+#                         "filename": filename,
+#                         "status": status,
+#                         "additions": additions,
+#                         "deletions": deletions,
+#                         "total_changes": changes,
+#                         "changes_str": changes_str,  # Summary of the changes
+#                         "code_changes": patch  # Actual code changes (diff)
+#                     }
+
+#                     commit_info["file_changes"].append(file_change_info)
+
+#                 # Step 4: Add or update the user's changes in the dictionary
+#                 if author not in user_changes:
+#                     user_changes[author] = {
+#                         "total_commits": 0,
+#                         "commit_details": []
+#                     }
+
+#                 # Increment the user's total commits and add the current commit details
+#                 user_changes[author]["total_commits"] += 1
+#                 user_changes[author]["commit_details"].append(commit_info)
+
+#             else:
+#                 print(f"Error fetching commit details for {commit_sha}: {detail_response.json()}")
+
+#     else:
+#         print(f"Error fetching commits: {commits_response.json()}")
+#         return None
+
+#     return user_changes
+
 def get_commits_with_changes_files(since, until, repo_owner, repo_name, repo_url=None):
     """
     Fetches commits within a specific date range and stores details of file changes in a dictionary for each author.
@@ -156,7 +255,6 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name, repo_url
     commits_url = f"{BASE_URL}/commits"
     params = {"since": since, "until": until}
     commits_response = requests.get(commits_url, headers=HEADERS, params=params)
-    print(commits_response.json())
 
     if commits_response.status_code == 200:
         commits = commits_response.json()
@@ -169,8 +267,12 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name, repo_url
 
             if detail_response.status_code == 200:
                 commit_data = detail_response.json()
+
+                # Fetch the GitHub username from the 'author' field
+                author_data = commit_data.get('author')  # GitHub user info, if available
+                github_username = author_data['login'] if author_data else "Unknown"
+
                 commit_message = commit_data['commit']['message']
-                author = commit_data['commit']['author']['name']
                 date = commit_data['commit']['author']['date']
 
                 # Prepare the commit metadata
@@ -209,15 +311,15 @@ def get_commits_with_changes_files(since, until, repo_owner, repo_name, repo_url
                     commit_info["file_changes"].append(file_change_info)
 
                 # Step 4: Add or update the user's changes in the dictionary
-                if author not in user_changes:
-                    user_changes[author] = {
+                if github_username not in user_changes:
+                    user_changes[github_username] = {
                         "total_commits": 0,
                         "commit_details": []
                     }
 
                 # Increment the user's total commits and add the current commit details
-                user_changes[author]["total_commits"] += 1
-                user_changes[author]["commit_details"].append(commit_info)
+                user_changes[github_username]["total_commits"] += 1
+                user_changes[github_username]["commit_details"].append(commit_info)
 
             else:
                 print(f"Error fetching commit details for {commit_sha}: {detail_response.json()}")

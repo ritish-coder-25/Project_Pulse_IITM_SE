@@ -2,7 +2,7 @@ import { Axios, HttpStatusCode } from 'axios'
 import { LocalStorageEnums } from '../enums'
 
 export const BASE_URL = 'http://localhost:5000/api'
-// export const BASE_URL = 'https://symmetrical-space-eureka-4r7j5xvq5x7f7qj-5000.app.github.dev/api'
+//export const BASE_URL = 'https://symmetrical-space-eureka-4r7j5xvq5x7f7qj-5000.app.github.dev/api'
 
 const axios = new Axios({
   baseURL: BASE_URL,

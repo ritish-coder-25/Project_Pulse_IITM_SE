@@ -35,23 +35,20 @@ export class TaScoringApiHelpers {
 
     static async fetchCommits(startDate, endDate) {
         try {
-            const response = await mainAxios.get('/commits', {
-                params: { 
-                    start_date: startDate, 
-                    end_date: endDate 
-                }
-            });
-    
+            const response = await mainAxios.post('/commitslist',JSON.stringify({ start_date: startDate, end_date: endDate }));
+              
+            
             console.log("Commits Response:", response.data);
+            // console.log("Commits Response:", typeof(response.data));
     
             // Ensure the response is an array of commits
-            if (!Array.isArray(response.data)) {
+            if (!Array.isArray(JSON.parse(response.data))) {
                 console.warn('Invalid API response format: Expected an array of commits.');
                 return { data: TaScoringApiHelpersJson.localCommits }; // Fallback to local data
             }
     
             // Map over the commits to structure data as required
-            const commitsArray = response.data.map(commit => ({
+            const commitsArray = JSON.parse(response.data).map(commit => ({
                 commit_id: commit.commit_id,
                 commit_hash: commit.commit_hash,
                 commit_message: commit.commit_message,
@@ -60,7 +57,29 @@ export class TaScoringApiHelpers {
                 complexity_score: commit.complexity_score,
                 code_quality_score: commit.code_quality_score,
                 improvement_suggestions: commit.improvement_suggestions || [],
-                commit_date: commit.commit_timestamp
+                commit_date: commit.commit_timestamp,
+                observations: commit.additional_observations,
+                risk_assessment: commit.risk_assessment,
+                commit_changes: commit.commit_changes,
+                analysis_timestamp: commit.analysis_timestamp,
+                user_id: commit.user_id,
+
+
+            //     'commit_id': self.commit_id,
+            // 'user_id': self.user_id,
+            // 'team_id': self.team_id,
+            // 'commit_hash': self.commit_hash,
+            // 'commit_message': self.commit_message,
+            // 'commit_timestamp': self.commit_timestamp,
+            // 'commit_score': self.commit_score,
+            // 'commit_changes': self.commit_changes,
+            // 'commit_clarity': self.commit_clarity,
+            // 'complexity_score': self.complexity_score,
+            // 'code_quality_score': self.code_quality_score,
+            // 'risk_assessment': self.risk_assessment,
+            // 'improvement_suggestions': self.improvement_suggestions,
+            // 'analysis_timestamp': self.analysis_timestamp,
+            // 'additional_observations': self.additional_observations,
             }));
     
             console.log("Processed Commits Array:", commitsArray);

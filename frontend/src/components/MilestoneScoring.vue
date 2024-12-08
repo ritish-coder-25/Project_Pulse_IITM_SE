@@ -78,31 +78,76 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           </div>
         </div>
 
-                <!-- Commits Section -->
-                <div class="row mt-4">
+        <!-- Commits Section -->
+        <div class="row mt-4">
           <div class="col-md-12">
-            <div class="card mb-3">
-              <div class="card-header bg-info text-white">
-                Commits
+            <div class="card mb-3 shadow">
+              <!-- Card Header -->
+              <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                  🚀 Commits
+                </h4>
+                <span class="badge bg-warning text-dark">{{ commits.length }} Total</span>
               </div>
+
+              <!-- Card Body -->
               <div class="card-body">
-                <ul v-if="commits.length">
-                  {{ commits }}
-                  <li v-for="commit in commits" :key="commit.commit_id">
-                    <p><strong>Commit Hash:</strong> {{ commit.commit_hash }}</p>
-                    <p><strong>Message:</strong> {{ commit.commit_message }}</p>
-                    <p><strong>Score:</strong> {{ commit.commit_score }}</p>
-                    <p><strong>Code Clarity:</strong> {{ commit.commit_clarity }}</p>
-                    <p><strong>Complexity Score:</strong> {{ commit.complexity_score }}</p>
-                    <p><strong>Quality Score:</strong> {{ commit.code_quality_score }}</p>
-                    <p><strong>Suggestions:</strong> {{ commit.improvement_suggestions }}</p>
+                <ul v-if="commits.length" class="list-group">
+                  <li v-for="commit in commits" :key="commit.commit_id"
+                    class="list-group-item mb-3 border rounded shadow-sm">
+                    <!-- Commit Header -->
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="mb-1 text-success">
+                        ✏️ {{ commit.commit_message }}
+                      </h5>
+                      <button class="btn btn-sm btn-outline-primary" type="button" @click="toggleCodeChanges(commit)">
+                        {{ commit.showChanges ? '🙈 Hide Changes' : '👀 Show Changes' }}
+                      </button>
+                    </div>
+
+                    <!-- Commit Details -->
+                    <small class="text-muted">
+                      🔑 <strong>Hash:</strong> {{ commit.commit_hash }} |
+                      📅 <strong>Date:</strong> {{ commit.commit_date }}
+                    </small>
+                    <p class="mt-2 mb-1">
+                      📊 <strong>Score:</strong> {{ commit.commit_score }} |
+                      💡 <strong>Clarity:</strong> {{ commit.commit_clarity }} |
+                      🧮 <strong>Complexity:</strong> {{ commit.complexity_score }} |
+                      🎯 <strong>Quality:</strong> {{ commit.code_quality_score }}
+                    </p>
+                    <p>
+                      💡 <strong>Suggestions:</strong>
+                      <span v-if="commit.improvement_suggestions.length">
+                        {{ commit.improvement_suggestions}}
+                      </span>
+                      <span v-else>
+                        No suggestions available.
+                      </span>
+                    </p>
+
+                    <!-- Expandable Code Changes -->
+                    <div v-if="commit.showChanges" class="mt-3">
+                      <div class="card bg-light border-info">
+                        <div class="card-header text-info">
+                          🛠️ Code Changes
+                        </div>
+                        <pre class="card-body p-3 rounded bg-white">
+                  <code>{{ commit.commit_changes }}</code>
+                </pre>
+                      </div>
+                    </div>
                   </li>
                 </ul>
-                <p v-else class="text-muted">No commits available for the selected team and milestone.</p>
+                <p v-else class="text-muted text-center">
+                  😔 No commits available for the selected team and milestone.
+                </p>
               </div>
             </div>
           </div>
         </div>
+
+
 
         <!-- Score and Buttons -->
         <div class="row g-3">
@@ -167,6 +212,14 @@ export default {
     }
   },
   methods: {
+    toggleCodeChanges(commit) {
+      if (commit.hasOwnProperty('showChanges')) {
+        commit.showChanges = !commit.showChanges;
+      } else {
+        // Add `showChanges` property dynamically
+        commit.showChanges = true;
+      }
+    },
     async fetchTeams() {
       try {
         const response = await TaScoringApiHelpers.fetchTeams()
@@ -181,7 +234,7 @@ export default {
       try {
         const startDate = this.selectedMilestone.start_date
         const endDate = this.selectedMilestone.end_date
-        const response = await TaScoringApiHelpers.fetchCommits({startDate: startDate, endDate: endDate})
+        const response = await TaScoringApiHelpers.fetchCommits({ startDate: startDate, endDate: endDate })
         console.log("Commits data received:", response.data)
         this.commits = response.data
       } catch (error) {
@@ -351,5 +404,17 @@ export default {
 .datalist {
   /* max-height: 200px; */
   overflow-y: auto;
+}
+
+.list-group-item {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>

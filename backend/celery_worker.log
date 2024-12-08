@@ -5897,3 +5897,521 @@ def get_github_data(self, repo_url, start_time, end_time):
 2024-12-08 20:19:27,054 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:19:27] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
 2024-12-08 20:19:27,163 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:19:27] "OPTIONS /api/commits?start_date[startDate]=Wed,+25+Dec+2024+00:00:00+GMT&start_date[endDate]=Wed,+25+Dec+2024+00:00:00+GMT HTTP/1.1" 200 -
 2024-12-08 20:19:27,253 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:19:27] "GET /api/commits?start_date[startDate]=Wed,+25+Dec+2024+00:00:00+GMT&start_date[endDate]=Wed,+25+Dec+2024+00:00:00+GMT HTTP/1.1" 200 -
+2024-12-08 20:24:33,305 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:24:33,362 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:24:33,363 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:24:33,388 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:24:33,396 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:24:33,397 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:24:33,424 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:24:33,426 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:24:33,455 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:24:33,456 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:24:33,492 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:24:33,498 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:24:33,518 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:24:33,529 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:24:33,530 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:24:33,547 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:24:33,551 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:24:33,601 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:33] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:24:37,444 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:37] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:24:37,541 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:37] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:24:37,661 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:37] "OPTIONS /api/commits?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1" 200 -
+2024-12-08 20:24:37,735 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:24:37] "GET /api/commits?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1" 200 -
+2024-12-08 20:25:45,410 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:25:45,826 INFO werkzeug  * Restarting with stat
+2024-12-08 20:25:48,025 INFO root Database created successfully.
+2024-12-08 20:25:48,041 INFO root Default admin user already exists.
+2024-12-08 20:25:48,041 INFO root Default admin user already exists.
+2024-12-08 20:25:48,042 INFO root Default admin user already exists.
+2024-12-08 20:25:48,054 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:25:48,054 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:25:53,607 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:53] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:25:53,610 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:53] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:25:53,724 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:53] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:25:53,735 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:53] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:25:58,938 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:25:58,939 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:25:58,940 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:25:58,942 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:25:58,941 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:25:58,944 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:25:58,948 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:25:58,954 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:58] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:25:59,040 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:25:59,041 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:25:59,050 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:25:59,052 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:25:59,092 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:25:59,102 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:25:59,114 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:25:59,124 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:25:59,125 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:25:59,212 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:25:59] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:26:02,947 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:26:02] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:26:03,036 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:26:03] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:26:03,134 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:26:03] "OPTIONS /api/commitslist?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1" 200 -
+2024-12-08 20:26:03,216 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:26:03] "[35m[1mGET /api/commitslist?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1[0m" 500 -
+2024-12-08 20:27:37,676 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:27:38,081 INFO werkzeug  * Restarting with stat
+2024-12-08 20:27:40,154 INFO root Database created successfully.
+2024-12-08 20:27:40,170 INFO root Default admin user already exists.
+2024-12-08 20:27:40,171 INFO root Default admin user already exists.
+2024-12-08 20:27:40,172 INFO root Default admin user already exists.
+2024-12-08 20:27:40,178 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:27:40,178 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:28:01,990 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:01] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:28:02,008 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:28:02,010 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:28:02,449 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:28:02,473 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:28:02,474 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:28:02,488 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:28:02,500 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:28:02,502 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:28:02,503 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:28:02,537 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:28:02,544 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:28:02,563 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:28:02,570 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:28:02,597 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:28:02,603 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:28:02,625 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:28:02,660 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:02] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:28:06,223 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:06] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:28:06,300 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:06] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:28:06,393 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:06] "OPTIONS /api/commitslist?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1" 200 -
+2024-12-08 20:28:06,490 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:28:06] "[35m[1mGET /api/commitslist?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1[0m" 500 -
+2024-12-08 20:29:00,391 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:29:00,795 INFO werkzeug  * Restarting with stat
+2024-12-08 20:29:02,991 INFO root Database created successfully.
+2024-12-08 20:29:03,010 INFO root Default admin user already exists.
+2024-12-08 20:29:03,011 INFO root Default admin user already exists.
+2024-12-08 20:29:03,012 INFO root Default admin user already exists.
+2024-12-08 20:29:03,018 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:29:03,019 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:29:05,078 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:29:05,466 INFO werkzeug  * Restarting with stat
+2024-12-08 20:29:07,589 INFO root Database created successfully.
+2024-12-08 20:29:07,606 INFO root Default admin user already exists.
+2024-12-08 20:29:07,607 INFO root Default admin user already exists.
+2024-12-08 20:29:07,608 INFO root Default admin user already exists.
+2024-12-08 20:29:07,614 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:29:07,614 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:29:08,657 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:29:09,112 INFO werkzeug  * Restarting with stat
+2024-12-08 20:29:10,994 INFO root Database created successfully.
+2024-12-08 20:29:11,014 INFO root Default admin user already exists.
+2024-12-08 20:29:11,015 INFO root Default admin user already exists.
+2024-12-08 20:29:11,016 INFO root Default admin user already exists.
+2024-12-08 20:29:11,027 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:29:11,030 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:29:12,111 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:29:12,601 INFO werkzeug  * Restarting with stat
+2024-12-08 20:29:14,561 INFO root Database created successfully.
+2024-12-08 20:29:14,579 INFO root Default admin user already exists.
+2024-12-08 20:29:14,580 INFO root Default admin user already exists.
+2024-12-08 20:29:14,581 INFO root Default admin user already exists.
+2024-12-08 20:29:14,588 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:29:14,589 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:29:19,488 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:29:19,494 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:29:19,495 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:29:19,497 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:29:19,499 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:29:19,508 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:29:19,511 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:29:19,520 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:29:19,521 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:29:19,588 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:29:19,594 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:29:19,598 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:29:19,603 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:29:19,611 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:29:19,688 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:29:19,696 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:29:19,699 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:29:19,780 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:19] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:29:22,624 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:22] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:29:22,720 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:22] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:29:22,841 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:22] "OPTIONS /api/commitslist?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1" 200 -
+2024-12-08 20:29:22,950 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:29:22] "[35m[1mGET /api/commitslist?start_date[startDate]=Fri,+08+Nov+2024+22:00:00+GMT&start_date[endDate]=Sat,+09+Nov+2024+22:00:00+GMT HTTP/1.1[0m" 500 -
+2024-12-08 20:32:16,227 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:32:16,618 INFO werkzeug  * Restarting with stat
+2024-12-08 20:32:18,691 INFO root Database created successfully.
+2024-12-08 20:32:18,709 INFO root Default admin user already exists.
+2024-12-08 20:32:18,710 INFO root Default admin user already exists.
+2024-12-08 20:32:18,711 INFO root Default admin user already exists.
+2024-12-08 20:32:18,718 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:32:18,719 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:32:20,777 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:32:21,160 INFO werkzeug  * Restarting with stat
+2024-12-08 20:33:22,906 INFO root Database created successfully.
+2024-12-08 20:33:22,931 INFO root Default admin user already exists.
+2024-12-08 20:33:22,933 INFO root Default admin user already exists.
+2024-12-08 20:33:22,934 INFO root Default admin user already exists.
+2024-12-08 20:33:22,943 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-08 20:33:22,944 INFO werkzeug [33mPress CTRL+C to quit[0m
+2024-12-08 20:33:22,945 INFO werkzeug  * Restarting with stat
+2024-12-08 20:33:24,815 INFO root Database created successfully.
+2024-12-08 20:33:24,832 INFO root Default admin user already exists.
+2024-12-08 20:33:24,833 INFO root Default admin user already exists.
+2024-12-08 20:33:24,834 INFO root Default admin user already exists.
+2024-12-08 20:33:24,841 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:33:24,842 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:33:30,280 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:33:30,287 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:33:30,289 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:33:30,609 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:33:30,635 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:33:30,639 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:33:30,708 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:33:30,716 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:33:30,727 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:33:30,732 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:33:30,738 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:33:30,810 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:33:30,812 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:33:30,822 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:33:30,822 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:33:30,823 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:33:30,923 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:33:30,924 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:30] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:33:34,131 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:34] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:33:34,214 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:33:34] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:34:07,203 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:34:07,205 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:34:07,206 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:34:07,215 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:34:07,224 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:07,225 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:07,227 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:34:07,228 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:34:07,229 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:34:07,278 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:34:07,282 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:34:07,319 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:34:07,327 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:07,334 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:34:07,355 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:34:07,370 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:34:07,414 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:07,441 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:07] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:34:18,082 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:18] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:34:18,198 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:18] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:34:51,487 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:51] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:51,488 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:51] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:34:51,577 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:51] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:51,589 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:51] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:34:54,581 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:54] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:34:54,582 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:34:54] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:35:02,714 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:35:02] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:35:02,794 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:35:02] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:35:02,901 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:35:02] "[33mOPTIONS /api/api/commitslist HTTP/1.1[0m" 404 -
+2024-12-08 20:36:53,369 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:36:53] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:36:53,371 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:36:53] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:36:53,720 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:36:53] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:36:53,766 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:36:53] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:37:04,446 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:37:04] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:37:04,536 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:37:04] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:37:04,645 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:37:04] "[33mOPTIONS /api/api/commitslist HTTP/1.1[0m" 404 -
+2024-12-08 20:38:29,931 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:29] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:38:29,968 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:29] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:38:30,027 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:30] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:38:30,047 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:30] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:38:34,622 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:34] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:38:34,848 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:34] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:38:34,941 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:34] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:38:35,015 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:38:35] "[31m[1mPOST /api/commitslist HTTP/1.1[0m" 400 -
+2024-12-08 20:40:42,873 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:40:43,263 INFO werkzeug  * Restarting with stat
+2024-12-08 20:40:45,262 INFO root Database created successfully.
+2024-12-08 20:40:45,279 INFO root Default admin user already exists.
+2024-12-08 20:40:45,280 INFO root Default admin user already exists.
+2024-12-08 20:40:45,281 INFO root Default admin user already exists.
+2024-12-08 20:40:45,287 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:40:45,288 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:40:51,436 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/main.py', reloading
+2024-12-08 20:40:51,827 INFO werkzeug  * Restarting with stat
+2024-12-08 20:40:58,622 INFO root Database created successfully.
+2024-12-08 20:40:58,640 INFO root Default admin user already exists.
+2024-12-08 20:40:58,641 INFO root Default admin user already exists.
+2024-12-08 20:40:58,642 INFO root Default admin user already exists.
+2024-12-08 20:40:58,649 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-08 20:40:58,649 INFO werkzeug [33mPress CTRL+C to quit[0m
+2024-12-08 20:40:58,651 INFO werkzeug  * Restarting with stat
+2024-12-08 20:41:00,627 INFO root Database created successfully.
+2024-12-08 20:41:00,662 INFO root Default admin user already exists.
+2024-12-08 20:41:00,664 INFO root Default admin user already exists.
+2024-12-08 20:41:00,665 INFO root Default admin user already exists.
+2024-12-08 20:41:00,675 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:41:00,675 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:41:07,420 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:41:07,457 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:41:07,459 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:41:07,487 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:41:07,512 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:41:07,517 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:41:07,537 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:41:07,539 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:41:07,540 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:41:07,555 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:41:07,560 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:41:07,565 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:41:07,570 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:41:07,604 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:41:07,611 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:41:07,931 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:41:07,936 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:07] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:41:08,013 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:08] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:41:11,853 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:11] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:41:11,939 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:11] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:41:12,052 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:12] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:41:12,149 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:41:12] "[35m[1mPOST /api/commitslist HTTP/1.1[0m" 500 -
+2024-12-08 20:42:54,409 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/models.py', reloading
+2024-12-08 20:42:54,849 INFO werkzeug  * Restarting with stat
+2024-12-08 20:42:56,826 INFO root Database created successfully.
+2024-12-08 20:42:56,843 INFO root Default admin user already exists.
+2024-12-08 20:42:56,844 INFO root Default admin user already exists.
+2024-12-08 20:42:56,845 INFO root Default admin user already exists.
+2024-12-08 20:42:56,852 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:42:56,853 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:43:00,937 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/models.py', reloading
+2024-12-08 20:43:01,344 INFO werkzeug  * Restarting with stat
+2024-12-08 20:43:03,230 INFO root Database created successfully.
+2024-12-08 20:43:03,247 INFO root Default admin user already exists.
+2024-12-08 20:43:03,248 INFO root Default admin user already exists.
+2024-12-08 20:43:03,249 INFO root Default admin user already exists.
+2024-12-08 20:43:03,256 WARNING werkzeug  * Debugger is active!
+2024-12-08 20:43:03,256 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 20:43:09,387 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:43:09,395 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:43:09,406 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:43:09,838 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:43:09,899 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:43:09,924 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:43:09,932 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:43:09,934 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:43:09,935 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:43:09,936 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:43:09,954 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:43:09,956 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:43:09,978 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:09] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:43:10,018 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:10] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:43:10,023 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:10] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:43:10,039 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:10] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:43:10,061 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:10] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:43:10,100 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:10] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:43:13,494 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:13] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:43:13,574 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:13] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:43:13,691 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:13] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:43:13,780 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:43:13] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:44:41,129 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:44:41,134 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:44:41,156 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:44:41,159 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:44:41,160 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:44:41,278 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:44:41,295 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:44:41,298 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:44:41,300 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:44:41,466 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:44:41,472 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:44:41,518 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:44:41,520 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:44:41,537 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:44:41,556 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:44:41,618 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:44:41,638 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:44:41,659 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:41] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:44:46,474 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:46] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:44:46,571 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:46] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:44:46,670 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:46] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:44:46,766 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:44:46] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:46:25,717 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:46:25,718 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:46:25,719 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:46:25,719 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:46:25,731 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:46:25,741 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:46:25,742 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:46:25,876 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:46:25,879 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:46:25,880 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:46:25,882 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:46:25,884 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:46:25,953 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:46:25,960 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:46:25,963 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:46:25,966 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:25] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:46:26,039 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:26] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:46:26,055 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:26] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:46:29,039 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:29] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:46:29,119 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:29] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:46:29,214 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:29] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:46:29,296 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:46:29] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:47:43,150 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:47:43,160 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:47:43,161 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:47:43,166 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:47:43,168 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:47:43,169 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:47:43,170 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:47:43,171 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:47:43,171 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:47:43,235 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:47:43,236 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:47:43,240 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:47:43,247 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:47:43,271 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:47:43,293 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:47:43,297 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:47:43,304 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:47:43,374 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:43] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:47:46,612 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:46] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:47:46,711 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:46] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:47:46,832 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:46] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:47:46,918 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:47:46] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:53:50,811 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:50] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:53:50,936 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:50] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:53:51,025 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:51] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:53:51,371 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:51] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:53:54,807 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:53:54,818 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:53:54,822 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:53:54,832 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:53:54,831 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:53:54,835 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:53:54,959 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:53:54,975 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:54] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:53:55,021 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:53:55,106 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:53:55,110 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:53:55,163 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:53:55,166 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:53:55,171 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:53:55,258 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:55] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:53:59,636 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:59] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:53:59,773 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:59] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:53:59,870 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:59] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:53:59,956 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:53:59] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:56:34,746 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:34] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:56:35,003 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:35] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:56:35,221 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:35] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:56:35,373 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:35] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:56:38,431 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:56:38,434 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:56:38,435 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:56:38,439 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:56:38,447 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:56:38,450 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:56:38,453 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:56:38,548 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:56:38,552 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:56:38,553 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:56:38,561 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:56:38,563 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:56:38,593 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:56:38,596 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:56:38,675 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:38] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:56:41,630 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:41] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:56:41,720 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:41] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:56:41,813 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:41] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:56:41,897 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:56:41] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:58:30,322 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:30] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:58:30,481 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:30] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:58:30,581 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:30] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:58:30,694 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:30] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:58:34,999 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:34] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 20:58:35,001 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:58:35,011 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 20:58:35,012 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:58:35,014 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:58:35,020 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:58:35,021 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:58:35,077 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 20:58:35,080 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 20:58:35,099 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 20:58:35,107 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 20:58:35,130 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 20:58:35,132 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 20:58:35,190 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 20:58:35,194 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:35] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 20:58:39,711 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:39] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:58:39,798 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:39] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 20:58:39,886 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:39] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 20:58:39,980 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 20:58:39] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 21:00:22,006 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 21:00:22,007 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 21:00:22,014 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 21:00:22,018 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 21:00:22,132 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 21:00:22,241 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 21:00:22,334 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 21:00:22,357 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 21:00:22,377 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:22,379 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 21:00:22,439 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 21:00:22,462 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 21:00:22,471 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:22,474 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 21:00:22,500 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:22,505 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 21:00:22,548 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 21:00:22,576 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:22] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:30,595 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:30] "OPTIONS /api/uploaded-files2/1 HTTP/1.1" 200 -
+2024-12-08 21:00:30,693 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:30] "[33mGET /api/uploaded-files2/1 HTTP/1.1[0m" 404 -
+2024-12-08 21:00:35,587 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 21:00:35,602 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 21:00:35,604 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 21:00:35,606 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 21:00:35,609 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 21:00:35,610 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 21:00:35,612 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 21:00:35,619 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:35,623 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:35,668 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 21:00:35,676 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 21:00:35,679 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 21:00:35,685 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 21:00:35,693 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 21:00:35,696 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 21:00:35,707 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 21:00:35,710 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:35,782 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:35] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:00:39,677 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:39] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 21:00:39,763 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:39] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 21:00:39,840 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:39] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 21:00:39,934 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:00:39] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 21:03:03,645 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 21:03:03,650 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 21:03:03,663 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 21:03:03,686 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 21:03:03,808 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:03:03,811 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:03:03,827 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 21:03:03,832 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 21:03:03,849 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 21:03:03,871 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 21:03:03,877 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 21:03:03,879 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 21:03:03,893 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 21:03:03,898 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:03:03,905 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 21:03:03,960 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 21:03:03,997 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 21:03:03,998 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:03] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 21:03:07,171 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:07] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 21:03:07,258 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:07] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 21:03:07,341 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:07] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 21:03:07,412 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:03:07] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 21:04:07,178 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:04:07] "OPTIONS /api/milestone-review HTTP/1.1" 200 -
+2024-12-08 21:04:07,261 DEBUG apis.Ta_dashboard.submission_files Received request to create or update milestone review.
+2024-12-08 21:04:07,261 DEBUG apis.Ta_dashboard.submission_files Request data: {'team_id': 2, 'team_score': 5, 'milestone_id': 2, 'feedback': 'Nice', 'max_milestone_score': 9}
+2024-12-08 21:04:07,263 DEBUG apis.Ta_dashboard.submission_files Found milestone status: <MilestoneStatus 1>
+2024-12-08 21:04:07,263 INFO apis.Ta_dashboard.submission_files Updating existing milestone review.
+2024-12-08 21:04:07,269 DEBUG apis.Ta_dashboard.submission_files Milestone review saved successfully.
+2024-12-08 21:04:07,270 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 21:04:07] "[35m[1mPOST /api/milestone-review HTTP/1.1[0m" 201 -

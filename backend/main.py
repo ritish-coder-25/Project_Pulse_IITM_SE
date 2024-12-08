@@ -28,6 +28,7 @@ from celery.result import AsyncResult
 # from flask_restx import Api
 import marshmallow as ma
 from flask_smorest import Api, Blueprint, abort
+from datetime import datetime
 
 app = Flask(__name__)
 # CORS(app)
@@ -138,11 +139,49 @@ def get_task_status(task_id):
     return jsonify(response), 200
 
 
-@app.route("/api/commits", methods=["GET"])
-def get_commits(start_date, end_date):
-    commits = Commit.query.filter(Commit.commit_date >= start_date, Commit.commit_date <= end_date).all()
-    print("Commits", commits.to_dict())
-    return jsonify([commit.to_dict() for commit in commits]), 200
+
+@app.route("/api/commitslist", methods=["POST"])
+def get_commits():
+    try:
+        # Parse JSON data from the request body
+        data = request.get_json()
+        date_range = data.get('start_date')  # Correctly get the nested dictionary
+        start_date = date_range.get('startDate')
+        end_date = date_range.get('endDate')
+
+        # Print debugging information
+        print("Request args", request.args)
+        print("Request body", request.json)
+        print("Parsed start_date:", start_date)
+        print("Parsed end_date:", end_date)
+
+        # Validate the received data
+        if not start_date or not end_date:
+            return jsonify({"error": "Both start_date and end_date are required"}), 400
+
+        # Convert the strings to datetime objects for filtering
+        start_date = datetime.strptime(start_date, '%a, %d %b %Y %H:%M:%S %Z')
+        end_date = datetime.strptime(end_date, '%a, %d %b %Y %H:%M:%S %Z')
+
+        # Query database for commits within the specified date range
+        commits = Commit.query.filter(Commit.commit_timestamp >= start_date, 
+                                       Commit.commit_timestamp <= end_date).all()
+
+        # Convert query result to a list of dictionaries
+        commits_list = [commit.to_dict() for commit in commits]
+        print("Fetched Commits:", commits_list)
+
+        return jsonify(commits_list), 200
+
+    except ValueError as e:
+        # Handle invalid date format
+        print("Error parsing dates:", e)
+        return jsonify({"error": "Invalid date format. Use ISO 8601 or similar"}), 400
+
+    except Exception as e:
+        # Handle any unexpected errors
+        print("Error fetching commits:", e)
+        return jsonify({"error": "An unexpected error occurred"}), 500
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)

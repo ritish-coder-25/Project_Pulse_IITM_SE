@@ -514,3 +514,40 @@ class MilestoneStatusCreate(Resource):
                 "message": "An unexpected error occurred.",
                 "error": str(e),
             }, 500
+
+
+
+@api_bp_submission.route("/api/github-data", methods=["POST"])
+# @jwt_required()
+def trigger_github_data():
+    if request.is_json:
+        data = request.get_json()
+        print("Received data:", data)
+    else:
+        data = request.form
+
+    if not data or "team_id" not in data:
+        return jsonify({"message": "No input data provided or team_id missing"}), 400
+
+    # current_user_id = get_jwt_identity()
+    # current_user = User.query.get_or_404(current_user_id)
+
+    # allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+    # if current_user.user_type not in allowed_roles:
+    #     return (
+    #         jsonify({"message": "You do not have permission to trigger GitHub data retrieval"}),
+    #         403,
+    #     )
+
+    team_id = data["team_id"]
+    get_github_data.delay(team_id)  # Call the Celery task asynchronously
+
+    return (
+        jsonify(
+            {
+                "message": "GitHub data retrieval has been triggered successfully",
+                "team_id": team_id,
+            }
+        ),
+        202,
+    )

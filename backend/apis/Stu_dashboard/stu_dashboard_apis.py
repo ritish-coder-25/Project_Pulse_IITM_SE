@@ -66,20 +66,26 @@ class StuDashboard(Resource):
                 }
                 print(member_data)
                 team_data['members'].append(member_data)
-
+                
+                
             # Fetch milestone details
             max_marks=0
-            for status in statuses:
-                milestone = Milestone.query.get(status.milestone_id)
-                if milestone:
-                    max_marks += milestone.max_marks
-                    milestone_data = {
-                        'milestone_name': milestone.milestone_name,
-                        'milestone_status': status.milestone_status,
-                        'end_date': milestone.end_date,
-                    }
-                    team_data['milestones'].append(milestone_data)
-                    team_data['total_max_marks'] = float(max_marks)
+            milestones = Milestone.query.all()
+            for milestone in milestones: 
+                status = next((s for s in statuses if s.milestone_id == milestone.milestone_id), None) 
+                if status: 
+                    milestone_status = status.milestone_status 
+                    max_marks+=milestone.max_marks
+                elif milestone.end_date < datetime.now(): 
+                    milestone_status = 'Missed' 
+                    max_marks+=milestone.max_marks
+                else: 
+                    milestone_status = 'Pending'
+                milestone_data = {'milestone_name': milestone.milestone_name, 
+                                  'milestone_status': milestone_status,
+                                  'end_date': milestone.end_date }
+                team_data['milestones'].append(milestone_data)
+                team_data['total_max_marks'] = float(max_marks)
 
             return jsonify(team_data), 200
         except NotFound as e:

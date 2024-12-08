@@ -175,12 +175,16 @@ export default {
     },
     filterDocuments() {
       // Only filter if both team and milestone are selected
-      if (this.selectedTeam.name && this.selectedMilestone.milestone_name) {
+      if (this.selectedMilestone.milestone_id) {
         this.filteredDocuments = this.documents.filter(doc =>
-          doc.team === this.selectedTeam.name &&
-          doc.milestone === this.selectedMilestone.milestone_name
+          // doc.team === this.selectedTeam.name &&
+          doc.milestone === this.selectedMilestone.milestone_id
         )
         console.log("Filtered documents:", this.filteredDocuments)
+        console.log(this.documents, this.documents.filter(doc =>
+          // doc.team === this.selectedTeam.name &&
+          doc.milestone === this.selectedMilestone.milestone_id
+        ))
       }
     },
     handleTeamChange(event) {

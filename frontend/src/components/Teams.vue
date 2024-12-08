@@ -38,7 +38,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td v-for="milestone in milestones">{{ milestone.end_date }}</td>
+                        <td v-for="milestone in milestones">Deadline: {{ milestone.end_date }}</td>
                     </tr>
                 </tbody>
             </table>

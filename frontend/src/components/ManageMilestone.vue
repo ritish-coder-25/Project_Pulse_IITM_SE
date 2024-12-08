@@ -65,16 +65,14 @@ import { BListGroup, BListGroupItem, BLink } from 'bootstrap-vue-next'
 
     <div class="note">
       <p>
-        <strong>Note:</strong> Documents can be uploaded and the submit button
-        can be clicked without marking the milestone as complete. Once a
-        milestone is marked as completed, no further changes are allowed.
+        <strong>Note:</strong> Once a milestone is marked as completed, no further changes are allowed.
       </p>
     </div>
 
-    <div class="actions">
+    <!-- <div class="actions">
       <button @click="submit" :disabled="isSubmitDisabled">Submit</button>
       <button @click="reset">Reset</button>
-    </div>
+    </div> -->
   </div>
 </template>
 

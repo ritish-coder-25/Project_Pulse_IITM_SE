@@ -159,6 +159,57 @@ class UploadedFiles(Resource):
             }, 500
 
 
+@api_bp_submission.route("/api/uploaded-files2/<int:team_id>", methods=["GET"])
+class UploadedFiles2(Resource):
+
+    @jwt_required()
+    @api_bp_submission.response(
+        200, DocumentListSchema
+    )  # Assuming you define a schema for response
+    @api_bp_submission.response(404, CommonErrorSchema)
+    def get(self, team_id):
+        """
+        Get all files submitted by a specific team.
+
+        Query Parameters:
+            - team_id (int): The ID of the team whose submissions are being queried.
+
+        Returns:
+            List of documents with their metadata.
+        """
+        try:
+            # team_id = data["team_id"]
+            print("Team Id Recieved: ", team_id)
+            files = File.query.filter_by(team_id=team_id).all()
+            if not files:
+                return {
+                    "errorCode": "submissions_not_found",
+                    "message": "No submissions found for the specified team.",
+                }, 404
+
+            print(files)
+            documents = []
+            for file in files:
+                url_name = file.file_name.split("\\")[-1]
+                document = {
+                    "id": file.file_id,
+                    "name": file.file_name,
+                    #"url": f"{request.url_root}uploads/{url_name}",
+                    "url": f"http://localhost:5000/uploads/{url_name}",
+                    "team": file.team_id,
+                    "milestoneId": file.milestone_id,
+                }
+                documents.append(document)
+            print("Documents:", documents)
+            return jsonify({"documents": documents}), 200
+        except Exception as e:
+            print(e)
+            return {
+                "errorCode": "error",
+                "message": "An error occurred.",
+                "error": str(e),
+            }, 500
+
 @api_bp_submission.route("/api/download/<int:file_id>", methods=["GET"])
 class FileDownloadResource(Resource):
 

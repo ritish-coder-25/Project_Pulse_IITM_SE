@@ -74,8 +74,6 @@ import { BButton } from 'bootstrap-vue-next'
               />
             </div>
           </div>
-          {{ apiErrors }}
-          {{ apiErrorMessage }}
           <!-- Submit Button -->
           <!-- <button type="submit" class="submit-button">Submit</button> -->
           <BButton type="submit" variant="primary" class="w-100"

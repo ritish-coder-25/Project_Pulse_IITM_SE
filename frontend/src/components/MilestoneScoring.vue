@@ -150,7 +150,8 @@ export default {
       try {
         const response = await TaScoringApiHelpers.fetchMilestones()
         console.log("Milestones data received:", response.data)
-        this.milestones = response.data.milestones;
+        console.log("Milestone data received render --> :", response.data);
+        this.milestones = response.data;
 
       } catch (error) {
         console.warn('Using local milestones data due to error:', error)

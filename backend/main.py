@@ -8,7 +8,7 @@ import os
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
 from apis.Ta_dashboard.submission_files import api_bp_submission

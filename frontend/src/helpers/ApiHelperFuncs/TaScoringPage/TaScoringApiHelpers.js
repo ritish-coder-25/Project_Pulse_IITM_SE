@@ -59,7 +59,7 @@ export class TaScoringApiHelpers {
 
     static async fetchDocs(teamId) {
         try {
-            const response = await mainAxios.get(`/files/${teamId}`);
+            const response = await mainAxios.get(`/uploaded-files2/${teamId}`);
 
             console.log("Documents:", response.data)
             const data = typeof response.data === 'string'
@@ -77,7 +77,7 @@ export class TaScoringApiHelpers {
                 name: doc.name,
                 url: doc.url,
                 team: doc.team,
-                milestone: doc.milestone
+                milestone: doc.milestoneID
             }));
 
             console.log("Docs array:", docsArray)

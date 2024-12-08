@@ -82,7 +82,10 @@ const router = createRouter({
           ) {
             if (authStore.userRole === UserRoleEnums.student) {
               return `/dashboard/student/home/${urlParams}${queryString}`
-            } else if (authStore.userRole === UserRoleEnums.instructor) {
+            } else if (
+              authStore.userRole === UserRoleEnums.instructor ||
+              authStore.userRole === UserRoleEnums.ta
+            ) {
               return `/dashboard/instructor/home/${urlParams}${queryString}`
             }
             showToast({

@@ -3,4 +3,5 @@ export const UserRoleEnums = {
     instructor: 'Instructor',
     admin: 'Admin',
     registered: 'Registered',
+    ta: 'TA',
 }

@@ -9,7 +9,7 @@ from api_parsers import team_parsers
 from flask_restx import Resource
 from flask_smorest import Blueprint
 
-
+from tasks import get_github_data
 from datetime import datetime
 import logging
 
@@ -518,36 +518,51 @@ class MilestoneStatusCreate(Resource):
 
 
 @api_bp_submission.route("/api/github-data", methods=["POST"])
-# @jwt_required()
-def trigger_github_data():
-    if request.is_json:
-        data = request.get_json()
-        print("Received data:", data)
-    else:
-        data = request.form
+class GitHubDataTrigger(Resource):
+    @api_bp_submission.response(202, {"message": "GitHub data retrieval has been triggered successfully", "team_id": "int"})
+    @api_bp_submission.response(400, CommonErrorSchema)
+    @api_bp_submission.response(403, CommonErrorSchema)
+    def post(self):
+        """
+        Trigger GitHub data retrieval for a specific team.
+        """
 
-    if not data or "team_id" not in data:
-        return jsonify({"message": "No input data provided or team_id missing"}), 400
+        if request.is_json:
+            data = request.get_json()
+            print("Received data:", data)
+        else:
+            data = request.form
 
-    # current_user_id = get_jwt_identity()
-    # current_user = User.query.get_or_404(current_user_id)
+        if not data or "team_id" not in data:
+            return {
+                "errorCode": "missing_data",
+                "message": "No input data provided or team_id missing"
+            }, 400
 
-    # allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
-    # if current_user.user_type not in allowed_roles:
-    #     return (
-    #         jsonify({"message": "You do not have permission to trigger GitHub data retrieval"}),
-    #         403,
-    #     )
+        # Uncomment the following lines if user authentication is required
+        # current_user_id = get_jwt_identity()
+        # current_user = User.query.get_or_404(current_user_id)
 
-    team_id = data["team_id"]
-    get_github_data.delay(team_id)  # Call the Celery task asynchronously
+        # allowed_roles = ["Admin", "TA", "Instructor", "Developer"]
+        # if current_user.user_type not in allowed_roles:
+        #     return (
+        #         jsonify({"message": "You do not have permission to trigger GitHub data retrieval"}),
+        #         403,
+        #     ) 
 
-    return (
-        jsonify(
-            {
+        team_id = data["team_id"]
+        try:
+            team = Team.query.get(team_id)
+            if team:
+                repo_url = team.github_repo_url
+            get_github_data.delay(repo_url)  # Call the Celery task asynchronously
+            return {
                 "message": "GitHub data retrieval has been triggered successfully",
                 "team_id": team_id,
-            }
-        ),
-        202,
-    )
+            }, 202
+        except Exception as e:
+            return {
+                "errorCode": "unknown_error",
+                "message": f"An unexpected error occurred.{str(e)}",
+                "error": str(e),
+            }, 500

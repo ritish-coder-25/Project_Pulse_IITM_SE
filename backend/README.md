@@ -64,3 +64,7 @@ install redis-server, start redis-server in a terminal
 
 then in a new terminal
 celery -A tasks.celery worker --loglevel=info
+
+or 
+
+celery -A main.celery worker -l debug -P solo

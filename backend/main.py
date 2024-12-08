@@ -21,6 +21,8 @@ from apis.taHomeAPIs.taHome_apis import api_bp_tahome
 import logging
 from flask_cors import CORS
 from celery_config import make_celery
+import tasks
+from celery.result import AsyncResult
 
 
 # from flask_restx import Api
@@ -99,6 +101,32 @@ def test_route():
 def download(filename):
     uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
     return send_from_directory(uploads, filename)
+
+@app.route("/api/celery-test", methods=["POST"])
+# @jwt_required()
+# @check_access(roles=[MRoles.admin.value])
+def download_theatre_csv():
+    repo_url = request.json.get("repo_url")
+    #current_user_id = get_jwt_identity()
+    #print("request got for ",current_user_id,theatreId)
+    #tasks.create_theatre_csv_celery.delay(theatreId,current_user_id)
+    asyncTaskTheatre =  tasks.get_github_data.apply_async(args=[repo_url])
+    print("returning from async task")
+    return jsonify({
+        "message": "File processing started. Do not close your browser as the file will be downloaded automatically.",
+        "task_id": asyncTaskTheatre.id,
+    })
+
+@app.route("/api/task_status/<task_id>", methods=["GET"])
+def get_task_status(task_id):
+    task_result = AsyncResult(task_id, app=celery)
+    response = {
+        "task_id": task_id,
+        "status": task_result.status,
+        #"result": task_result.result if task_result.ready() else None
+    }
+    return jsonify(response), 200
+
 
 
 if __name__ == "__main__":

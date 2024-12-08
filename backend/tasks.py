@@ -11,9 +11,10 @@ app.config.from_object('config.Config')
 
 celery = make_celery(app)
 
-@celery.task
-def get_github_data(repo_url):
+@celery.task(bind=True)
+def get_github_data(self, repo_url):
     try:
+        print("Received data", repo_url)
         # Fetch GitHub data
         output = get_commits_with_changes_files(
             since="2024-11-08T22:00:00Z",
@@ -46,7 +47,13 @@ def get_github_data(repo_url):
 
         db.session.commit()
         print(f"Commits from {repo_url} saved to the database.")
-
+        return {
+            "status": "success",
+            "output_file": output_file,
+            "commit_count": len(output)
+        }
     except Exception as e:
         db.session.rollback()
+        self.update_state(state='FAILURE', meta={'error': str(e)})
         print(f"Error occurred while processing GitHub data: {e}")
+        raise e

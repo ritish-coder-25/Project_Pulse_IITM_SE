@@ -1,4 +1,5 @@
 from celery import Celery
+from flask import current_app as app
 
 
 def make_celery(app):
@@ -8,7 +9,8 @@ def make_celery(app):
     celery = Celery(
         app.import_name,
         backend=app.config['CELERY_RESULT_BACKEND'],
-        broker=app.config['CELERY_BROKER_URL']
+        broker=app.config['CELERY_BROKER_URL'],
+        task_track_started=True,
     )
     celery.conf.update(app.config)
 

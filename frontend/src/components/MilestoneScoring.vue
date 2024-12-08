@@ -297,9 +297,9 @@ export default {
 </script>
 
 <style scoped>
-.container {
+/* .container {
   max-width: 700px;
-}
+} */
 
 .card-header {
   font-weight: bold;
@@ -310,7 +310,7 @@ export default {
 }
 
 .datalist {
-  max-height: 200px;
+  /* max-height: 200px; */
   overflow-y: auto;
 }
 </style>

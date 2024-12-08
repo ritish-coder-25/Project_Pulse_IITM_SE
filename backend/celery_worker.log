@@ -7351,3 +7351,201 @@ def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retri
 2024-12-08 22:25:20,618 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:25:20] "GET /api/task_status/79dbe476-fbfb-42c0-b193-8d766339d7f1 HTTP/1.1" 200 -
 2024-12-08 22:26:54,128 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:26:54] "GET /api/task_status/79dbe476-fbfb-42c0-b193-8d766339d7f1 HTTP/1.1" 200 -
 2024-12-08 22:27:15,692 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:27:15] "GET /api/task_status/cc8e2ffc-f4d5-4402-9b54-e1913948a58e HTTP/1.1" 200 -
+2024-12-08 22:30:22,524 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:30:22,550 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 22:30:22,552 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:22,558 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:30:22,560 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 22:30:22,582 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:30:22,583 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:30:22,592 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:30:22,614 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:30:22,665 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 22:30:22,670 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:30:22,672 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 22:30:22,675 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:30:22,676 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:30:22,677 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:22,682 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:22,690 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:30:22,761 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:22] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:25,584 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:25] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:30:25,682 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:25] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:30:25,779 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:25] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:30:25,855 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:25] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:30:26,795 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:26] "OPTIONS /api/celery-test HTTP/1.1" 200 -
+2024-12-08 22:30:26,882 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:26] "POST /api/celery-test HTTP/1.1" 200 -
+2024-12-08 22:30:28,114 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:28] "OPTIONS /api/task_status/478a4a49-07fc-4d9e-bdec-1b61c44a2f81 HTTP/1.1" 200 -
+2024-12-08 22:30:28,200 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:28] "GET /api/task_status/478a4a49-07fc-4d9e-bdec-1b61c44a2f81 HTTP/1.1" 200 -
+2024-12-08 22:30:54,574 DEBUG celery.utils.functional 
+def chunks(task, it, n):
+    return 1
+
+2024-12-08 22:30:54,575 DEBUG celery.utils.functional 
+def get_github_data(self, repo_url, start_time, end_time):
+    return 1
+
+2024-12-08 22:30:54,575 DEBUG celery.utils.functional 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2024-12-08 22:30:54,576 DEBUG celery.utils.functional 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2024-12-08 22:30:54,576 DEBUG celery.utils.functional 
+def xmap(task, it):
+    return 1
+
+2024-12-08 22:30:54,577 DEBUG celery.utils.functional 
+def backend_cleanup():
+    return 1
+
+2024-12-08 22:30:54,577 DEBUG celery.utils.functional 
+def chain(*args, **kwargs):
+    return 1
+
+2024-12-08 22:30:54,578 DEBUG celery.utils.functional 
+def xstarmap(task, it):
+    return 1
+
+2024-12-08 22:30:54,578 DEBUG celery.utils.functional 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2024-12-08 22:30:54,578 DEBUG celery.utils.functional 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2024-12-08 22:30:57,660 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:30:57,662 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:57,675 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:30:57,677 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:57,683 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 22:30:57,694 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:30:57,705 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:30:57,710 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:30:57,712 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 22:30:57,739 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:30:57,752 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:30:57,759 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:30:57,761 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 22:30:57,777 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:30:57,779 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:30:57,797 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:30:57,798 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 22:30:57,833 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:30:57] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:31:00,546 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:00] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:31:00,625 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:00] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:31:00,720 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:00] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:31:00,794 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:00] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:31:02,026 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:02] "OPTIONS /api/celery-test HTTP/1.1" 200 -
+2024-12-08 22:31:02,121 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:02] "POST /api/celery-test HTTP/1.1" 200 -
+2024-12-08 22:31:03,440 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:03] "OPTIONS /api/task_status/2f69fe8c-480f-4492-9a48-48b19a846ada HTTP/1.1" 200 -
+2024-12-08 22:31:03,532 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:31:03] "GET /api/task_status/2f69fe8c-480f-4492-9a48-48b19a846ada HTTP/1.1" 200 -
+2024-12-08 22:32:31,171 DEBUG celery.utils.functional 
+def chunks(task, it, n):
+    return 1
+
+2024-12-08 22:32:31,173 DEBUG celery.utils.functional 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2024-12-08 22:32:31,173 DEBUG celery.utils.functional 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2024-12-08 22:32:31,174 DEBUG celery.utils.functional 
+def xmap(task, it):
+    return 1
+
+2024-12-08 22:32:31,174 DEBUG celery.utils.functional 
+def backend_cleanup():
+    return 1
+
+2024-12-08 22:32:31,174 DEBUG celery.utils.functional 
+def chain(*args, **kwargs):
+    return 1
+
+2024-12-08 22:32:31,175 DEBUG celery.utils.functional 
+def xstarmap(task, it):
+    return 1
+
+2024-12-08 22:32:31,175 DEBUG celery.utils.functional 
+def get_github_data(self, repo_url, start_time, end_time):
+    return 1
+
+2024-12-08 22:32:31,175 DEBUG celery.utils.functional 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2024-12-08 22:32:31,176 DEBUG celery.utils.functional 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2024-12-08 22:32:37,848 INFO root Database created successfully.
+2024-12-08 22:32:37,863 INFO root Default admin user already exists.
+2024-12-08 22:32:37,864 INFO root Default admin user already exists.
+2024-12-08 22:32:37,865 INFO root Default admin user already exists.
+2024-12-08 22:32:37,877 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-08 22:32:37,878 INFO werkzeug [33mPress CTRL+C to quit[0m
+2024-12-08 22:32:37,879 INFO werkzeug  * Restarting with stat
+2024-12-08 22:32:40,079 INFO root Database created successfully.
+2024-12-08 22:32:40,097 INFO root Default admin user already exists.
+2024-12-08 22:32:40,098 INFO root Default admin user already exists.
+2024-12-08 22:32:40,099 INFO root Default admin user already exists.
+2024-12-08 22:32:40,105 WARNING werkzeug  * Debugger is active!
+2024-12-08 22:32:40,115 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 22:32:41,642 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:41] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:32:41,659 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:41] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:32:41,669 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:41] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 22:32:42,043 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 22:32:42,044 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:32:42,159 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:32:42,185 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:32:42,189 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:32:42,236 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 22:32:42,242 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:32:42,249 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:32:42,254 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 22:32:42,263 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:32:42,276 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:32:42,279 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:32:42,282 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:32:42,361 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:32:42,372 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:42] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:32:46,583 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:46] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:32:46,668 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:46] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:32:46,766 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:46] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:32:46,846 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:46] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:32:48,673 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:48] "OPTIONS /api/celery-test HTTP/1.1" 200 -
+2024-12-08 22:32:48,752 DEBUG celery.utils.functional 
+def get_github_data(self, repo_url, start_time, end_time):
+    return 1
+
+2024-12-08 22:32:48,830 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:48] "POST /api/celery-test HTTP/1.1" 200 -
+2024-12-08 22:32:50,581 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:50] "OPTIONS /api/task_status/eea5a19c-3819-422b-9970-d98fcc5f45dd HTTP/1.1" 200 -
+2024-12-08 22:32:50,672 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:32:50] "GET /api/task_status/eea5a19c-3819-422b-9970-d98fcc5f45dd HTTP/1.1" 200 -
+2024-12-08 22:33:10,792 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:33:10,796 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:33:10,800 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:33:10,802 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-08 22:33:10,811 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:33:10,812 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:33:10,813 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:33:10,815 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:33:10,816 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-08 22:33:10,879 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-08 22:33:10,883 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:33:10,903 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-08 22:33:10,903 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-08 22:33:10,904 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-08 22:33:10,911 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-08 22:33:10,912 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/projects HTTP/1.1" 200 -
+2024-12-08 22:33:10,916 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/commits HTTP/1.1" 200 -
+2024-12-08 22:33:10,958 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:10] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-08 22:33:14,122 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:33:14,226 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-08 22:33:14,335 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-08 22:33:14,412 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "POST /api/commitslist HTTP/1.1" 200 -

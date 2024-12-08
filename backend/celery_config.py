@@ -1,20 +1,22 @@
-# celery_config.py
 from celery import Celery
-from flask import current_app as app
-def make_celery():
+
+
+def make_celery(app):
+    """
+    Create and configure a Celery instance with Flask app context.
+    """
     celery = Celery(
-        'my_app',
-        broker='redis://localhost:6379/0',  # Redis URL
-        backend='redis://localhost:6379/0'   # Redis URL for results
+        app.import_name,
+        backend=app.config['CELERY_RESULT_BACKEND'],
+        broker=app.config['CELERY_BROKER_URL']
     )
+    celery.conf.update(app.config)
+
+    # Create a custom task class that wraps Flask app context
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return super().__call__(*args, **kwargs)
+
+    celery.Task = ContextTask
     return celery
-
-celery = make_celery()
-
-class ContextTask(celery.Task):
-    def _call_(self, *args, **kwargs):
-        with app.app_context():
-            return self.run(*args, **kwargs)
-
-
-# main.py

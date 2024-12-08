@@ -34,6 +34,16 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           </datalist>
         </div>
 
+        <!-- Trigger Celery Task Button -->
+        <div class="form-group mb-3">
+          <button type="button" v-if="!hideButton" @click="startCeleryTask" class="btn btn-warning">Trigger Celery Task</button>
+        </div>
+
+        <div v-if="hideButton" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p> ⌛ Loading Commits and Generating Reports... Please wait.</p>
+    </div>
+
         <!-- Row containing Documents and Feedback side-by-side -->
         <div class="row">
           <!-- Documents Column -->
@@ -78,6 +88,77 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
           </div>
         </div>
 
+        <!-- Commits Section -->
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <div class="card mb-3 shadow">
+              <!-- Card Header -->
+              <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                  🚀 Commits
+                </h4>
+                <span class="badge bg-warning text-dark">{{ commits.length }} Total</span>
+              </div>
+
+              <!-- Card Body -->
+              <div class="card-body">
+                <ul v-if="commits.length" class="list-group">
+                  <li v-for="commit in commits" :key="commit.commit_id"
+                    class="list-group-item mb-3 border rounded shadow-sm">
+                    <!-- Commit Header -->
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="mb-1 text-success">
+                        ✏️ {{ commit.commit_message }}
+                      </h5>
+                      <button class="btn btn-sm btn-outline-primary" type="button" @click="toggleCodeChanges(commit)">
+                        {{ commit.showChanges ? '🙈 Hide Changes' : '👀 Show Changes' }}
+                      </button>
+                    </div>
+
+                    <!-- Commit Details -->
+                    <small class="text-muted">
+                      🔑 <strong>Hash:</strong> {{ commit.commit_hash }} |
+                      📅 <strong>Date:</strong> {{ commit.commit_date }}
+                    </small>
+                    <p class="mt-2 mb-1">
+                      📊 <strong>Score:</strong> {{ commit.commit_score }} |
+                      💡 <strong>Clarity:</strong> {{ commit.commit_clarity }} |
+                      🧮 <strong>Complexity:</strong> {{ commit.complexity_score }} |
+                      🎯 <strong>Quality:</strong> {{ commit.code_quality_score }}
+                    </p>
+                    <p>
+                      💡 <strong>Suggestions:</strong>
+                      <span v-if="commit.improvement_suggestions.length">
+                        {{ commit.improvement_suggestions}}
+                      </span>
+                      <span v-else>
+                        No suggestions available.
+                      </span>
+                    </p>
+
+                    <!-- Expandable Code Changes -->
+                    <div v-if="commit.showChanges" class="mt-3">
+                      <div class="card bg-light border-info">
+                        <div class="card-header text-info">
+                          🛠️ Code Changes
+                        </div>
+                        <pre class="card-body p-3 rounded bg-white">
+                  <code>{{ commit.commit_changes }}</code>
+                </pre>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p v-else class="text-muted text-center">
+                  😔 No commits available for the selected team and milestone.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      
         <!-- Score and Buttons -->
         <div class="row g-3">
           <div class="col-md-6">
@@ -94,11 +175,11 @@ import FormConatiner from './MainComponents/FormConatiner.vue'
             </div>
           </div>
         </div>
-
+<!-- 
         <div v-if="reviewData" class="mt-4">
           <h3>Code Review Scores and Comments</h3>
           <pre>{{ reviewData }}</pre>
-        </div>
+        </div> -->
 
 
         <div class="d-flex mt-4">
@@ -137,9 +218,19 @@ export default {
       teamScore: 18,
       maxMilestoneScore: 20,
       reviewData: null,
+      commits: [],
+      hidebutton: false,
     }
   },
   methods: {
+    toggleCodeChanges(commit) {
+      if (commit.hasOwnProperty('showChanges')) {
+        commit.showChanges = !commit.showChanges;
+      } else {
+        // Add `showChanges` property dynamically
+        commit.showChanges = true;
+      }
+    },
     async fetchTeams() {
       try {
         const response = await TaScoringApiHelpers.fetchTeams()
@@ -150,6 +241,56 @@ export default {
         this.teams = TaScoringApiHelpersJson.teams
       }
     },
+    async fetchCommits() {
+      try {
+        const startDate = this.selectedMilestone.start_date
+        const endDate = this.selectedMilestone.end_date
+        const response = await TaScoringApiHelpers.fetchCommits({ startDate: startDate, endDate: endDate })
+        console.log("Commits data received:", response.data)
+        this.commits = response.data
+      } catch (error) {
+        console.warn('Using local teams data due to error:', error)
+        this.commits = TaScoringApiHelpersJson.commits
+      }
+    },
+    async startCeleryTask() {
+      try {
+        const startDate = this.selectedMilestone.start_date
+        const endDate = this.selectedMilestone.end_date
+        const team_id = this.selectedTeam.id
+        const response = await TaScoringApiHelpers.startCeleryTask({startTime: startDate, endTime: endDate,teamId: team_id })
+        console.log("Celery task started:", response)
+        this.hidebutton = true;
+        alert('Celery task started successfully!')
+        
+        const taskId = response.task_id;
+        console.log("Task ID:", taskId)
+        this.pollTaskStatus(taskId);
+      } catch (error) {
+        console.warn('Error starting Celery task:', error)
+      }
+    },
+    async pollTaskStatus(taskId) {
+      try {
+        const response = await TaScoringApiHelpers.getTaskStatus(taskId);
+
+        console.log("Polling Response:", response.data)
+        if (response.data.state === 'SUCCESS') {
+          alert('Celery task completed successfully!');
+          this.isTaskRunning = false; // Re-enable the button
+        } else if (response.data.state === 'FAILURE') {
+          alert('Celery task failed.');
+          this.isTaskRunning = false; // Re-enable the button
+        } else {
+          // Continue polling if the task is still running
+          setTimeout(() => this.pollTaskStatus(taskId), 2000);
+        }
+      } catch (error) {
+        console.warn('Error polling task status:', error);
+        this.isTaskRunning = false; // Re-enable the button in case of error
+      }
+    },
+
     async fetchMilestones() {
       try {
         const response = await TaScoringApiHelpers.fetchMilestones()
@@ -170,7 +311,7 @@ export default {
         console.log("Documents ye rha:", this.documents)
         this.filterDocuments()
         this.reviewData = `Here's the JSON object with the requested code review scores and comments:\n\n\`\`\`json\n{\n  "code_clarity": 5,\n  "functionality": 5,\n  "efficiency": 5,\n  "maintainability": 5,\n  "documentation": 1,\n  "overall_review": {\n    "strengths": "The code changes are very clear and functional, with good efficiency and maintainability. However, there is a lack of documentation that could hinder understanding the purpose and implementation of the changes.",\n    "weaknesses": "The code lacks documentation, which can make it difficult for other developers to understand the purpose and implementation of the changes. Adding comments and explanations to the code will greatly improve its maintainability and readability.",\n    "suggested_improvements": [\n      "Add comments and explanations to the code to improve documentation.",\n      "Consider breaking down large functions into smaller, more manageable ones for better maintainability."\n    ]\n  }\n}\n\`\`\`\n\nThe code changes are well-implemented, clear, and functional, with good efficiency. However, there is a significant lack of documentation, which can make it difficult for other developers to understand the purpose and implementation of the changes. Adding comments and explanations to the code will greatly improve its maintainability and readability.`;
-
+        this.fetchCommits()
       } catch (error) {
         console.warn('Using local documents data due to error:', error)
         this.documents = TaScoringApiHelpersJson.documents
@@ -312,5 +453,17 @@ export default {
 .datalist {
   /* max-height: 200px; */
   overflow-y: auto;
+}
+
+.list-group-item {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>

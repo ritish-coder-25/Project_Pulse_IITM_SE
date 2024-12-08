@@ -1,0 +1,11 @@
+2024-12-08 18:15:59,867 DEBUG httpx load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-12-08 18:15:59,867 DEBUG httpx load_verify_locations cafile='/workspaces/Project_Pulse_IITM_SE/backend/env/lib/python3.12/site-packages/certifi/cacert.pem'
+2024-12-08 18:15:59,873 DEBUG httpx load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-12-08 18:15:59,873 DEBUG httpx load_verify_locations cafile='/workspaces/Project_Pulse_IITM_SE/backend/env/lib/python3.12/site-packages/certifi/cacert.pem'
+2024-12-08 18:16:00,107 INFO root Database created successfully.
+2024-12-08 18:16:00,123 INFO root Default admin user already exists.
+2024-12-08 18:16:00,124 INFO root Default admin user already exists.
+2024-12-08 18:16:00,125 INFO root Default admin user already exists.
+2024-12-08 18:16:00,131 WARNING werkzeug  * Debugger is active!
+2024-12-08 18:16:00,131 INFO werkzeug  * Debugger PIN: 430-769-793
+2024-12-08 18:16:03,199 INFO werkzeug  * Detected change in '/workspaces/Project_Pulse_IITM_SE/backend/tasks.py', reloading

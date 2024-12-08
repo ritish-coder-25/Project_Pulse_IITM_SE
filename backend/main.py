@@ -8,7 +8,7 @@ import os
 from utils.github_helpers import github_user_exists
 from datetime import timedelta
 from apis.team_apis.team_apis import api_bp_ta
-from apis.stu_dashboard.stu_dashboard_apis import api_bp_stu
+from apis.Stu_dashboard.stu_dashboard_apis import api_bp_stu
 from apis.project_apis.Manage_milestone_apis import api_bp_milestones
 from apis.project_apis.TADproject_apis import api_bp_projects
 from apis.Ta_dashboard.submission_files import api_bp_submission
@@ -28,6 +28,7 @@ from celery.result import AsyncResult
 # from flask_restx import Api
 import marshmallow as ma
 from flask_smorest import Api, Blueprint, abort
+from datetime import datetime
 
 app = Flask(__name__)
 # CORS(app)
@@ -106,11 +107,26 @@ def download(filename):
 # @jwt_required()
 # @check_access(roles=[MRoles.admin.value])
 def download_theatre_csv():
-    repo_url = request.json.get("repo_url")
+    team_id = request.json.get("team_id")
+    start_time = request.json.get("start_time")
+    end_time = request.json.get("end_time")
     #current_user_id = get_jwt_identity()
     #print("request got for ",current_user_id,theatreId)
     #tasks.create_theatre_csv_celery.delay(theatreId,current_user_id)
-    asyncTaskTheatre =  tasks.get_github_data.apply_async(args=[repo_url])
+    # checkallTeams = Team.query.all()
+    # print("All teams", checkallTeams.to_dict())
+    repo_url = Team.query.filter_by(team_id=team_id).first()
+    repo_url = repo_url.to_dict()['github_repo_url']
+    print("Repo URL", repo_url)
+    print("Repo URL", repo_url)
+    if not team_id:
+        return jsonify({"error": "Please provide a valid Team Id"}), 400
+    if not start_time:
+        return jsonify({"error": "Please provide a valid start_time"}), 400
+    if not end_time:
+        return jsonify({"error": "Please provide a valid end_time"}), 400
+        
+    asyncTaskTheatre =  tasks.get_github_data.apply_async(args=[repo_url, start_time, end_time])
     print("returning from async task")
     return jsonify({
         "message": "File processing started. Do not close your browser as the file will be downloaded automatically.",
@@ -128,6 +144,49 @@ def get_task_status(task_id):
     return jsonify(response), 200
 
 
+
+@app.route("/api/commitslist", methods=["POST"])
+def get_commits():
+    try:
+        # Parse JSON data from the request body
+        data = request.get_json()
+        date_range = data.get('start_date')  # Correctly get the nested dictionary
+        start_date = date_range.get('startDate')
+        end_date = date_range.get('endDate')
+
+        # Print debugging information
+        print("Request args", request.args)
+        print("Request body", request.json)
+        print("Parsed start_date:", start_date)
+        print("Parsed end_date:", end_date)
+
+        # Validate the received data
+        if not start_date or not end_date:
+            return jsonify({"error": "Both start_date and end_date are required"}), 400
+
+        # Convert the strings to datetime objects for filtering
+        start_date = datetime.strptime(start_date, '%a, %d %b %Y %H:%M:%S %Z')
+        end_date = datetime.strptime(end_date, '%a, %d %b %Y %H:%M:%S %Z')
+
+        # Query database for commits within the specified date range
+        commits = Commit.query.filter(Commit.commit_timestamp >= start_date, 
+                                       Commit.commit_timestamp <= end_date).all()
+
+        # Convert query result to a list of dictionaries
+        commits_list = [commit.to_dict() for commit in commits]
+        # print("Fetched Commits:", commits_list)
+
+        return jsonify(commits_list), 200
+
+    except ValueError as e:
+        # Handle invalid date format
+        print("Error parsing dates:", e)
+        return jsonify({"error": "Invalid date format. Use ISO 8601 or similar"}), 400
+
+    except Exception as e:
+        # Handle any unexpected errors
+        print("Error fetching commits:", e)
+        return jsonify({"error": "An unexpected error occurred"}), 500
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)

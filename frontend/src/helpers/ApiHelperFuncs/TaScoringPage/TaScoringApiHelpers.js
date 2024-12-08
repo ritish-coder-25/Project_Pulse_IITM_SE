@@ -33,6 +33,63 @@ export class TaScoringApiHelpers {
         }
     }
 
+    static async fetchCommits(startDate, endDate) {
+        try {
+            const response = await mainAxios.post('/commitslist',JSON.stringify({ start_date: startDate, end_date: endDate }));
+              
+            
+            console.log("Commits Response:", response.data);
+            // console.log("Commits Response:", typeof(response.data));
+    
+            // Ensure the response is an array of commits
+            if (!Array.isArray(JSON.parse(response.data))) {
+                console.warn('Invalid API response format: Expected an array of commits.');
+                return { data: TaScoringApiHelpersJson.localCommits }; // Fallback to local data
+            }
+    
+            // Map over the commits to structure data as required
+            const commitsArray = JSON.parse(response.data).map(commit => ({
+                commit_id: commit.commit_id,
+                commit_hash: commit.commit_hash,
+                commit_message: commit.commit_message,
+                commit_score: commit.commit_score,
+                commit_clarity: commit.commit_clarity,
+                complexity_score: commit.complexity_score,
+                code_quality_score: commit.code_quality_score,
+                improvement_suggestions: commit.improvement_suggestions || [],
+                commit_date: commit.commit_timestamp,
+                observations: commit.additional_observations,
+                risk_assessment: commit.risk_assessment,
+                commit_changes: commit.commit_changes,
+                analysis_timestamp: commit.analysis_timestamp,
+                user_id: commit.user_id,
+
+
+            //     'commit_id': self.commit_id,
+            // 'user_id': self.user_id,
+            // 'team_id': self.team_id,
+            // 'commit_hash': self.commit_hash,
+            // 'commit_message': self.commit_message,
+            // 'commit_timestamp': self.commit_timestamp,
+            // 'commit_score': self.commit_score,
+            // 'commit_changes': self.commit_changes,
+            // 'commit_clarity': self.commit_clarity,
+            // 'complexity_score': self.complexity_score,
+            // 'code_quality_score': self.code_quality_score,
+            // 'risk_assessment': self.risk_assessment,
+            // 'improvement_suggestions': self.improvement_suggestions,
+            // 'analysis_timestamp': self.analysis_timestamp,
+            // 'additional_observations': self.additional_observations,
+            }));
+    
+            console.log("Processed Commits Array:", commitsArray);
+            return { data: commitsArray };
+        } catch (error) {
+            console.warn('Using local commits data due to error:', error);
+            return { data: TaScoringApiHelpersJson.localCommits }; // Fallback to local data
+        }
+    }
+    
 
     static async fetchMilestones() {
         try {
@@ -113,6 +170,42 @@ export class TaScoringApiHelpers {
         } catch (error) {
             console.warn('Fallback to default error handling for milestone review:', error);
             throw error.response?.data || { message: "An unexpected error occurred" };
+        }
+    }
+
+    static async startCeleryTask(teamId, startTime, endTime) {
+        try {
+            // Sending POST request to trigger the Celery task
+            const payload = {
+                team_id: teamId.teamId,
+                start_time: teamId.startTime,
+                end_time: teamId.endTime
+            }
+
+            console.log("Celery task payload:", payload);
+
+            const response = await mainAxios.post('/celery-test', JSON.stringify(payload));
+               
+
+            console.log("Celery task started:", response.data);
+            return JSON.parse(response.data); // Return the task ID and message
+        } catch (error) {
+            console.warn('Error triggering Celery task:', error);
+            throw error;
+        }
+    }
+
+    // Function to fetch the task status
+    static async getTaskStatus(taskId) {
+        try {
+            // Sending GET request to fetch the task status
+            const response = await mainAxios.get(`/task_status/${taskId}`);
+            
+            console.log("Task status:", response.data);
+            return response.data; // Return the task status info
+        } catch (error) {
+            console.warn('Error fetching task status:', error);
+            throw error;
         }
     }
 

@@ -32,6 +32,10 @@ api_bp_GenAI = Blueprint(
 )
 
 
+
+
+
+
 @api_bp_GenAI.route("/api/commits-fetch", methods=["POST"])
 class GetAllCommitsResource(Resource):
     @jwt_required()

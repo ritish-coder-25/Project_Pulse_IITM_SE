@@ -118,32 +118,36 @@ export default {
       try {
         const response = await TaHomePageApiHelpers.fetchUploads()
         const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
-        this.uploads = parsedResponse || []
+        this.uploads = Array.isArray(parsedResponse) ? parsedResponse : [];
       } catch (error) {
-        console.warn('Using local uploads data due to error:', error)
+        console.warn('Using local uploads data due to error:', error);
+        this.uploads = [];
       }
     },
     async fetchCommits() {
       try {
-        const response = await TaHomePageApiHelpers.fetchCommits()
-        const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
-        this.commits = parsedResponse || []
-      } catch (error) {
-        console.warn('Using local commit data due to error:', error)
-      }
-    },
+        const response = await TaHomePageApiHelpers.fetchCommits();
+          const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
+          this.commits = Array.isArray(parsedResponse) ? parsedResponse : [];
+        } catch (error) {
+          console.warn('Using local commit data due to error:', error);
+          this.commits = [];
+        }
+      },
     async fetchMilecomps() {
       try {
-        const response = await TaHomePageApiHelpers.fetchMilecomps()
+        const response = await TaHomePageApiHelpers.fetchMilecomps();
         const parsedResponse = typeof response === "string" ? JSON.parse(response) : response;
-        this.milecomps = parsedResponse
+        this.milecomps = Array.isArray(parsedResponse) ? parsedResponse : [];
       } catch (error) {
         console.warn(
           'Using local milestone completion data due to error:',
           error,
-        )
+        );
+        this.milecomps = [];
       }
     },
+
     async submitForm() {
       // Ensure all users have been approved or rejected
       if (!this.pendusers.every(user => user.approved || user.rejected)) {

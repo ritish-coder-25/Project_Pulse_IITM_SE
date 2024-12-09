@@ -71,6 +71,10 @@ def get_github_data(self, repo_url, start_time, end_time):
             print("This is the commit details", details)
                 
             for commit_detail in details["commit_details"]:
+                existing_commit = Commit.query.filter_by(commit_hash=commit_detail["commit_sha"]).first()
+                if(existing_commit):
+                    print(f"Commit {commit_detail['commit_sha']} already exists in the database. Skipping.")
+                    continue
                 commit_changes = ""
                 for file in commit_detail["file_changes"]:
                     commit_changes += f"Additions: {file['filename']} ({file['additions']} additions, {file['deletions']} deletions)\n\n File changes: {file['changes_str']} \n File changes details: {file['code_changes']}\n\n" 

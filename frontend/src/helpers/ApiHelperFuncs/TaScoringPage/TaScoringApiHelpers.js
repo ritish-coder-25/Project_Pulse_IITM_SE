@@ -202,7 +202,7 @@ export class TaScoringApiHelpers {
             const response = await mainAxios.get(`/task_status/${taskId}`);
             
             console.log("Task status:", response.data);
-            return response.data; // Return the task status info
+            return JSON.parse(response.data); // Return the task status info
         } catch (error) {
             console.warn('Error fetching task status:', error);
             throw error;

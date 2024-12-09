@@ -129,7 +129,7 @@ class Commit(db.Model):
     commit_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'), nullable=False)
-    commit_hash = db.Column(db.String(40), nullable=False)
+    commit_hash = db.Column(db.String(40), nullable=False, unique=True)
     commit_message = db.Column(db.Text)
     commit_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     commit_score = db.Column(db.Float, default=0.0)

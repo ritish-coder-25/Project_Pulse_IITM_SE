@@ -7549,3 +7549,208 @@ def get_github_data(self, repo_url, start_time, end_time):
 2024-12-08 22:33:14,226 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
 2024-12-08 22:33:14,335 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "OPTIONS /api/commitslist HTTP/1.1" 200 -
 2024-12-08 22:33:14,412 INFO werkzeug 127.0.0.1 - - [08/Dec/2024 22:33:14] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-09 17:11:46,681 DEBUG celery.utils.functional 
+def chain(*args, **kwargs):
+    return 1
+
+2024-12-09 17:11:46,682 DEBUG celery.utils.functional 
+def xstarmap(task, it):
+    return 1
+
+2024-12-09 17:11:46,682 DEBUG celery.utils.functional 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2024-12-09 17:11:46,682 DEBUG celery.utils.functional 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2024-12-09 17:11:46,682 DEBUG celery.utils.functional 
+def chunks(task, it, n):
+    return 1
+
+2024-12-09 17:11:46,683 DEBUG celery.utils.functional 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2024-12-09 17:11:46,683 DEBUG celery.utils.functional 
+def get_github_data(self, repo_url, start_time, end_time):
+    return 1
+
+2024-12-09 17:11:46,684 DEBUG celery.utils.functional 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2024-12-09 17:11:46,684 DEBUG celery.utils.functional 
+def xmap(task, it):
+    return 1
+
+2024-12-09 17:11:46,685 DEBUG celery.utils.functional 
+def backend_cleanup():
+    return 1
+
+2024-12-09 17:12:02,052 INFO root Database created successfully.
+2024-12-09 17:12:02,065 INFO root Default admin user already exists.
+2024-12-09 17:12:02,066 INFO root Default admin user already exists.
+2024-12-09 17:12:02,066 INFO root Default admin user already exists.
+2024-12-09 17:12:02,114 INFO werkzeug [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-09 17:12:02,114 INFO werkzeug [33mPress CTRL+C to quit[0m
+2024-12-09 17:12:02,121 INFO werkzeug  * Restarting with stat
+2024-12-09 17:12:03,591 INFO root Database created successfully.
+2024-12-09 17:12:03,606 INFO root Default admin user already exists.
+2024-12-09 17:12:03,607 INFO root Default admin user already exists.
+2024-12-09 17:12:03,608 INFO root Default admin user already exists.
+2024-12-09 17:12:03,612 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:12:03,613 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:16:18,546 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:16:18] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2024-12-09 17:16:18,820 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:16:18] "POST /api/auth/login HTTP/1.1" 200 -
+2024-12-09 17:17:15,754 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:15] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2024-12-09 17:17:16,023 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:16] "POST /api/auth/login HTTP/1.1" 200 -
+2024-12-09 17:17:20,333 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-09 17:17:20,336 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-09 17:17:20,340 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-09 17:17:20,341 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-09 17:17:20,345 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-09 17:17:20,347 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-09 17:17:20,348 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-09 17:17:20,350 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:17:20,354 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-09 17:17:20,355 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "[35m[1mGET /api/commits HTTP/1.1[0m" 500 -
+2024-12-09 17:17:20,356 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-09 17:17:20,358 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:17:20,364 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-09 17:17:20,382 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:17:20,383 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/projects HTTP/1.1" 200 -
+2024-12-09 17:17:20,384 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:17:20,387 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-09 17:17:20,388 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:20] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-09 17:17:38,007 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:38] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-09 17:17:38,011 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:38] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-09 17:17:38,020 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:38] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-09 17:17:38,037 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:17:38] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-09 17:18:01,571 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:01] "OPTIONS /api/milestone-review HTTP/1.1" 200 -
+2024-12-09 17:18:01,573 DEBUG apis.Ta_dashboard.submission_files Received request to create or update milestone review.
+2024-12-09 17:18:01,573 DEBUG apis.Ta_dashboard.submission_files Request data: {'team_id': 2, 'team_score': 5, 'milestone_id': 2, 'feedback': 'Nice Work.', 'max_milestone_score': 9}
+2024-12-09 17:18:01,575 DEBUG apis.Ta_dashboard.submission_files Found milestone status: <MilestoneStatus 1>
+2024-12-09 17:18:01,575 INFO apis.Ta_dashboard.submission_files Updating existing milestone review.
+2024-12-09 17:18:01,645 DEBUG apis.Ta_dashboard.submission_files Milestone review saved successfully.
+2024-12-09 17:18:01,646 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:01] "[35m[1mPOST /api/milestone-review HTTP/1.1[0m" 201 -
+2024-12-09 17:18:45,179 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:45] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-09 17:18:45,183 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:45] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-09 17:18:45,190 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:45] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-09 17:18:45,192 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:45] "[35m[1mPOST /api/commitslist HTTP/1.1[0m" 500 -
+2024-12-09 17:18:46,737 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:46] "[33mGET /uploads/uploads/12_2_1_2_2024-12-08T131137.598159_2002.08527.pdf HTTP/1.1[0m" 404 -
+2024-12-09 17:18:46,767 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:46] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:18:53,447 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:53] "[33mGET /uploads/12_2_1_2_2024-12-08T131137.598159_2002.08527.pdf HTTP/1.1[0m" 404 -
+2024-12-09 17:18:53,477 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:18:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:19:03,079 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:19:03] "[33mGET /12_2_1_2_2024-12-08T131137.598159_2002.08527.pdf HTTP/1.1[0m" 404 -
+2024-12-09 17:19:03,110 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:19:03] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:19:10,677 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:19:10] "[33mGET /api/download/12_2_1_2_2024-12-08T131137.598159_2002.08527.pdf HTTP/1.1[0m" 404 -
+2024-12-09 17:19:10,703 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:19:10] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:19:38,200 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:19:38] "[33mGET /api/uploads/12_2_1_2_2024-12-08T131137.598159_2002.08527.pdf HTTP/1.1[0m" 404 -
+2024-12-09 17:19:38,251 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:19:38] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:20:57,428 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-09 17:20:57,431 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-09 17:20:57,434 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-09 17:20:57,435 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-09 17:20:57,437 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-09 17:20:57,438 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-09 17:20:57,440 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:20:57,441 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:20:57,443 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-09 17:20:57,449 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/commits HTTP/1.1" 200 -
+2024-12-09 17:20:57,450 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-09 17:20:57,451 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-09 17:20:57,453 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-09 17:20:57,460 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:20:57,462 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:20:57,465 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/projects HTTP/1.1" 200 -
+2024-12-09 17:20:57,466 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-09 17:20:57,469 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:20:57] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-09 17:21:02,502 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:02] "OPTIONS /api/uploaded-files2/1 HTTP/1.1" 200 -
+2024-12-09 17:21:02,505 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:02] "[33mGET /api/uploaded-files2/1 HTTP/1.1[0m" 404 -
+2024-12-09 17:21:16,743 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/users/pendusers HTTP/1.1" 200 -
+2024-12-09 17:21:16,747 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-09 17:21:16,751 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/users/pendusers HTTP/1.1" 200 -
+2024-12-09 17:21:16,753 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/commits HTTP/1.1" 200 -
+2024-12-09 17:21:16,754 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/project/milecomps HTTP/1.1" 200 -
+2024-12-09 17:21:16,755 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/submissions/uploads HTTP/1.1" 200 -
+2024-12-09 17:21:16,756 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/teams/all HTTP/1.1" 200 -
+2024-12-09 17:21:16,758 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:21:16,759 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:21:16,761 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/ta-teams HTTP/1.1" 200 -
+2024-12-09 17:21:16,764 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "OPTIONS /api/projects HTTP/1.1" 200 -
+2024-12-09 17:21:16,766 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "[35m[1mGET /api/commits HTTP/1.1[0m" 500 -
+2024-12-09 17:21:16,768 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/project/milecomps HTTP/1.1" 200 -
+2024-12-09 17:21:16,772 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:21:16,782 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/milestones HTTP/1.1" 200 -
+2024-12-09 17:21:16,782 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/projects HTTP/1.1" 200 -
+2024-12-09 17:21:16,784 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/teams/all HTTP/1.1" 200 -
+2024-12-09 17:21:16,785 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:16] "GET /api/ta-teams HTTP/1.1" 200 -
+2024-12-09 17:21:23,705 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:23] "OPTIONS /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-09 17:21:23,708 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:23] "GET /api/uploaded-files2/2 HTTP/1.1" 200 -
+2024-12-09 17:21:23,716 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:23] "OPTIONS /api/commitslist HTTP/1.1" 200 -
+2024-12-09 17:21:23,719 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:23] "POST /api/commitslist HTTP/1.1" 200 -
+2024-12-09 17:21:25,744 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:25] "[33mGET /uploads/uploads/dummy.txt HTTP/1.1[0m" 404 -
+2024-12-09 17:21:25,781 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:25] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:21:32,197 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:32] "GET /uploads/dummy.txt HTTP/1.1" 200 -
+2024-12-09 17:21:32,233 INFO werkzeug 127.0.0.1 - - [09/Dec/2024 17:21:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-12-09 17:24:55,362 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:24:55,752 INFO werkzeug  * Restarting with stat
+2024-12-09 17:24:57,631 INFO root Database created successfully.
+2024-12-09 17:24:57,646 INFO root Default admin user already exists.
+2024-12-09 17:24:57,646 INFO root Default admin user already exists.
+2024-12-09 17:24:57,647 INFO root Default admin user already exists.
+2024-12-09 17:24:57,651 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:24:57,652 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:25:16,079 INFO werkzeug  * Detected change in '/home/pranjal/Documents/Project_Pulse_IITM_SE/backend/env/lib/python3.11/site-packages/langchain_core/documents/base.py', reloading
+2024-12-09 17:25:16,409 INFO werkzeug  * Restarting with stat
+2024-12-09 17:25:18,088 INFO root Database created successfully.
+2024-12-09 17:25:18,103 INFO root Default admin user already exists.
+2024-12-09 17:25:18,104 INFO root Default admin user already exists.
+2024-12-09 17:25:18,105 INFO root Default admin user already exists.
+2024-12-09 17:25:18,110 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:25:18,110 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:25:33,464 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:25:33,847 INFO werkzeug  * Restarting with stat
+2024-12-09 17:25:35,555 INFO root Database created successfully.
+2024-12-09 17:25:35,570 INFO root Default admin user already exists.
+2024-12-09 17:25:35,570 INFO root Default admin user already exists.
+2024-12-09 17:25:35,571 INFO root Default admin user already exists.
+2024-12-09 17:25:35,576 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:25:35,576 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:28:05,432 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:28:05,775 INFO werkzeug  * Restarting with stat
+2024-12-09 17:28:08,642 INFO root Database created successfully.
+2024-12-09 17:28:08,654 INFO root Default admin user already exists.
+2024-12-09 17:28:08,655 INFO root Default admin user already exists.
+2024-12-09 17:28:08,656 INFO root Default admin user already exists.
+2024-12-09 17:28:08,660 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:28:08,660 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:30:49,716 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:30:50,112 INFO werkzeug  * Restarting with stat
+2024-12-09 17:30:51,953 INFO root Database created successfully.
+2024-12-09 17:30:51,968 INFO root Default admin user already exists.
+2024-12-09 17:30:51,969 INFO root Default admin user already exists.
+2024-12-09 17:30:51,969 INFO root Default admin user already exists.
+2024-12-09 17:30:51,974 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:30:51,974 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:32:56,920 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:32:57,252 INFO werkzeug  * Restarting with stat
+2024-12-09 17:32:58,949 INFO root Database created successfully.
+2024-12-09 17:32:58,964 INFO root Default admin user already exists.
+2024-12-09 17:32:58,964 INFO root Default admin user already exists.
+2024-12-09 17:32:58,965 INFO root Default admin user already exists.
+2024-12-09 17:32:58,969 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:32:58,970 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:33:07,137 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:33:07,547 INFO werkzeug  * Restarting with stat
+2024-12-09 17:33:09,294 INFO root Database created successfully.
+2024-12-09 17:33:09,306 INFO root Default admin user already exists.
+2024-12-09 17:33:09,307 INFO root Default admin user already exists.
+2024-12-09 17:33:09,308 INFO root Default admin user already exists.
+2024-12-09 17:33:09,312 WARNING werkzeug  * Debugger is active!
+2024-12-09 17:33:09,312 INFO werkzeug  * Debugger PIN: 199-139-396
+2024-12-09 17:33:17,492 INFO werkzeug  * Detected change in '/home/pranjal/Documents/test/Project_Pulse_IITM_SE/backend/utils/summarizer_chain.py', reloading
+2024-12-09 17:33:17,837 INFO werkzeug  * Restarting with stat
